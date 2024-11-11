@@ -17,7 +17,7 @@ function Auth() {
                         <AuthProvider
                                 supabaseClient={supabase} 
                                 socialLayout="horizontal" 
-                                providers={['google', 'apple']}
+                                providers={[]}
                                 appearance={{
                                     theme: ThemeSupa,
                                     variables: {
