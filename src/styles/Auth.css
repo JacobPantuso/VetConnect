@@ -1,0 +1,44 @@
+.Auth {
+    background-color: #1a1a1a;
+    height: 100vh;
+    color: white;
+}
+
+.auth-container {
+    display: flex;
+    flex-direction: column;
+    width: 80vw;
+    max-width: 500px;
+    margin: auto;
+    justify-content: center;
+    height: 100vh;
+}
+
+.auth-box {
+    padding: 3rem;
+    border-radius: 10px;
+    -webkit-box-shadow:0px 0px 50px 12px rgba(46,142,56,0.15);
+    -moz-box-shadow: 0px 0px 50px 12px rgba(46,142,56,0.15);
+    box-shadow: 0px 0px 50px 12px rgba(46,142,56,0.15);
+}
+
+.auth-box h2 {
+    margin-bottom: 5px;
+}
+
+.auth-box p {
+    margin-top: 0;
+}
+
+.wrapper {
+    width: 100%;
+}
+
+.wrapper div {
+    width: 100%;
+}
+
+.auth-btn {
+    background-color: rgba(46,142,56);
+}
+  
