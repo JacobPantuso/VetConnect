@@ -1,3 +1,10 @@
+@import url('https://fonts.cdnfonts.com/css/sf-pro-display');
+
+html, body {
+  background-color: #1a1a1a;
+  color: white;
+  font-family: 'SF Pro Display', sans-serif;
+}
 .logo {
   width: 30px;
   height: 30px;
@@ -8,4 +15,26 @@
   -webkit-box-shadow:0px 0px 10px 12px rgba(46,142,56,0.05);
   -moz-box-shadow: 0px 0px 10px 12px rgba(46,142,56,0.05);
   box-shadow: 0px 0px 10px 12px rgba(46,142,56,0.05);
+}
+
+.loading {
+  width: 100px;
+  height: 20px;
+  background: linear-gradient(
+      90deg,
+      #333 25%,
+      #555 50%,
+      #333 75%
+  ); /* Dark gray to light gray to dark gray */
+  background-size: 200% 100%;
+  animation: sweep 1.5s linear infinite;
+}
+  
+@keyframes sweep {
+  0% {
+  background-position: 200% 0;
+  }
+  100% {
+  background-position: -200% 0;
+  }
 }

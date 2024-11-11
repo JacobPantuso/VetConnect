@@ -1,0 +1,70 @@
+:root {
+    --navbar-padding: clamp(3rem, 2vw, 7rem);
+}
+  
+.Nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    padding-left: var(--navbar-padding);
+    padding-right: var(--navbar-padding);
+    background-color: #141414;
+    align-items: center;
+}
+
+.left {
+    display: flex;
+    flex-direction: row;
+    gap: 1.3rem;
+    align-items: center;
+}
+
+.logo-right {
+    display: flex;
+    flex-direction: column;
+}
+
+.logo-right h2, p {
+    margin: 0;
+}
+
+.logo-right h2 {
+    font-size: 1.3rem;
+}
+
+.logo-right p {
+    font-size: 0.8rem;
+}
+
+.profile {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.profile-pic img {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+    border-radius: 50%;
+    background-color: #000000;
+    -webkit-box-shadow: 0px 0px 10px 12px rgba(46,142,56,0.05);
+    -moz-box-shadow: 0px 0px 10px 12px rgba(46,142,56,0.05);
+    box-shadow: 0px 0px 10px 12px rgba(46,142,56,0.05);
+}
+
+.right {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
