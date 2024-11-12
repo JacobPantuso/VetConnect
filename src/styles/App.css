@@ -38,3 +38,10 @@ html, body {
   background-position: -200% 0;
   }
 }
+
+footer {
+  display: flex;
+  margin-top: auto;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
