@@ -1,0 +1,141 @@
+.Auth {
+    background-color: #1a1a1a;
+    height: 100vh;
+    color: white;
+}
+
+.auth-container {
+    display: flex;
+    flex-direction: column;
+    width: 80vw;
+    max-width: 500px;
+    justify-content: center;
+    margin: auto;
+    height: 100vh;
+    gap: 1rem;
+}
+
+.auth-box {
+    padding: 3rem;
+    border-radius: 10px;
+    margin-top: auto;
+    -webkit-box-shadow:0px 0px 50px 12px rgba(46,142,56,0.15);
+    -moz-box-shadow: 0px 0px 50px 12px rgba(46,142,56,0.15);
+    box-shadow: 0px 0px 50px 12px rgba(46,142,56,0.15);
+}
+
+.auth-box h2 {
+    margin-bottom: 5px;
+}
+
+.auth-box p {
+    margin-top: 0;
+}
+
+.wrapper {
+    width: 100%;
+}
+
+.wrapper div {
+    width: 100%;
+}
+
+.auth-btn {
+    background-color: rgba(46,142,56);
+}
+
+.account-setup {
+    display: flex;
+    flex-direction: column;
+    margin-top: 1rem;
+}
+
+.account-setup label {
+    margin-bottom: 0.5rem;
+}
+
+.account-setup input[type="text"] {
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border-radius: 5px;
+    border: none;
+    background-color: transparent;
+    border: 1px solid #bbbaba;
+    color: white;
+}
+
+.account-setup input[type="text"]:focus {
+    outline: none;
+    border: 1.5px solid #41924a;
+}
+
+.setup-submit {
+    padding: 0.5rem;
+    border-radius: 5px;
+    background-color: transparent;
+    border: 1px solid #41924a;
+    color: white;
+    width: 100%;
+}
+
+.setup-submit:hover {
+    background-color: #41924a;
+    cursor: pointer;
+}
+
+
+.error {
+    border: 1px solid red !important;
+}
+
+.error-box {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border: 1px solid salmon;
+    background-color: rgba(250, 128, 114, 0.281);
+    border-radius: 5px;
+    padding: 1rem;
+    gap: 1rem;
+}
+
+.error-box svg {
+    font-size: 3rem;
+}
+
+.error-message {
+    display: flex;
+    flex-direction: column;
+}
+
+.error-message h3 {
+    margin: 0;
+}
+
+.auth-fetching {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem 1rem 0rem 1rem;
+}
+
+.loader {
+    width: 48px;
+    height: 48px;
+    border: 5px solid #FFF;
+    border-bottom-color: #41924a;
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+    }
+
+    @keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+} 

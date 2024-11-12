@@ -1,25 +1,59 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {useState, useEffect} from 'react';
+import { Session } from '@supabase/supabase-js'
+import { supabase, useUserSession } from './utils/supabase';
+import './styles/App.css';
+import Auth from './Auth';
+import Home from './Home';
+import AccountSetup from './AccoutSetup';
+import Gateway from './components/Gateway';
+import {Route, Routes, Navigate } from 'react-router-dom';
+import Nav from './components/Nav';
+import Appointment from './Appointment';
+import About from './About';
+import Resources from './Resources';
 
 function App() {
+  const { user, fetching } = useUserSession();
+  const [session, setSession] = useState<Session | null>(null);
+  const [initialLoading, setInitialLoading] = useState(true);
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      setInitialLoading(false);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  if (initialLoading || fetching) {
+    return <Gateway />;
+  }
+
+  if (!session) {
+    return <Auth />;
+  }
+
+  if (user && !user.setup) {
+    return <AccountSetup />;
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Nav />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/appointments" element={<Appointment />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/resources" element={<Resources />} />
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
+    </>
   );
 }
 
