@@ -1,7 +1,9 @@
 import React from 'react';
 import { useUserSession } from './utils/supabase';
 import './styles/Home.css';
-import Nav from './components/Nav';
+import AppointmentSummary from './components/AppointmentSummary';
+import BillingSummary from './components/BillingSummary';
+import AccountNotifications from './components/AccountNotifications';
 
 function Home() {
   const { user, fetching } = useUserSession();
@@ -20,7 +22,15 @@ function Home() {
   return (
     <div className="Home">
         <div className='home-content'>
-          <h2>Welcome, {user?.first_name}!</h2>
+          <div className='content-left'>
+            <h2 className='welcome'>Welcome, {user?.first_name}!</h2>
+            <p>No pets have any upcoming appointments.</p>
+            {user && <BillingSummary user={user} />}
+            {user && <AppointmentSummary user={user} />}
+          </div>
+          <div className='content-right'>
+            <AccountNotifications />
+          </div>
         </div>
     </div>
   );

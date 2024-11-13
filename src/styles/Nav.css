@@ -1,5 +1,5 @@
 :root {
-    --padding: clamp(3rem, 2vw, 7rem);
+    --padding: clamp(7rem, 2vw, 12rem);
 }
   
 .Nav {
@@ -80,7 +80,7 @@
     gap: 0.3rem;
 }
 
-.profile-info a, p {
+.profile-info a .profile-info p {
     margin: 0;
     cursor: pointer;
 }
@@ -95,6 +95,6 @@
     cursor: pointer;
 }
 
-.profile-info a:hover, p:hover {
+.profile-info a:hover, .profile-info p:hover {
     text-decoration: underline;
 }

@@ -13,7 +13,7 @@ interface UserSession {
   fetching: boolean;
 }
 
-interface User {
+export interface User {
   id: string;
   created_at: string;
   first_name: string;

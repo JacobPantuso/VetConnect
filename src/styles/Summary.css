@@ -1,0 +1,49 @@
+.Summary {
+    display: flex;
+    flex-direction: column;
+    margin: 1rem 0rem 1rem 0rem;
+    padding: 20px;
+    width: 90%;
+    height: 100%;
+    border-radius: 10px;
+    -webkit-box-shadow: 0px 0px 10px 5px rgba(46, 142, 52, 0.3);
+    -moz-box-shadow: 0px 0px 10px 5px rgba(46, 142, 52, 0.3);
+    box-shadow: 0px 0px 10px 5px rgba(46, 142, 52, 0.3);
+}
+
+.Summary h2 {
+    font-size: 1.2rem;
+    margin: 0;
+}
+
+.Summary p {
+    margin-top: 0.2rem;
+    font-size: 1rem;
+}
+
+.details {
+    display: flex;
+    flex-direction: row;
+    margin-top: 1rem;
+}
+
+.chart-left {
+    position: relative;
+    width: 170px;
+    height: 170px;
+}
+
+.inside-chart {
+    position: absolute;
+    top: 53%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    font-size: 20px;
+    color: rgb(255, 153, 0);
+}
+
+.due-in {
+    color: #ffffff;
+    font-size: 13px;
+}

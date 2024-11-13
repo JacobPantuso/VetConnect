@@ -1,7 +1,9 @@
 .home-content {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: 1rem;
+    align-items: stretch;
+    height: 100%;
     padding-top: 3rem;
     padding-left: var(--padding);
     padding-right: var(--padding);
@@ -9,5 +11,26 @@
 
 .home-content h2 {
     font-size: 2rem;
-    margin: 0;
+}
+
+.home-content p {
+    margin-bottom: 1rem;
+}
+
+.welcome {
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+.content-left {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    height: 100%;
+}
+
+.content-right {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
 }
