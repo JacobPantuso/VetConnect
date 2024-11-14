@@ -11,8 +11,10 @@ import Nav from './components/Nav';
 import Appointment from './Appointment';
 import About from './About';
 import Resources from './Resources';
+import MyPets from './MyPets';
 
 function App() {
+
   const { user, fetching } = useUserSession();
   const [session, setSession] = useState<Session | null>(null);
   const [initialLoading, setInitialLoading] = useState(true);
@@ -51,6 +53,7 @@ function App() {
         <Route path="/appointments" element={<Appointment />} />
         <Route path="/about" element={<About />} />
         <Route path="/resources" element={<Resources />} />
+        <Route path="/mypets" element={<MyPets />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </>

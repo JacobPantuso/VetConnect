@@ -1,0 +1,61 @@
+section.MyPets {
+    margin: 5vw;
+}
+
+div.title,
+div.petProfileInfo,
+div.petRow,
+div.manageProfiles {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+div.petRow {
+    column-gap: 1.5em;
+}
+
+div.petList {
+    margin-top: 3vw;
+
+}
+
+h1 {
+    font-size: 3em;
+}
+
+h2.title {
+    font-weight: 300;
+}
+
+div.iconBody {
+    width: 11em;
+    background-color: grey;
+    border-radius: 100%;
+}
+
+div.icon {
+    padding: 10%;
+}
+
+div.manageProfiles {
+    margin-top: 3vw;
+}
+
+.manageButton {
+    background-color: rgba(0, 0, 0, 0);
+    padding: 1.5vw 3.5vw;
+    font-size: 1.5em;
+    text-decoration: none;
+    color: white;
+    transition: 0.3s ease-in-out;
+    border: none;
+    border-style: solid;
+    border-radius: 10em;
+}
+
+.manageButton:hover {
+    cursor: pointer;
+    color: #41924a;
+}
