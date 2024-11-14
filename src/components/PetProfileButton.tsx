@@ -1,5 +1,6 @@
 import React from "react";
 import '../styles/MyPets.css';
+import { Link } from 'react-router-dom';
 
 function PetProfileIcon() {
   return (
@@ -15,16 +16,17 @@ function PetProfileIcon() {
 }
 
 
-function PetProfileButton(petProfile: {petProfileId: number; petProfileName: string; petProfileOwner: string}) {
-//petProfile: {name: String; }
-const petProfileColorId = petProfile.petProfileId % 4;
-const petProfileColors = ["rgb(255, 40, 115)","rgb(124, 255, 54)","rgb(40, 155, 255)"];
-const petColorIndex = petProfileColors[petProfileColorId-1];
+function PetProfileButton(petProfile: { petProfileId: number; petProfileName: string; petProfileOwner: string }) {
+  //petProfile: {name: String; }
+  const petProfileColorId: number = (petProfile.petProfileId % 4)-1;
+  const petProfileColors:string[] = ["rgb(255, 40, 115)", "rgb(124, 255, 54)", "rgb(40, 155, 255)"] //Generated colors for pfps
+  const petColorIndex = petProfileColors[petProfileColorId];
 
   return (
     <div className="petProfileButton">
-      <div className="iconBody" style={{backgroundColor: petColorIndex}}>
-        <div className="icon"><PetProfileIcon/></div>
+      <Link to="/PetProfile">
+      <div className="iconBody" style={{ backgroundColor: petColorIndex }}>
+        <div className="icon"><PetProfileIcon /></div>
       </div>
       <div className="petProfileInfo">
         <h2 className="title">
@@ -33,6 +35,7 @@ const petColorIndex = petProfileColors[petProfileColorId-1];
         <h2>
         </h2>
       </div>
+      </Link>
     </div>
   );
 }
