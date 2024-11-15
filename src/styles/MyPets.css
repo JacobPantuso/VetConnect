@@ -2,9 +2,10 @@ section.MyPets {
     margin: 5vw;
 }
 
-div.title,
+div.myPetsTitle,
 div.petProfileInfo,
 div.petRow,
+div.petList,
 div.manageProfiles {
     width: 100%;
     display: flex;
@@ -12,20 +13,20 @@ div.manageProfiles {
     justify-content: center;
 }
 
-div.petRow {
-    column-gap: 1.5em;
+.petContainer {
+    width: 100%;
+    margin-top: 2vw;
 }
 
-div.petList {
-    margin-top: 3vw;
-
+div.petRow {
+    column-gap: 1.5em;
 }
 
 h1 {
     font-size: 3em;
 }
 
-h2.title {
+h2.myPetsTitle {
     font-weight: 300;
 }
 
@@ -55,48 +56,4 @@ div.petProfileButton:hover .iconBody {
 
 div.manageProfiles {
     margin-top: 3vw;
-}
-
-.manageButton {
-    background-color: rgba(0, 0, 0, 0);
-    padding: 0.8vw 1.5vw;
-    font-size: 1.5em;
-    text-decoration: none;
-    color: white;
-    transition: 0.3s ease-in-out;
-    border: none;
-    border-style: solid;
-    border-radius: 10em;
-}
-
-.done {
-    background-color: #41924a;
-    padding: 0.8vw 1.5vw;
-    font-size: 1.5em;
-    text-decoration: none;
-    color: #1a1a1a;
-    transition: 0.3s ease-in-out;
-    border: none;
-    border-style: solid;
-    border-radius: 10em;
-}
-
-.done:hover {
-    cursor: pointer;
-    color: white;
-}
-
-a, a:visited, a:link {
-    text-decoration: none;
-    color: white;
-    transition: 0.3s ease-in-out;
-}
-
-a:hover {
-    color: #41924a;
-}
-
-.manageButton:hover {
-    cursor: pointer;
-    color: #41924a;
 }

@@ -1,0 +1,43 @@
+.manageButton {
+    background-color: rgba(0, 0, 0, 0);
+    padding: 0.8vw 1.5vw;
+    font-size: 1.5em;
+    text-decoration: none;
+    color: white;
+    transition: 0.3s ease-in-out;
+    border: none;
+    border-style: solid;
+    border-radius: 10em;
+}
+
+.done {
+    background-color: #41924a;
+    padding: 0.8vw 1.5vw;
+    font-size: 1.5em;
+    text-decoration: none;
+    color: #1a1a1a;
+    transition: 0.3s ease-in-out;
+    border: none;
+    border-style: solid;
+    border-radius: 10em;
+}
+
+.done:hover {
+    cursor: pointer;
+    color: white;
+}
+
+a, a:visited, a:link {
+    text-decoration: none;
+    color: white;
+    transition: 0.3s ease-in-out;
+}
+
+a:hover {
+    color: #41924a;
+}
+
+.manageButton:hover {
+    cursor: pointer;
+    color: #41924a;
+}
