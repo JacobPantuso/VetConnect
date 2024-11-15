@@ -90,9 +90,7 @@ function AccountSetup() {
                     </div>
                 </div>
                 )}
-                <footer>
-                    &copy; 2024 VetConnect - All Rights Reserved
-                </footer>
+
             </div>
         </div>
     )

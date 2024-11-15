@@ -11,6 +11,8 @@ import Nav from './components/Nav';
 import Appointment from './Appointment';
 import About from './About';
 import Resources from './Resources';
+import UserProfile from './components/UserProfile';
+import Footer from './Footer';
 
 function App() {
   const { user, fetching } = useUserSession();
@@ -49,10 +51,12 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/appointments" element={<Appointment />} />
+        <Route path={`/profile/${user?.id}`} element={<UserProfile user={user ?? undefined} />} />
         <Route path="/about" element={<About />} />
         <Route path="/resources" element={<Resources />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
+      <Footer />
     </>
   );
 }

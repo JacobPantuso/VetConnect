@@ -13,9 +13,6 @@ function Gateway() {
                     <h3>Authenticating...</h3>
                 </div>
             </div>
-            <footer>
-                &copy; 2024 VetConnect - All Rights Reserved
-            </footer>
         </div>
     </div>
   );
