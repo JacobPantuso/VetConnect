@@ -12,6 +12,7 @@ import Appointment from './Appointment';
 import About from './About';
 import Resources from './Resources';
 import MyPets from './MyPets';
+import PetProfile from './PetProfile';
 
 function App() {
 
@@ -54,6 +55,7 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/resources" element={<Resources />} />
         <Route path="/mypets" element={<MyPets />} />
+        <Route path="petprofile" element={<PetProfile/>}/>
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </>

@@ -40,11 +40,8 @@ function MyPets() {
 
   if (fetching) {
     return (
-      <div className="Home">
-        <div className='home-content'>
-          <p className='loading' style={{ width: '250px', height: '30px' }}></p>
-          <p className='loading' style={{ width: '320px', height: '20px' }}></p>
-        </div>
+      <div>
+
       </div>
     );
   }

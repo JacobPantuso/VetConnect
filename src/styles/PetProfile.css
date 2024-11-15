@@ -1,0 +1,30 @@
+.petProfile {
+    margin: 2vw;
+}
+
+.petRow {
+    display: flex;
+    align-items: center;
+    margin: 2vw;
+    column-gap: 2vw;
+}
+
+.petTitle, .petStats, .petTraits, .petAllergies, .petVaccinations, .petVisits {
+    padding: 3em;
+    border-radius: 8px;
+    -webkit-box-shadow: 0px 0px 10px 12px rgba(46,142,56,0.05);
+    -moz-box-shadow: 0px 0px 10px 12px rgba(46,142,56,0.05);
+    box-shadow: 0px 0px 10px 12px rgba(46,142,56,0.05);
+}
+
+.petTitle {
+    width: 40%;
+}
+
+.petStats {
+    width: 50%;
+}
+
+.petTraits, .petAllergies, .petVaccinations, .petVisits {
+    width: 25%;
+}
