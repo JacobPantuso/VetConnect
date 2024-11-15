@@ -3,7 +3,7 @@
     padding: 0.8vw 1.5vw;
     font-size: 1.5em;
     text-decoration: none;
-    color: white;
+    color: #D5DDDF;
     transition: 0.3s ease-in-out;
     border: none;
     border-style: solid;
@@ -11,7 +11,7 @@
 }
 
 .done {
-    background-color: #41924a;
+    background-color: #6B8E4E;
     padding: 0.8vw 1.5vw;
     font-size: 1.5em;
     text-decoration: none;
@@ -24,20 +24,10 @@
 
 .done:hover {
     cursor: pointer;
-    color: white;
-}
-
-a, a:visited, a:link {
-    text-decoration: none;
-    color: white;
-    transition: 0.3s ease-in-out;
-}
-
-a:hover {
-    color: #41924a;
+    color: #D5DDDF;
 }
 
 .manageButton:hover {
     cursor: pointer;
-    color: #41924a;
+    color: #6B8E4E;
 }

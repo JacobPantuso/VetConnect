@@ -1,5 +1,9 @@
 @import url('https://fonts.cdnfonts.com/css/sf-pro-display');
 
+::-webkit-scrollbar {
+  display: none;
+}
+
 html, body {
   background-color: #1a1a1a;
   color: white;

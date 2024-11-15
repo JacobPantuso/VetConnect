@@ -14,9 +14,21 @@ const petProfile: PetProfileProps = {
 };
 
 function ArrowSvg() {
+    const fillColor: string = "#D5DDDF";
+
     return (
         <svg width="35" height="35" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M8.62813 19.625L20.5281 31.525L17.5 34.5L0.5 17.5L17.5 0.5L20.5281 3.475L8.62813 15.375H34.5V19.625H8.62813Z" fill="white" />
+            <path fill={fillColor} d="M8.62813 19.625L20.5281 31.525L17.5 34.5L0.5 17.5L17.5 0.5L20.5281 3.475L8.62813 15.375H34.5V19.625H8.62813Z" />
+        </svg>
+    );
+}
+
+function ClockSvg() {
+    const fillColor: string = "#D5DDDF";
+
+    return (
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path stroke={fillColor} d="M10.0001 4.99996V9.99996L13.3334 11.6666M18.3334 9.99996C18.3334 14.6023 14.6025 18.3333 10.0001 18.3333C5.39771 18.3333 1.66675 14.6023 1.66675 9.99996C1.66675 5.39759 5.39771 1.66663 10.0001 1.66663C14.6025 1.66663 18.3334 5.39759 18.3334 9.99996Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
     );
 }
@@ -62,13 +74,26 @@ function PetStats() {
     );
 }
 
+function AppointmentItem() {
+    return (
+        <div className='appointmentItem'>
+            <h3><span className='doctorName'>Doctor_Name</span></h3>
+            <div className='appointmentDate'>
+            <ClockSvg/>
+            <h3>On October 5th</h3>
+            </div>
+        </div>
+    );
+}
 
 function PetVisits() {
     return (
         <div className='petVisits'>
             <h2>Visits</h2>
-            <div className='appointments'>
-
+            <div className='appointmentsContainer'>
+                <AppointmentItem />
+                <AppointmentItem />
+                <AppointmentItem />
             </div>
         </div>
 
@@ -132,7 +157,7 @@ function PetProfile() {
                     <PetStats />
                 </section>
 
-                <section className='petRow'>
+                <section className='petRow' style={{ marginBottom: '5em' }}>
                     <PetVisits />
                     <PetAllergies />
                     <PetVaccinations />

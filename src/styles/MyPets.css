@@ -1,5 +1,6 @@
 section.MyPets {
     margin: 5vw;
+    color: #D5DDDF;
 }
 
 div.myPetsTitle,
@@ -28,6 +29,7 @@ h1 {
 
 h2.myPetsTitle {
     font-weight: 300;
+    margin-top: 20px;
 }
 
 div.iconBody {
@@ -47,13 +49,24 @@ div.petProfileButton {
 
 div.petProfileButton:hover {
     cursor: pointer;
-    color: #41924a;
+    color: #D5DDDF;
 }
 
 div.petProfileButton:hover .iconBody {
-    filter: drop-shadow(0 0 0.75rem #41924a);
+    filter: drop-shadow(0 0 0.2rem white)
+    drop-shadow(0 0 0.3rem white);
 }
 
 div.manageProfiles {
     margin-top: 3vw;
+}
+
+a, a:visited, a:link {
+    text-decoration: none;
+    color: #D5DDDF;
+    transition: 0.3s ease-in-out;
+}
+
+a:hover {
+    color: white;
 }

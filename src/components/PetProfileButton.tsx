@@ -15,7 +15,7 @@ function PetProfileButton({petProfile}: PetProfileButtonProps) {
       <Link to="/PetProfile">
       <PetProfileIcon petProfile={petProfile}/> 
       <div className="petProfileInfo">
-        <h2 className="title">
+        <h2 className="myPetsTitle">
           {petProfile.petProfileName}
         </h2>
         <h2>

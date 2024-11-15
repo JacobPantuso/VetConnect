@@ -1,5 +1,6 @@
 .petProfile {
     margin: 2vw;
+    color: #D5DDDF;
 }
 
 h1, h2 {
@@ -14,12 +15,33 @@ h1, h2 {
     column-gap: 2vw;
 }
 
-.petTitle, .petStats, .petTraits, .petAllergies, .petVaccinations, .petVisits {
+.petTitle, .petStats, .petTraits, .petAllergies, .petVaccinations, .petVisits, .appointmentItem {
     padding: 2em;
     border-radius: 8px;
-    -webkit-box-shadow: 0px 0px 10px 12px rgba(46,142,56,0.05);
-    -moz-box-shadow: 0px 0px 10px 12px rgba(46,142,56,0.05);
-    box-shadow: 0px 0px 10px 12px rgba(46,142,56,0.05);
+    border-style: solid;
+    border-width: 2px;
+    border-color: rgb(60, 62, 60);
+    
+}
+
+.appointmentItem {
+    padding: 1em;
+    margin: 1em;
+}
+
+.appointmentItem h3 {
+    margin: 0;
+    padding: 0;
+}
+
+.appointmentItem .doctorName {
+    font-size: 1.5em;
+}
+.appointmentDate {
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    column-gap: .8em;
 }
 
 .petTitle {
@@ -70,6 +92,10 @@ h2 {
 
 .petStats {
     width: 62%;
+}
+
+.petTraits, .petAllergies, .petVaccinations, .petVisits {
+    min-height: 25em;
 }
 
 .petTraits, .petAllergies, .petVaccinations {
