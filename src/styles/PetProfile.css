@@ -44,7 +44,7 @@ h1, h2 {
 }
 
 .petTitle {
-    padding: 3.2em 2em;
+    padding: 2.05em 2em;
     width: 28%;
     display: flex;
     align-items: center;
@@ -52,17 +52,17 @@ h1, h2 {
 }
 
 .petStats {
-    padding: 1.5em;
+    padding: 1em;
 }
 
 .numberUnit {
     display: flex;
     align-items: baseline;
-    column-gap: 15px;
+    column-gap: 0.8vw;
 }
 
 .numberUnit h1 {
-    font-size: 6em;
+    font-size: 4.5em;
     font-weight: 100;
 }
 
@@ -70,6 +70,8 @@ h1, h2 {
     display: flex;
     align-items: center;
     justify-content: center;
+    column-gap: 2em;
+    padding-top: 1.2em;
 }
 
 .stringStat, .numberStat {
@@ -86,7 +88,7 @@ h2 {
 
 .stringStat h1 {
     font-weight: 100;
-    font-size: 2.8em;
+    font-size: 2.2em;
 }
 
 
@@ -134,7 +136,7 @@ h2 {
 
 .petProfileContainer {
     overflow: auto;
-    height: 87%;
+    height: 85%;
 }
 
 .petAllergies .petProfileContainer {
@@ -161,5 +163,6 @@ h2 {
     white-space: nowrap; 
     text-overflow: ellipsis;
     overflow: hidden;
+    font-size: 1.4em;
     
 }

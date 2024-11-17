@@ -177,7 +177,7 @@ function PetTraits({ items }: PetBubbleStats) {
 function PetProfile() {
     const { user, fetching } = useUserSession();
     const [isEditing, setIsEditing] = useState(false);
-    let petAllergies: string[] = ["Pollen", "Dust", "Feathers", "Rubber", "Smoke"];
+    let petAllergies: string[] = ["Pollen", "Dust", "Feathers", "Rubber", "Smoke", "Smoke"];
     let petVaccinations: string[] = ["Lyme Disease", "Canine Influenza", "Leptospirosis"];
     let petTraits: string[] = ["Extroverted", "Short-haired", "Neutered", "Heart Cond."];
 
