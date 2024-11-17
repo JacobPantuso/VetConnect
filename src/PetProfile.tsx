@@ -13,6 +13,7 @@ const petProfile: PetProfileProps = {
     petProfileOwner: "Noah"
 };
 
+
 function ArrowSvg() {
     const fillColor: string = "#D5DDDF";
 
@@ -79,8 +80,8 @@ function AppointmentItem() {
         <div className='appointmentItem'>
             <h3><span className='doctorName'>Doctor_Name</span></h3>
             <div className='appointmentDate'>
-            <ClockSvg/>
-            <h3>On October 5th</h3>
+                <ClockSvg />
+                <h3>On October 5th</h3>
             </div>
         </div>
     );
@@ -90,7 +91,8 @@ function PetVisits() {
     return (
         <div className='petVisits'>
             <h2>Visits</h2>
-            <div className='appointmentsContainer'>
+            <div className='petProfileContainer'>
+                <AppointmentItem />
                 <AppointmentItem />
                 <AppointmentItem />
                 <AppointmentItem />
@@ -100,27 +102,73 @@ function PetVisits() {
     );
 }
 
-function PetAllergies() {
+export interface InfoBubbleProps {
+    value: string,
+    color?: string
+};
+
+function InfoBubble({ value, color }: InfoBubbleProps) {
+    return (
+        <div className='infoBubbleContainer'>
+            <div className='infoBubble'>
+                <h2>{value}</h2>
+            </div>
+        </div>
+
+    );
+}
+
+export interface PetBubbleStats {
+    items: string[]
+};
+
+function PetAllergies({ items }: PetBubbleStats) {
+    const listItems = items.map((item) => {
+        return (
+            <InfoBubble value={item} />
+        );
+    });
+
     return (
         <div className='petAllergies'>
             <h2>Allergies</h2>
+            <div className='petProfileContainer'>
+                {listItems}
+            </div>
         </div>
     );
 }
 
-function PetVaccinations() {
+function PetVaccinations({ items }: PetBubbleStats) {
+    const listItems = items.map((item) => {
+        return (
+            <InfoBubble value={item} />
+        );
+    });
+    
     return (
         <div className='petVaccinations'>
             <h2>Vaccinations</h2>
+            <div className='petProfileContainer'>
+                {listItems}
+            </div>
         </div>
     );
 }
 
+function PetTraits({ items }: PetBubbleStats) {
+    const listItems = items.map((item) => {
+        return (
+            <InfoBubble value={item} />
+        );
+    });
 
-function PetTraits() {
     return (
         <div className='petTraits'>
             <h2>Traits</h2>
+            <div className='petProfileContainer'>
+                {listItems}
+            </div>
         </div>
     );
 }
@@ -129,6 +177,9 @@ function PetTraits() {
 function PetProfile() {
     const { user, fetching } = useUserSession();
     const [isEditing, setIsEditing] = useState(false);
+    let petAllergies: string[] = ["Pollen", "Dust", "Feathers", "Rubber", "Smoke"];
+    let petVaccinations: string[] = ["Lyme Disease", "Canine Influenza", "Leptospirosis"];
+    let petTraits: string[] = ["Extroverted", "Short-haired", "Neutered", "Heart Cond."];
 
     if (fetching) {
         return (
@@ -159,9 +210,9 @@ function PetProfile() {
 
                 <section className='petRow' style={{ marginBottom: '5em' }}>
                     <PetVisits />
-                    <PetAllergies />
-                    <PetVaccinations />
-                    <PetTraits />
+                    <PetAllergies items={petAllergies} />
+                    <PetVaccinations items={petVaccinations}/>
+                    <PetTraits items={petTraits}/>
                 </section>
             </section>
         </section>
