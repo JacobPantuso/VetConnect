@@ -37,8 +37,9 @@ function Home() {
     );
   }
 
-  if (user?.user_type === 'CS') {
 
+  if (user?.user_type === 'CS') {
+    console.log(user.user_type)
     return (
       <div className="Home">
       <div className='home-content'>
@@ -81,7 +82,7 @@ function Home() {
             {user && <AppointmentSummary user={user} />}
           </div>
           <div className='content-right'>
-            <AccountNotifications />
+            {user && <AccountNotifications user={user} />}
           </div>
         </div>
     </div>

@@ -26,7 +26,7 @@ function AccountNotifications({ user, fetching }: AccountNotificationsProps) {
   return (
     <div className="AccountNotifications">
       <div className="account-notifications-content">
-        <h2>{user?.user_type !== '' ? 'Clinic' : 'Account'} Notifications</h2>
+        <h2>{user?.user_type === 'USER' ? 'Account' : 'Clinic'} Notifications</h2>
         <div className="no-notifications">
             <img src="/no-notifications.png" alt="No notifications" />
             <p>No updates at the moment!</p>

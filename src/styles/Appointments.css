@@ -1,0 +1,32 @@
+.Appointment {
+    display: flex;
+    flex-direction: column;
+    padding-top: 2rem;
+    padding-left: var(--padding);
+    padding-right: var(--padding);
+    margin-bottom: auto;
+}
+
+.appt-desc {
+    margin-bottom: 1rem;
+}
+
+.appointment-content {
+    display: flex;
+    flex-direction: row;
+    margin-top: 1rem;
+    gap: 1.5rem;
+}
+
+.CurrentAppointments, .BookAppointment {
+    display: flex;
+    flex-direction: column;
+    width: 45%;
+    padding: 1rem;
+    box-shadow: 0px 0px 10px 5px #9bf3a542;
+}
+
+.CurrentAppointments h2 {
+    font-size: 1.2rem;
+    margin: 0;
+}
