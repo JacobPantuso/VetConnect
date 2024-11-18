@@ -1,0 +1,145 @@
+.createPetProfile {
+    margin: 2vw;
+    color: #D5DDDF;
+}
+
+.fillInSection {
+    padding: 2em;
+    margin-top: 3vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.createPetProfile .title {
+    position: absolute;
+    width: 100%;
+}
+
+.petCreationContainer {
+    position: absolute;
+    top: 32%;
+    width: 88vw;
+    aspect-ratio: 2/1;
+    display: flex;
+}
+
+.createPetProfile h2 {
+    font-size: 2em;
+    margin-bottom: 0.5em;
+}
+
+.createPetProfile input[type="text"],
+.createPetProfile input[type="date"],
+.createPetProfile input[type="number"] {
+    font-family: inherit;
+    font-size: 1.5em;
+    color: inherit;
+    background-color: rgba(0, 0, 0, 0);
+    width: 100%;
+    border: solid 2px #3c3e3c;
+    border-radius: 0.4em;
+    padding: 0.5em;
+}
+
+.createPetProfile input[type="date"] {
+    color-scheme: dark;
+}
+
+::-webkit-calendar-picker-indicator {
+    filter: brightness(0) saturate(100%) invert(94%) sepia(6%) saturate(215%) hue-rotate(145deg) brightness(97%) contrast(85%);
+}
+
+.petCreationColumn1 {
+
+    padding: 1em;
+    width: 40%;
+}
+
+.petSpecies,
+.petDOB, .petCreationTraits {
+    margin-top: 2em;
+}
+
+.petCreationTraits {
+    font-family: inherit;
+    width: 94%;
+    border: solid 2px #3c3e3c;
+    border-radius: 0.4em;
+    padding: 2em;
+    height: 18em;
+}
+
+.petCreationColumn2 {
+    padding: 1em;
+    padding-left: 4em;
+    padding-right: 3em;
+    width: 60%;
+}
+
+.petGender,
+.petWeight,
+.petHeight {
+    width: 45%;
+}
+
+.petGender select {
+    font-family: inherit;
+    font-size: 1.5em;
+    color: inherit;
+    width: 100%;
+    border: solid 2px #3c3e3c;
+    border-radius: 0.4em;
+    padding: 0.5em;
+    background-color: rgba(0, 0, 0, 0);
+    -moz-appearance: none;
+    /* Firefox */
+    -webkit-appearance: none;
+    /* Safari and Chrome */
+    appearance: none;
+    background: url("data:image/svg+xml;charset=utf-8,<svg width='20' height='12' viewBox='0 0 20 12' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M2 2L10 10L18 2' stroke='rgb(213, 221, 223)' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/></svg>") no-repeat 95%;
+}
+
+.petGender select option {
+    background-color: #1a1a1a;
+}
+
+.weightSuffix, .heightSuffix {
+    display: inline-block;
+    position: relative;
+}
+
+.weightSuffix::after, .heightSuffix::after {
+    position: absolute;
+    top: 20%;
+    right: -.5em;
+    transition: all .05s ease-in-out;
+    font-size: 1.8em;
+    color: #686c68;
+}
+
+.weightSuffix::after {
+    content: "kg";
+}
+
+.heightSuffix::after {
+    content: "in";
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.petCreationRow {
+    display: flex;
+    column-gap: 4.5em;
+}
+

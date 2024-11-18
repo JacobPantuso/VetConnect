@@ -74,8 +74,12 @@ h1, h2 {
     padding-top: 1.2em;
 }
 
-.stringStat, .numberStat {
+.numberStat {
     width: 25%;
+}
+
+.stringStat {
+    width: 20%;
 }
 
 h2 {

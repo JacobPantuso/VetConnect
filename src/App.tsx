@@ -13,6 +13,7 @@ import About from './About';
 import Resources from './Resources';
 import MyPets from './MyPets';
 import PetProfile from './PetProfile';
+import CreatePetProfile from './CreatePetProfile';
 
 function App() {
 
@@ -55,7 +56,8 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/resources" element={<Resources />} />
         <Route path="/mypets" element={<MyPets />} />
-        <Route path="petprofile" element={<PetProfile/>}/>
+        <Route path="/petprofile" element={<PetProfile/>}/>
+        <Route path="/createpetprofile" element={<CreatePetProfile/>}/>
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </>

@@ -8,6 +8,8 @@ html, body {
   background-color: #1a1a1a;
   color: white;
   font-family: 'SF Pro Display', sans-serif;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 .logo {
   width: 30px;
