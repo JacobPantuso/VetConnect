@@ -4,7 +4,7 @@ import { supabase, useUserSession } from './utils/supabase';
 import './styles/App.css';
 import Auth from './Auth';
 import Home from './Home';
-import AccountSetup from './AccoutSetup';
+import AccountSetup from './AccountSetup';
 import Gateway from './components/Gateway';
 import {Route, Routes, Navigate } from 'react-router-dom';
 import Nav from './components/Nav';
