@@ -4,10 +4,11 @@
     gap: 1rem;
     align-items: stretch;
     height: 100%;
-    padding-top: 3rem;
+    padding-top: 2rem;
     padding-left: var(--padding);
     padding-right: var(--padding);
 }
+
 
 .home-content h2 {
     font-size: 2rem;
@@ -33,4 +34,18 @@
     display: flex;
     flex-direction: column;
     width: 50%;
+}
+
+@media screen and (max-width: 768px) {
+    .home-content {
+        flex-direction: column;
+    }
+
+    .content-left {
+        width: 100%;
+    }
+
+    .content-right {
+        width: 100%;
+    }
 }
