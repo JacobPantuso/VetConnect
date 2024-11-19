@@ -1,5 +1,4 @@
 import React, {useState} from "react";
-import { useNavigate } from "react-router-dom";
 import { useUserSession, setupProfile } from "./utils/supabase";
 import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,7 +11,6 @@ function AccountSetup() {
     const [lastNameError, setLastNameError] = useState(false);
     const [showError, setShowError] = useState(false);
     const [submitText, setSubmitText] = useState('Submit');
-    const navigate = useNavigate();
     const handleFirstNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFirstName(e.target.value);
     }
