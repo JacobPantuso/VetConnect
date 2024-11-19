@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from "react";
+import React, {useState, useEffect, useRef, ChangeEvent} from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faArrowRight, faShieldDog } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
@@ -95,14 +95,24 @@ function BookAppointment({user, fetching}: BookAppointmentProps) {
       <h2>Book Appointment</h2>
       <p>Book an appointment for your pet.</p>
       <div className="booking">
-        {currentStep === 1 && <SelectPet nextStep={nextStep} selectPet={selectPet} pets={samplePets} />}
-        {currentStep === 2 && <SelectService nextStep={nextStep} selectService={selectService} previousStep={previousStep} />}
-        {currentStep === 3 && <SelectTime nextStep={nextStep} selectDate={selectDate} selectTime={selectTime} previousStep={previousStep} selectedService={selectedService || ''} />}
+        {currentStep === 1 && <SelectPet nextStep={nextStep} selectPet={selectPet} pets={samplePets} currentValue={selectedPet} />}
+        {currentStep === 2 && <SelectService nextStep={nextStep} selectService={selectService} previousStep={previousStep} currentValue={selectedService || ''} />}
+        {currentStep === 3 && <SelectTime nextStep={nextStep} selectDate={selectDate} selectTime={selectTime} previousStep={previousStep} selectedService={selectedService || ''} currentDate={selectedDate || ''} currentTime={selectedTime || ''} />}
+        {currentStep === 4 && selectedPet && selectedService && selectedTime && selectedDate && <AppointmentSummary pet={selectedPet} service={selectedService} time={selectedTime} date={selectedDate} previousStep={previousStep} />}
       </div>
     </div>
   );
 }
-const SelectPet: React.FC<{ nextStep: () => void, pets: Array<Pet>, selectPet: (pet: Pet) => void }> = ({ nextStep, pets, selectPet }) => {
+const SelectPet: React.FC<{ nextStep: () => void, pets: Array<Pet>, selectPet: (pet: Pet) => void, currentValue: Pet | undefined }> = ({ nextStep, pets, selectPet, currentValue }) => {
+  const [selectedPet, setSelectedPet] = useState(currentValue);
+  const handlePetSelect = (event: ChangeEvent<HTMLSelectElement>) => {
+    pets.forEach((pet) => {
+      if (pet.petProfileId.toString() === event.target.value) {
+        selectPet(pet);
+        setSelectedPet(pet);
+      }
+    });
+  }
   return (
     <div className="form">
       <h2>Select a Pet</h2>
@@ -110,12 +120,17 @@ const SelectPet: React.FC<{ nextStep: () => void, pets: Array<Pet>, selectPet: (
       { pets.length > 0
         ?
         <div className="select-pet">
-          <select onChange={(e) => selectPet(pets.find(pet => pet.name === e.target.value)!)}>
+          <select value={selectedPet?.petProfileId || ''} onChange={handlePetSelect}>
+            <option value="" disabled>
+              Select a Pet
+            </option>
             {pets.map((pet) => (
-              <option key={pet.petProfileId}>{pet.name}</option>
+              <option key={pet.petProfileId} value={pet.petProfileId}>
+                {pet.name}
+              </option>
             ))}
           </select>
-          <button id="nextbtn" onClick={nextStep}>Next</button>          
+          <button id="nextbtn" disabled={selectedPet === undefined} onClick={nextStep}>Next</button>          
         </div>
         :
         <div className="no-pets">
@@ -123,42 +138,50 @@ const SelectPet: React.FC<{ nextStep: () => void, pets: Array<Pet>, selectPet: (
           <h4>Appointment Error</h4>
           <p>You currently have no pets. Please create one now to continue.</p>
           <Link to={'/pet-profiles'}>Add Pet</Link>
-      </div>
+        </div>
       }
     </div>
   );
 };
 
-const SelectService: React.FC<{ nextStep: () => void, previousStep: () => void, selectService: (service: string) => void }> = ({ nextStep, previousStep, selectService }) => {
+const SelectService: React.FC<{ nextStep: () => void, previousStep: () => void, selectService: (service: string) => void, currentValue: string }> = ({ nextStep, previousStep, selectService, currentValue }) => {
+  const [selectedService, setSelectedService] = useState(currentValue);
+  const handleServiceSelect = (event: ChangeEvent<HTMLSelectElement>) => {
+    selectService(event.target.value);
+    setSelectedService(event.target.value);
+  }
   return (
     <div className="form">
       <FontAwesomeIcon id="backbtn" icon={faArrowLeft} onClick={previousStep} />
       <h2>Select a Service</h2>
       <p>Select a service to book an appointment for.</p>
-      <select onChange={(e) => selectService(e.target.value)}>
-        <option>Vaccination (30 Minutes)</option>
-        <option>Wellness Exam (1 Hour)</option>
-        <option>Boarding (1 Hour)</option>
-        <option>Grooming (1-2 Hours)</option>
-      </select>
-      <p className="dropdown-subtitle">One service per appointment. To book multiple services,<br></br> you'll need to create another appointment.</p>
-      <button id="nextbtn" onClick={nextStep}> Next</button>          
+      <div className="service-selection">
+        <select value={selectedService} onChange={handleServiceSelect}>
+          <option value="" disabled>
+            Select a Service
+          </option>
+          <option value={'Vaccination (30 Minutes)'}>Vaccination (30 Minutes)</option>
+          <option value={'Wellness Exam (1 Hour)'}>Wellness Exam (1 Hour)</option>
+          <option value={'Boarding (1 Hour)'}>Boarding (1 Hour)</option>
+          <option value={'Grooming (1-2 Hours)'}>Grooming (1-2 Hours)</option>
+        </select>
+        <p className="dropdown-subtitle">One service per appointment. To book multiple services,<br></br> you'll need to create another appointment.</p>
+        <button id="nextbtn" disabled={selectedService === ''} onClick={nextStep}> Next</button>          
+      </div>
     </div>
   );
 }
 
-const SelectTime: React.FC<{ nextStep: () => void, previousStep: () => void, selectTime: (time: string) => void, selectDate: (date: string) => void, selectedService: string}> = ({ nextStep, previousStep, selectTime, selectDate, selectedService}) => {
+const SelectTime: React.FC<{ nextStep: () => void, previousStep: () => void, selectTime: (time: string) => void, selectDate: (date: string) => void, selectedService: string, currentDate: string, currentTime: string}> = ({ nextStep, previousStep, selectTime, selectDate, selectedService, currentDate, currentTime}) => {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [availableTimes, setAvailableTimes] = useState<string[]>([]);
   const [showDatePicker, setShowDatePicker] = useState(false);
 
-  // Extract duration from the selectedService
   const duration = parseInt(
     selectedService.match(/\((\d+)\)/)?.[1] || "30",
     10
   );
 
-  // Function to convert 24-hour time to 12-hour time with AM/PM
   const formatTime = (hours: number, minutes: number) => {
     const ampm = hours >= 12 ? "PM" : "AM";
     const formattedHours = hours % 12 || 12; // Convert 0 to 12 for midnight
@@ -166,31 +189,63 @@ const SelectTime: React.FC<{ nextStep: () => void, previousStep: () => void, sel
     return `${formattedHours}:${formattedMinutes} ${ampm}`;
   };
 
-  // Generate time slots with 12-hour format
   const generateTimeSlots = () => {
     const slots: string[] = [];
     let currentTime = new Date();
     currentTime.setHours(9, 0, 0, 0); // Start at 9:00 AM
 
     while (currentTime.getHours() < 17) {
-      const start = formatTime(currentTime.getHours(), currentTime.getMinutes());
+      const start = formatTime(
+        currentTime.getHours(),
+        currentTime.getMinutes()
+      );
       currentTime.setMinutes(currentTime.getMinutes() + duration); // Add duration
       if (currentTime.getHours() >= 17 && currentTime.getMinutes() > 0) break; // Stop after 5:00 PM
-      const end = formatTime(currentTime.getHours(), currentTime.getMinutes());
+      const end = formatTime(
+        currentTime.getHours(),
+        currentTime.getMinutes()
+      );
       slots.push(`${start} - ${end}`);
     }
 
     return slots;
   };
 
+  const handleSelectTime = (
+    time: string,
+    e: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    selectTime(time);
+    const buttons = document.querySelectorAll(".time-slot-button");
+    buttons.forEach((button) => button.classList.remove("selected"));
+    (e.target as HTMLElement).classList.add("selected");
+  };
 
-  // Handle date selection
   const handleDateSelect = (date: string) => {
     setSelectedDate(date);
     selectDate(date);
     setAvailableTimes(generateTimeSlots());
-    setShowDatePicker(false); // Close date picker
+    setShowDatePicker(false);
   };
+
+  // Restore state on component load or when currentDate/currentTime changes
+  useEffect(() => {
+    if (currentDate) {
+      setSelectedDate(currentDate);
+      setAvailableTimes(generateTimeSlots());
+    }
+  }, [currentDate]);
+
+  useEffect(() => {
+    if (currentTime && currentDate) {
+      const buttons = document.querySelectorAll(".time-slot-button");
+      buttons.forEach((button) => {
+        if (button.textContent?.includes(currentTime)) {
+          button.classList.add("selected");
+        }
+      });
+    }
+  }, [currentTime, availableTimes]);
 
   return (
     <div className="form">
@@ -200,7 +255,6 @@ const SelectTime: React.FC<{ nextStep: () => void, previousStep: () => void, sel
         Select a date and time for your appointment.
       </p>
 
-      {/* Custom Date Picker */}
       <div className="date-picker-container">
         <div
           className="date-input"
@@ -215,7 +269,6 @@ const SelectTime: React.FC<{ nextStep: () => void, previousStep: () => void, sel
         )}
       </div>
 
-      {/* Time Slots */}
       {selectedDate && (
         <div className="time-slots">
           <h4 className="time-slots-title">Available Times:</h4>
@@ -223,9 +276,11 @@ const SelectTime: React.FC<{ nextStep: () => void, previousStep: () => void, sel
             {availableTimes.length > 0 ? (
               availableTimes.map((time) => (
                 <button
-                  key={formatTime(parseInt(time.split(':')[0]), parseInt(time.split(':')[1]))}
-                  className="time-slot-button"
-                  onClick={() => selectTime(time)}
+                  key={time}
+                  className={`time-slot-button ${
+                    time === currentTime ? "selected" : ""
+                  }`}
+                  onClick={(e) => handleSelectTime(time, e)}
                 >
                   {time}
                 </button>
@@ -237,8 +292,12 @@ const SelectTime: React.FC<{ nextStep: () => void, previousStep: () => void, sel
         </div>
       )}
 
-
-      <button id="nextbtn" style={{width: '50%', margin: 'auto'}} onClick={nextStep} disabled={!selectedDate}>
+      <button
+        id="nextbtn"
+        style={{ width: "50%", margin: "auto" }}
+        onClick={nextStep}
+        disabled={!selectedDate}
+      >
         Next
       </button>
     </div>
@@ -341,5 +400,30 @@ const CustomDatePicker: React.FC<{ onDateSelect: (date: string) => void }> = ({
     </div>
   );
 };
+
+const AppointmentSummary: React.FC<{ previousStep: () => void, pet: Pet, service: string, time: string, date: string }> = ({ pet, service, time, date, previousStep }) => {
+  return (
+    <div className="form">
+      <FontAwesomeIcon id="backbtn" icon={faArrowLeft} onClick={previousStep} />
+      <h2>Appointment Summary</h2>
+      <p>Review the details of your appointment.</p>
+      <div className="summary-details">
+        <div className="summary-pet">
+          {pet.species === "Dog"
+            ? <img src="https://media.istockphoto.com/id/474486193/photo/close-up-of-a-golden-retriever-panting-11-years-old-isolated.jpg?s=612x612&w=0&k=20&c=o6clwQS-h6c90AHlpDPC74vAgtc_y2vvGg6pnb7oCNE=" alt={pet.name} />
+            : <img src="https://t3.ftcdn.net/jpg/01/63/55/90/360_F_163559018_oWTwmNBHysXDPj4lh2PPWJDMXOkMYFlD.jpg" alt={pet.name} />
+          }
+          <h3>{pet.name}</h3>
+          <p>{pet.species}</p>
+        </div>
+        <div className="summary-service">
+          <h3>{service}</h3>
+          <p>{date} from {time}</p>
+        </div>
+      </div>
+      <button id="confirmbtn">Confirm Appointment</button>
+    </div>
+  );
+}
 
 export default BookAppointment;

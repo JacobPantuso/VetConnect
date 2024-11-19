@@ -71,6 +71,22 @@
   margin-bottom: 1rem;
 }
 
+.select-pet {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 50%;
+  margin: auto;
+}
+
+.service-selection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 50%;
+  margin: auto;
+}
+
 .no-pets {
   display: flex;
   flex-direction: column;
@@ -110,6 +126,7 @@
   display: flex;
   flex-direction: column;
   text-align: center;
+  width: 100%;
 }
 
 .form select {
@@ -149,6 +166,10 @@
   background-color: #41924a;
 }
 
+.form #nextbtn:disabled {
+  cursor: not-allowed;
+}
+
 .form #backbtn {
   background-color: transparent;
   color: white;
@@ -170,14 +191,37 @@
   background-color: rgb(252, 95, 95);
 }
 
+.form #confirmbtn {
+  background-color: transparent;
+  color: white;
+  border: none;
+  text-decoration: none;
+  text-align: center;
+  font-size: 0.9rem;
+  border-radius: 5px;
+  width: 50%;
+  margin: auto;
+  padding: 0.5rem;
+  cursor: pointer;
+  border: none;
+  border: 1px solid #41924a;
+  transition: background-color 0.3s;
+}
+
+.form #confirmbtn:hover {
+  background-color: #41924a;
+}
+
 .dropdown-subtitle {
   font-size: 0.8rem;
 }
 
 /* Date Picker Input */
 .date-picker-container {
+  display: flex;
   position: relative;
-  width: 100%;
+  width: 50%;
+  margin: auto;
 }
 
 .date-input {
@@ -186,8 +230,7 @@
   border: 1px solid #b2f3b9;
   border-radius: 4px;
   cursor: pointer;
-  margin: auto;
-  width: 50%;
+  width: 100%;
   text-align: center;
   background-color: transparent;
   margin-bottom: 1rem;
@@ -197,8 +240,8 @@
   position: absolute;
   margin: auto;
   top: 50px;
-  left: 25%;
-  width: 50%;
+  left: 0;
+  width: 100%;
   background: rgb(56, 56, 56);
   border: 1px solid #b2f3b9;
   border-radius: 4px;
@@ -312,6 +355,11 @@ button:disabled {
   transition: background-color 0.3s ease;
 }
 
+.time-slot-button.selected {
+  background-color: #41924a;
+  border: #41924a;
+}
+
 .time-slot-button:hover {
   background-color: #41924a;
   border: #41924a;
@@ -345,6 +393,22 @@ button:disabled {
 ::-webkit-scrollbar-thumb:hover {
   background: #888; /* Darker gray on hover */
 }
+
+.summary-pet img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.summary-pet h3 {
+  margin: 0;
+}
+
+.summary-pet p {
+  color: #ccc;
+}
+
 @media screen and (max-width: 768px) {
   .Appointment {
     flex-direction: column;
