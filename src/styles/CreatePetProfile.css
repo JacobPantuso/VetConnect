@@ -178,6 +178,9 @@ input[type=number] {
     border-radius: 50px;
     width: 90%;
     padding: 0.6em;
+    stroke: none;
+    fill: #D5DDDF;
+    transition: all ease-in-out 0.2s;
 }
 
 .petCreationInfoBubble h2, .petCreationInfoBubbleVA h2,
@@ -227,16 +230,15 @@ input[type=number] {
 }
 
 .petCreationAddBubbleIcon svg path {
-    stroke: none;
-    fill: white;
-    transition: ease-in-out 0.2s;
-
+    stroke: inherit;
+    fill: inherit;
 }
 
-.petCreationAddBubbleIcon:hover svg path {
+.petCreationAddBubble:hover {
     cursor: pointer;
     fill: #3c3e3c;
-
+    color: #3c3e3c;
+    border-color: #3c3e3c;
 }
 
 .petCreationInfoBubbleCross:hover, .petCreationInfoBubbleCrossVA:hover {

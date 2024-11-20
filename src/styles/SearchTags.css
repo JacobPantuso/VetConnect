@@ -1,0 +1,64 @@
+.searchTags {
+    width: 30%;
+    color: #D5DDDF;
+    border: solid 2px #3c3e3c;
+    border-radius: 0.4em;
+    padding: 1em;
+    background-color: #1a1a1a;
+    height: 20em;
+}
+
+
+.magnifySvg {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: .4em;
+}
+
+.searchTags input[type='text'] {
+    background-color: rgba(0,0,0,0);
+    border-style: none;
+    padding: .5em;
+    color: #D5DDDF;
+    font-size: 1.2em;
+    width: 100%;
+}
+
+.searchTags input[type='text']:focus {
+    border-style: none;
+    outline: none;
+}
+
+.searchTagsSearchBar {
+    width: 100%;
+    display: flex;
+    border: solid 2px #3c3e3c;
+    border-radius:  0.4em;
+}
+
+.searchedTagsContainer {
+    margin-top: 1em;
+    padding: 1em 0em;
+    width: 100%;
+    overflow: scroll;
+    height: 70%;
+}
+
+.searchTagsButton, .searchTagsButtonChecked {
+    cursor: pointer;
+    margin-bottom: .5em;
+    width: 100%;
+    padding: .5em;
+    background-color: rgba(0,0,0,0);
+    border-style: none;
+    border: solid 2px #3c3e3c;
+    border-radius: 1.5em;
+    color: inherit;
+    font-size: 1.3em;
+}
+
+.searchTagsButtonChecked {
+    color: #6B8E4E;
+    border-color: #6B8E4E;
+}
