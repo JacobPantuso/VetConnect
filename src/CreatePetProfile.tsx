@@ -52,13 +52,13 @@ interface InfoBubbleProps {
     index?: number,
 };
 
-function TraitInfoBubble({ value, color }: InfoBubbleProps) {
+function TraitInfoBubble({ value, color, onClick }: InfoBubbleProps) {
     return (
         <div className='petCreationInfoBubble'>
             <div className='petCreationInfoBubbleTitle'>
                 <h2>{value}</h2>
             </div>
-            <div className='petCreationInfoBubbleCross'>
+            <div className='petCreationInfoBubbleCross' onClick={()=>onClick(value)}>
                 <CrossSvg />
             </div>
         </div>
@@ -72,7 +72,7 @@ function InfoBubble({ value, color, onClick }: InfoBubbleProps) {
             <div className='petCreationInfoBubbleTitleVA'>
                 <h2>{value}</h2>
             </div>
-            <div className='petCreationInfoBubbleCrossVA'>
+            <div className='petCreationInfoBubbleCrossVA' onClick={()=>onClick(value)}>
                 <CrossSvg />
             </div>
         </div>
@@ -89,7 +89,7 @@ interface AddBubbleProps {
 
 function AddBubble({ value, color, onClick, index, onMouseDown }: AddBubbleProps) {
     return (
-        <div className='petCreationAddBubble' onMouseDown={(e) => { onMouseDown(e); onClick(index) }}>
+        <div className='petCreationAddBubble' onMouseDown={(e) => { onMouseDown(e); onClick(index)}}>
             <div className='petCreationAddBubbleIcon'>
                 <AddSvg />
             </div>
@@ -208,6 +208,10 @@ function CreatePetProfile() {
         return;
     };
 
+    const createPet = () => {
+        console.log("Create a pet here")
+    }
+
     if (fetching) {
         return (
             <div>
@@ -254,7 +258,7 @@ function CreatePetProfile() {
 
                                 {
                                     truePairs.map((item, i) => {
-                                        const twoTraits = item.map(([key, value]) => <TraitInfoBubble onClick={handleOpenMenu} value={key} />)
+                                        const twoTraits = item.map(([key, value]) => <TraitInfoBubble onClick={handleSelectTraits} value={key} />)
                                         return (
                                             <div className='petCreationTraitsRow'>
                                                 {twoTraits}
@@ -302,7 +306,7 @@ function CreatePetProfile() {
                                     {Object.entries(selectedVaccinations).map(([key, value]) => {
                                         if (value) {
                                             return (
-                                                <InfoBubble onClick={handleOpenMenu} value={key} />
+                                                <InfoBubble onClick={handleSelectVaccinations} value={key} />
                                             );
                                         }
                                     })}
@@ -315,7 +319,7 @@ function CreatePetProfile() {
                                     {Object.entries(selectedAllergies).map(([key, value]) => {
                                         if (value) {
                                             return (
-                                                <InfoBubble onClick={handleOpenMenu} value={key} />
+                                                <InfoBubble onClick={handleSelectAllergies} value={key} />
                                             );
                                         }
                                     })}
@@ -329,7 +333,9 @@ function CreatePetProfile() {
             {openedMenus[0] && <SearchTags mousePosition={mousePosition} buttons={selectedTraits} setSelectedButtons={handleSelectTraits} />}
             {openedMenus[1] && <SearchTags mousePosition={mousePosition} buttons={selectedVaccinations} setSelectedButtons={handleSelectVaccinations} />}
             {openedMenus[2] && <SearchTags mousePosition={mousePosition} buttons={selectedAllergies} setSelectedButtons={handleSelectAllergies} />}
-            <div>Save Button</div>
+            <div className='saveButton'>
+                <input className='saveButton' type="button" value="Save" onClick={()=>{createPet()}}/>
+            </div>
         </section>
     );
 }

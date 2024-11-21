@@ -105,7 +105,7 @@
 .heightSuffix::after {
     position: absolute;
     top: 20%;
-    right: .2em;
+    right: 6%;
     transition: all .05s ease-in-out;
     font-size: 1.8em;
     color: #686c68;
@@ -170,7 +170,7 @@ input[type=number] {
     width: 90%;
 }
 
-.petCreationAddBubble {
+.petCreationAddBubble{
     display: flex;
     align-items: center;
     column-gap: .6em;
@@ -276,4 +276,31 @@ input[type=number] {
     width: 100%;
     overflow: scroll;
     height: 25em;
+}
+
+div.saveButton {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+input.saveButton {
+    width: 10%;
+    font-family: inherit;
+    color: inherit;
+    background-color: inherit;
+    border: solid 2px #D5DDDF;
+    padding: 0.8vw 1.5vw;
+    font-size: 1.5em;
+    text-decoration: none;
+    border-radius: 10em;
+    transition: 0.3s ease-in-out;
+}
+
+
+input.saveButton:hover {
+    cursor: pointer;
+    color: #6B8E4E;
+    border-color: #6B8E4E;
 }
