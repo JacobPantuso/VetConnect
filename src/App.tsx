@@ -13,6 +13,7 @@ import About from './About';
 import Resources from './Resources';
 import UserProfile from './components/UserProfile';
 import Footer from './Footer';
+import Payment from './Payment';
 
 function App() {
   const { user, fetching } = useUserSession();
@@ -54,6 +55,7 @@ function App() {
         <Route path={`/profile/${user?.id}`} element={<UserProfile user={user ?? undefined} />} />
         <Route path="/about" element={<About />} />
         <Route path="/resources" element={<Resources />} />
+        <Route path="/payment/:paymentid" element={<Payment />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
       <Footer />
