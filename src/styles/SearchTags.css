@@ -1,11 +1,13 @@
 .searchTags {
-    width: 30%;
+    position: absolute;
+    z-index: 4;
+    width: 15%;
     color: #D5DDDF;
     border: solid 2px #3c3e3c;
     border-radius: 0.4em;
     padding: 1em;
     background-color: #1a1a1a;
-    height: 20em;
+    height: 15em;
 }
 
 
@@ -38,11 +40,11 @@
 }
 
 .searchedTagsContainer {
-    margin-top: 1em;
+    margin-top: .5em;
     padding: 1em 0em;
     width: 100%;
     overflow: scroll;
-    height: 70%;
+    height: 65%;
 }
 
 .searchTagsButton, .searchTagsButtonChecked {

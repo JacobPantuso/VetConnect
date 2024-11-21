@@ -1,6 +1,6 @@
 import { useUserSession } from '../utils/supabase';
 import '../styles/SearchTags.css';
-
+import { useState } from 'react';
 
 function MagnifySvg() {
     return (
@@ -10,28 +10,75 @@ function MagnifySvg() {
     );
 }
 
+interface Buttons {
+    [key: string]: boolean;
+  }
+
 interface SearchTagsProps {
-    buttons: string[],
-    selectedButtons: boolean[],
+    buttons: Buttons,
     setSelectedButtons: Function,
+    mousePosition: any[],
 };
 
-function SearchTags({buttons, selectedButtons, setSelectedButtons} : SearchTagsProps) {
-    const listItems = buttons.map((item, index) => {
-        if (selectedButtons[index]) {
-            return(
-                <input type="button" value={item} className='searchTagsButtonChecked' onClick={()=>{setSelectedButtons(index)}}/>
-            );
+function SearchTags({buttons, setSelectedButtons, mousePosition} : SearchTagsProps) {
+    const [searchParams, setSearchParams] = useState("");
+    const listItems = Object.entries(buttons).map(([key, value]) => 
+    {
+        if (searchParams === "") {
+            if (value) {
+                return (
+                    <input type="button" value={key} className='searchTagsButtonChecked' onClick={()=>{setSelectedButtons(key)}}/>
+                );     
+            }
+            return (
+                <input type="button" value={key} className='searchTagsButton' onClick={()=>{setSelectedButtons(key)}}/>
+             );
+        } else {
+            if (key.toLowerCase().search(searchParams.toLowerCase()) >= 0) {
+                if (value) {
+                    return (
+                        <input type="button" value={key} className='searchTagsButtonChecked' onClick={()=>{setSelectedButtons(key)}}/>
+                    );     
+                }
+                return (
+                    <input type="button" value={key} className='searchTagsButton' onClick={()=>{setSelectedButtons(key)}}/>
+                 ); 
+            }
         }
-        return (
-           <input type="button" value={item} className='searchTagsButton' onClick={()=>{setSelectedButtons(index)}}/>
-        );
-    });
+    }
+    )
+
+    const xPosition: number = mousePosition[0];
+    const yPosition: number = mousePosition[1];
+    let mouseStyles: any;
+
+    if (!mousePosition[2] && !mousePosition[3]) {
+        mouseStyles = {
+            left: xPosition,
+            top: yPosition
+        }
+    } else if (!mousePosition[2] && mousePosition[3]) {
+        mouseStyles = {
+            left: xPosition,
+            top: yPosition-180
+        }
+    } else if (mousePosition[2] && !mousePosition[3]) {
+        mouseStyles = {
+            left: xPosition-250,
+            top: yPosition
+        }
+    } else {
+        mouseStyles = {
+            left: xPosition,
+            top: yPosition
+        }
+    }
+
 
     return (
-        <div className='searchTags'>
+        <div className='searchTags' style={mouseStyles}>
             <div className='searchTagsSearchBar'>
-                <input type='text' placeholder='Search for a trait' />
+                <input type='text' placeholder='Search for a trait' onChange={(e)=>{setSearchParams(e.currentTarget.value)}}/>
                 <div className='magnifySvg'>
                     <MagnifySvg/>
                 </div>

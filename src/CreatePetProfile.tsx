@@ -48,6 +48,8 @@ function AddSvg() {
 interface InfoBubbleProps {
     value: string,
     color?: string
+    onClick: Function,
+    index?: number,
 };
 
 function TraitInfoBubble({ value, color }: InfoBubbleProps) {
@@ -64,7 +66,7 @@ function TraitInfoBubble({ value, color }: InfoBubbleProps) {
 }
 
 
-function InfoBubble({ value, color }: InfoBubbleProps) {
+function InfoBubble({ value, color, onClick }: InfoBubbleProps) {
     return (
         <div className='petCreationInfoBubbleVA'>
             <div className='petCreationInfoBubbleTitleVA'>
@@ -77,31 +79,134 @@ function InfoBubble({ value, color }: InfoBubbleProps) {
     );
 }
 
-function AddBubble({ value, color }: InfoBubbleProps) {
+interface AddBubbleProps {
+    value: string,
+    color?: string
+    onClick: Function,
+    onMouseDown: Function,
+    index?: number,
+};
+
+function AddBubble({ value, color, onClick, index, onMouseDown }: AddBubbleProps) {
     return (
-        <div className='petCreationAddBubble'>
+        <div className='petCreationAddBubble' onMouseDown={(e) => { onMouseDown(e); onClick(index) }}>
             <div className='petCreationAddBubbleIcon'>
                 <AddSvg />
             </div>
             <div className='petCreationAddBubbleTitle'>
                 <h2>{value}</h2>
             </div>
-
         </div>
     )
 }
 
+interface InfoBubbleValues {
+    [key: string]: boolean;
+}
+
+const traits: InfoBubbleValues = {
+    "Extroverted": false,
+    "Introverted": false,
+    "Long-hair": false,
+    "Short-hair": false,
+    "Blindness": false,
+    "Deafness": false,
+    "Diabetic": false,
+    "Neutered": false
+}
+
+const vaccinations: InfoBubbleValues = {
+    "Idk": false,
+}
+
+const allergies: InfoBubbleValues = {
+    "Grass": false,
+    "Dust": false,
+    "Smoke": false,
+    "Fleas": false,
+}
+
 function CreatePetProfile() {
     const { user, fetching } = useUserSession();
-    const [selectedTraits, setSelectedTraits] = useState<boolean[]>([true, false, false, true]); 
-    const traits: string[] = ["Cat",'Dog','Horse','Pig'];
 
-    const handleSelect = (index: number) => {
-        let newTraits = [...selectedTraits];
-        newTraits[index] = !newTraits[index];
+    const [selectedTraits, setSelectedTraits] = useState<InfoBubbleValues>(traits);
+    const [selectedVaccinations, setSelectedVaccinations] = useState<InfoBubbleValues>(vaccinations);
+    const [selectedAllergies, setSelectedAllergies] = useState<InfoBubbleValues>(allergies);
+    const selectedTraitsList = Object.entries(selectedTraits);
+
+    function getTrueTraitPairs() {
+        let trueTraits: any = [];
+        for (let i = 0; i < selectedTraitsList.length; i++) {
+            if (selectedTraitsList[i][1]) {
+                trueTraits.push(selectedTraitsList[i]);
+            }
+        }
+        var truePairs = [];
+        for (var i = 0; i < trueTraits.length; i += 2) {
+            if (trueTraits[i + 1] !== undefined) {
+                truePairs.push([trueTraits[i], trueTraits[i + 1]]);
+            } else {
+                truePairs.push([trueTraits[i]]);
+            }
+        }
+        return truePairs;
+    }
+
+    var truePairs = getTrueTraitPairs();
+    //Traits, Vaccinations, Allergies
+    const [openedMenus, setOpenMenu] = useState<boolean[]>([false, false, false]);
+    const [mousePosition, setMousePosition] = useState<any[]>([0, 0, false, false]);
+
+    const handleOpenMenu = async (index: number) => {
+        let newOpenedMenus: boolean[] = [...openedMenus];
+        let newOpenedMenusReset = [false, false, false]
+
+        if (!newOpenedMenus[index]) {
+            newOpenedMenusReset[index] = !newOpenedMenus[index];
+            setOpenMenu(newOpenedMenusReset);
+        } else {
+            setOpenMenu(newOpenedMenusReset);
+        }
+    };
+
+    const GetMousePosition = (e: any) => {
+        let newMousePosition: any[] = [0, 0, false, false];
+        newMousePosition[0] = e.clientX;
+        newMousePosition[1] = e.clientY;
+        if (newMousePosition[0] > window.innerWidth / 2) {
+            newMousePosition[2] = true
+        }
+
+        if (newMousePosition[1] > window.innerWidth / 2) {
+            newMousePosition[3] = true
+        }
+
+        setMousePosition(newMousePosition);
+    };
+
+    const handleSelectTraits = (key: string) => {
+        let newTraits = { ...selectedTraits };
+        newTraits[key] = !newTraits[key];
         setSelectedTraits(newTraits);
-      };
+    };
 
+    const handleSelectVaccinations = (key: string) => {
+        let newVaccinations = { ...selectedVaccinations };
+        newVaccinations[key] = !newVaccinations[key];
+        setSelectedVaccinations(newVaccinations);
+    };
+
+    const handleSelectAllergies = (key: string) => {
+        let newAllergies = { ...selectedAllergies };
+        newAllergies[key] = !selectedAllergies[key];
+        setSelectedAllergies(newAllergies);
+    };
+
+    const resetSearchTags = () => {
+        let newOpenedMenusReset = [false, false, false]
+        setOpenMenu(newOpenedMenusReset);
+        return;
+    };
 
     if (fetching) {
         return (
@@ -113,6 +218,8 @@ function CreatePetProfile() {
 
     return (
         <section className='createPetProfile'>
+
+
             <section className='title'>
                 <div className='backSection'>
                     <Link to={"/mypets"}>
@@ -121,11 +228,11 @@ function CreatePetProfile() {
                     <h1>Create a Pet Profile</h1>
                 </div>
             </section>
-            <section className='fillInSection'>
+
+            <section className='fillInSection' >
                 <FolderBackground />
                 <div className='petCreationContainer'>
                     <div className='petCreationColumn1'>
-
                         <div className='petName'>
                             <h2>Name:</h2>
                             <input type="text"></input>
@@ -144,20 +251,19 @@ function CreatePetProfile() {
                         <div className='petCreationTraits'>
                             <h2>Traits:</h2>
                             <div className='petCreationTraitsSection'>
+
+                                {
+                                    truePairs.map((item, i) => {
+                                        const twoTraits = item.map(([key, value]) => <TraitInfoBubble onClick={handleOpenMenu} value={key} />)
+                                        return (
+                                            <div className='petCreationTraitsRow'>
+                                                {twoTraits}
+                                            </div>
+                                        );
+                                    })
+                                }
                                 <div className='petCreationTraitsRow'>
-                                    <TraitInfoBubble value='Introverted' />
-                                    <TraitInfoBubble value='Heart Cond.' />
-                                </div>
-                                <div className='petCreationTraitsRow'>
-                                    <TraitInfoBubble value='Diabetes' />
-                                    <TraitInfoBubble value='Short-hair' />
-                                </div>
-                                <div className='petCreationTraitsRow'>
-                                    <TraitInfoBubble value='Blindness' />
-                                    <TraitInfoBubble value='Deaf' />
-                                </div>
-                                <div className='petCreationTraitsRow'>
-                                    <AddBubble value="Add Trait" />
+                                    <AddBubble onMouseDown={GetMousePosition} onClick={handleOpenMenu} index={0} value="Add Trait" />
                                 </div>
                             </div>
                         </div>
@@ -193,26 +299,36 @@ function CreatePetProfile() {
                             <div className='petCreationVaccinations'>
                                 <h2>Vaccinations:</h2>
                                 <div className='petCreationVaccinationContainer'>
-                                    <InfoBubble value='D12'/>
-                                    <InfoBubble value='L2H-3LD'/>
-                                    <AddBubble value='Add Vaccination'/>
+                                    {Object.entries(selectedVaccinations).map(([key, value]) => {
+                                        if (value) {
+                                            return (
+                                                <InfoBubble onClick={handleOpenMenu} value={key} />
+                                            );
+                                        }
+                                    })}
+                                    <AddBubble onMouseDown={GetMousePosition} onClick={handleOpenMenu} index={1} value='Add Vaccination' />
                                 </div>
                             </div>
                             <div className='petCreationAllergies'>
                                 <h2>Allergies:</h2>
                                 <div className='petCreationVaccinationContainer'>
-                                    <InfoBubble value='Dust'/>
-                                    <InfoBubble value='Smoke'/>
-                                    <InfoBubble value='Grass'/>
-                                    <AddBubble value='Add Allergy'/>
+                                    {Object.entries(selectedAllergies).map(([key, value]) => {
+                                        if (value) {
+                                            return (
+                                                <InfoBubble onClick={handleOpenMenu} value={key} />
+                                            );
+                                        }
+                                    })}
+                                    <AddBubble onMouseDown={GetMousePosition} onClick={handleOpenMenu} index={2} value='Add Allergy' />
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
-            
-            <SearchTags buttons={traits} selectedButtons={selectedTraits} setSelectedButtons={handleSelect}/>
+            {openedMenus[0] && <SearchTags mousePosition={mousePosition} buttons={selectedTraits} setSelectedButtons={handleSelectTraits} />}
+            {openedMenus[1] && <SearchTags mousePosition={mousePosition} buttons={selectedVaccinations} setSelectedButtons={handleSelectVaccinations} />}
+            {openedMenus[2] && <SearchTags mousePosition={mousePosition} buttons={selectedAllergies} setSelectedButtons={handleSelectAllergies} />}
             <div>Save Button</div>
         </section>
     );
