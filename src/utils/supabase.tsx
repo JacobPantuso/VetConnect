@@ -23,6 +23,19 @@ export interface User {
   setup: boolean;
 }
 
+
+export interface PetProfile {
+  pet_id: number;
+  owner_id: string;
+  name: string;
+  species: string;
+  date_of_birth: string;
+  gender: 'male' | 'female' | 'unknown';
+  weight: number;
+  height: number;
+  traits: string[];
+}
+
 export const useUserSession = (): UserSession => {
   const [user, setUser] = useState<User | null>(null);
   const [fetching, setFetching] = useState(true);
@@ -97,3 +110,4 @@ export const setupProfile = async (firstName: string, lastName: string, userId: 
   
   console.log("User profile updated successfully");
 };
+
