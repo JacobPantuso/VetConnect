@@ -1,0 +1,222 @@
+.petProfile {
+    margin: 2vw;
+    color: #D5DDDF;
+}
+
+h1, h2 {
+    padding: 0;
+    margin: 0;
+}
+
+.petRow {
+    display: flex;
+    align-items: center;
+    margin: 2vw;
+    column-gap: 2vw;
+}
+
+.petProfile h2 {
+    font-weight: 500;
+}
+
+.petTitle, .petStats, .petTraits, .petAllergies, .petVaccinations, .petVisits, .appointmentItem {
+    padding: 2em;
+    border-radius: 8px;
+    border-style: solid;
+    border-width: 2px;
+    border-color: #3c3e3c;
+}
+
+.appointmentItem {
+    padding: 1em;
+    margin: 1em;
+}
+
+.appointmentItem h3 {
+    margin: 0;
+    padding: 0;
+}
+
+.appointmentItem .doctorName {
+    font-size: 1.5em;
+}
+.appointmentDate {
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    column-gap: .8em;
+}
+
+.petTitle {
+    padding: 2.05em 2em;
+    width: 28%;
+    display: flex;
+    align-items: center;
+    column-gap: 2vw;
+}
+
+.petStats {
+    padding: 1em;
+}
+
+.numberUnit {
+    display: flex;
+    align-items: baseline;
+    column-gap: 0.8vw;
+}
+
+.numberUnit h1 {
+    font-size: 4.5em;
+    font-weight: 300;
+}
+
+.petStats {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: 2em;
+    padding-top: 1.2em;
+}
+
+.numberStat {
+    width: 25%;
+}
+
+.stringStat {
+    width: 20%;
+}
+
+.stringStat h2, .numberStat h2{
+    margin-bottom: 10px;
+}
+
+.stringStat h1 {
+    font-weight: 300;
+    font-size: 2.2em;
+}
+
+
+.petStats {
+    width: 62%;
+}
+
+.petTraits, .petAllergies, .petVaccinations, .petVisits {
+    height: 29em;
+}
+
+.petTraits, .petAllergies, .petVaccinations {
+    width: 16.5%;
+}
+
+.petVisits {
+    width: 28%;
+}
+
+.petVisits h2, .petVaccinations h2, .petTraits h2, .petAllergies h2 {
+    font-size: 1.8em;
+    margin-bottom: 0.5em;
+}
+
+.title {
+    display: flex;
+    align-items: center;
+    padding: 0em 2em;
+}
+
+.backSection {
+    width: 50%;
+    display: flex;
+    align-items: center;
+    column-gap: 2vw;
+}
+
+.editSection {
+    padding: 0em 2em;
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+}
+
+.petProfileContainer {
+    overflow: auto;
+    height: 23.5em;
+}
+
+.infoBubbleContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.infoBubble {
+        width: 100%;
+        display: flex;
+        background-color: #121412;
+        border: solid 2px #3c3e3c;
+        border-radius: 50px;
+        padding: 0.6em;
+        margin-bottom: .5em;
+}
+
+.infoBubble h2 {
+    width: 90%;
+    margin: .1em 0em;
+    text-align: center;
+    white-space: nowrap; 
+    text-overflow: ellipsis;
+    overflow: hidden;
+    font-size: 1.4em;
+    padding-left: 1.3em;
+}
+
+div.editIcons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: 1.5em;
+    margin-top: 1em;
+}
+
+svg.editIcons path {
+    fill: #595959;
+    transition: ease-in-out 0.3s;
+}
+
+svg.editIcons:hover, svg.editIcons:hover path {
+    cursor: pointer;
+}
+
+svg.editIcons:hover path {
+    fill: #D5DDDF
+}
+
+.petProfileCross {
+    width: 10%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.crossIconSvg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.crossIconSvg svg path {
+    stroke: #3c3e3c;
+    transition: ease-in-out 0.3s;
+}
+
+.crossIconSvg:hover {
+    cursor: pointer;
+}
+
+.crossIconSvg:hover svg path {
+    stroke: #D5DDDF
+}
+
+.appointmentCompleted h3 {
+    font-weight: 400;
+}

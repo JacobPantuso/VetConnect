@@ -1,12 +1,21 @@
 @import url('https://fonts.cdnfonts.com/css/montserrat');
+@import url('https://fonts.cdnfonts.com/css/sf-pro-display');
 :root {
   --sweep-delay: 0.1s; /* Shared delay to synchronize animations */
 }
+
+  
+::-webkit-scrollbar {
+  display: none;
+}
+  
 html, body {
   background-color: #1a1a1a;
   color: white;
   font-family: 'Montserrat', sans-serif;
   height: 100vh;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 #root {

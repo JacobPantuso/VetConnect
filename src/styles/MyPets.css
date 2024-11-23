@@ -1,0 +1,94 @@
+section.MyPets {
+    margin: 5vw;
+    color: #D5DDDF;
+}
+
+div.myPetsTitle,
+div.petProfileInfo,
+div.petRow,
+div.petList,
+div.manageProfiles {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.petContainer {
+    width: 100%;
+    margin-top: 2vw;
+}
+
+div.petRow {
+    column-gap: 1.5em;
+}
+
+h1 {
+    font-size: 3em;
+}
+
+h2.myPetsTitle {
+    font-weight: 400;
+    margin-top: 20px;
+}
+
+div.iconBody {
+    width: 11em;
+    background-color: grey;
+    border-radius: 100%;
+    transition: 0.3s ease-in-out;
+}
+
+div.icon {
+    padding: 10%;
+}
+
+div.petProfileButton {
+    transition: 0.3s ease-in-out;
+}
+
+div.petProfileButton:hover {
+    cursor: pointer;
+    color: #D5DDDF;
+}
+
+div.petProfileButton:hover .iconBody {
+    filter: drop-shadow(0 0 0.2rem white) drop-shadow(0 0 0.3rem white);
+}
+
+div.manageProfiles {
+    margin-top: 3vw;
+}
+
+a.petProfileButton,
+a.petProfileButton:visited,
+a.petProfileButton:link {
+    text-decoration: none;
+    color: #D5DDDF;
+    transition: 0.3s ease-in-out;
+}
+
+a.petProfileButton:hover {
+    color: #D5DDDF;
+}
+
+.addIconButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 2em;
+}
+
+.addIconButton svg path {
+    fill: #7E7E7E;
+    transition: ease-in-out 0.3s;
+}
+
+.addIconButton:hover,
+.addIconButton:hover svg path {
+    cursor: pointer;
+}
+
+.addIconButton:hover svg path {
+    fill: #D5DDDF;
+}

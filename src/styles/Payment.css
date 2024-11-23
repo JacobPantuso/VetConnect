@@ -1,0 +1,226 @@
+.Payment {
+  display: flex;
+  flex-direction: column;
+  padding-left: var(--padding);
+  padding-right: var(--padding);
+  padding-top: 2rem;
+}
+
+.payment-form-container {
+    display: flex;
+    flex-direction: row;
+    gap: 3rem;
+    padding: 1rem;
+    margin: 1rem;
+    width: 50%;
+    box-shadow: 0px 0px 10px 5px #9bf3a542;
+}
+
+.payment-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.form-group.expiry-cvv {
+  display: flex;
+  flex-direction: row;
+  gap: 1.5rem;
+}
+
+.expiry-container {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+}
+
+.cvv-container {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+}
+
+.card-logo {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.card-logo-img {
+  width: 80px;
+  height: auto;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  width: inherit;
+  margin-bottom: 15px;
+}
+
+.card-number-group {
+  position: relative;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.input-field {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #41924a;
+  color: white;
+  background-color: transparent;
+  border-radius: 4px;
+}
+
+.input-field.error {
+  border-color: #e74c3c;
+}
+
+.input-field::placeholder {
+  color: #ccc;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: #9ee2a6;
+}
+
+.input-with-icon {
+  position: relative;
+}
+
+.input-icon {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 25px;
+  height: auto;
+}
+
+.submit-button {
+width: inherit;
+    padding: 10px;
+  background-color: transparent;
+  color: white;
+  border: none;
+  border: 1px solid #41924a;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.submit-button:hover {
+  background-color: #41924a;
+}
+
+.payment-container {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
+.left-payment {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 50%;
+}
+
+.left-payment h3 {
+    margin: 0;
+}
+
+.right-payment {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    margin: auto;
+    width: 50%;
+}
+
+.right-payment svg {
+    color: #924141;
+}
+
+.paying-this {
+    display: flex;
+    flex-direction: column;
+    margin: 1rem;
+    margin-left: 0;
+    padding: 1rem;
+    width: 50%;
+    box-shadow: 0px 0px 10px 5px #9bf3a542;
+}
+
+.paying-this h3 {
+    margin: 0;
+}
+
+.verifying-payment {
+    position: fixed; 
+    background-color: rgba(20, 20, 20, 0.747); 
+    height: 100vh; 
+    width: 100vw;
+    left: 0;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.verifying-content {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+}
+.verifying-content p {
+    max-width: 250px;
+}
+
+@media screen and (max-width: 768px) {
+  .payment-container {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .input-field {
+    width: 95%;
+  }
+
+    .form-group.expiry-cvv {
+        width: 97%;
+    }
+
+  .input-icon {
+    right: -50px;
+  }
+
+  .paying-this {
+    width: 90%;
+  }
+
+  .payment-form-container {
+    width: 90%;
+    flex-direction: column;
+    gap: 1rem;
+    margin-left: 0;
+  }
+
+    .left-payment {
+        width: 100%;
+    }
+
+  .right-payment {
+    width: 100%;
+  }
+    
+}

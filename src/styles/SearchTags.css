@@ -1,0 +1,70 @@
+.searchTags {
+    position: absolute;
+    z-index: 4;
+    width: 15%;
+    color: #D5DDDF;
+    border: solid 2px #3c3e3c;
+    border-radius: 0.4em;
+    padding: 1em;
+    background-color: #1a1a1a;
+    height: 15em;
+}
+
+
+.magnifySvg {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: .4em;
+}
+
+.searchTags input[type=text] {
+    background-color: rgba(0,0,0,0);
+    border-style: none;
+    outline: none;
+    padding: .5em;
+    color: #D5DDDF;
+    font-size: 1.2em;
+    width: 100%;
+    font-family: inherit;
+}
+
+.searchTags input[type=text]:focus {
+    border-style: none;
+    outline: none;
+}
+
+.searchTagsSearchBar {
+    width: 100%;
+    display: flex;
+    border: solid 2px #3c3e3c;
+    border-radius:  0.4em;
+}
+
+.searchedTagsContainer {
+    margin-top: .5em;
+    padding: 1em 0em;
+    width: 100%;
+    overflow: scroll;
+    height: 65%;
+}
+
+.searchTagsButton, .searchTagsButtonChecked {
+    cursor: pointer;
+    margin-bottom: .5em;
+    width: 100%;
+    padding: .5em;
+    background-color: rgba(0,0,0,0);
+    border-style: none;
+    border: solid 2px #3c3e3c;
+    border-radius: 1.5em;
+    color: inherit;
+    font-size: 1.3em;
+    font-family: inherit;
+    font-weight: 500;
+}
+
+.searchTagsButtonChecked {
+    color: #6B8E4E;
+    border-color: #6B8E4E;
+}

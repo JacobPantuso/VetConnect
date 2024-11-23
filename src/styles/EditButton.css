@@ -1,0 +1,39 @@
+.manageButton, .done {
+    font-family: inherit;
+    padding: 0.8vw 1.5vw;
+    font-size: 1.5em;
+    text-decoration: none;
+    color: #D5DDDF;
+    border: none;
+    border-style: solid;
+    border-radius: 10em;
+    transition: 0.3s ease-in-out;
+    font-weight: 400;
+}
+
+.manageButton {
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.done {
+    background-color: #6B8E4E;
+}
+
+.done:hover {
+    cursor: pointer;
+    color: #D5DDDF;
+}
+
+.done:active {
+    background-color: rgba(0,0,0,0);
+}
+
+.manageButton:hover {
+    cursor: pointer;
+    color: #6B8E4E;
+}
+
+.manageButton:active {
+    background-color: #6B8E4E;
+    color: #D5DDDF;
+}
