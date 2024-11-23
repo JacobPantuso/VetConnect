@@ -186,7 +186,7 @@ function CreatePetProfile() {
         <section className='createPetProfile'>
 
 
-            <section className='title'>
+            <section className='createPetProfileTitle'>
                 <div className='backSection'>
                     <Link to={"/mypets"}>
                         <ArrowSvg />
@@ -292,12 +292,16 @@ function CreatePetProfile() {
                     </div>
                 </div>
             </section>
-            {openedMenu ==="Traits" && <SearchTags mousePosition={mousePosition} buttons={selectedTraits} setSelectedButtons={handleSelectTraits} />}
-            {openedMenu === "Vaccinations" && <SearchTags mousePosition={mousePosition} buttons={selectedVaccinations} setSelectedButtons={handleSelectVaccinations} />}
-            {openedMenu === "Allergies" && <SearchTags mousePosition={mousePosition} buttons={selectedAllergies} setSelectedButtons={handleSelectAllergies}/>}
+
             <div className='saveButton'>
                 <input className='saveButton' type="button" value="Save" onClick={()=>{createPet()}}/>
             </div>
+
+
+            {openedMenu ==="Traits" && <SearchTags mousePosition={mousePosition} buttons={selectedTraits} setSelectedButtons={handleSelectTraits} />}
+            {openedMenu === "Vaccinations" && <SearchTags mousePosition={mousePosition} buttons={selectedVaccinations} setSelectedButtons={handleSelectVaccinations} />}
+            {openedMenu === "Allergies" && <SearchTags mousePosition={mousePosition} buttons={selectedAllergies} setSelectedButtons={handleSelectAllergies}/>}
+            
         </section>
     );
 }

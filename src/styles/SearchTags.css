@@ -26,6 +26,7 @@
     color: #D5DDDF;
     font-size: 1.2em;
     width: 100%;
+    font-family: inherit;
 }
 
 .searchTags input[type=text]:focus {
@@ -59,6 +60,8 @@
     border-radius: 1.5em;
     color: inherit;
     font-size: 1.3em;
+    font-family: inherit;
+    font-weight: 500;
 }
 
 .searchTagsButtonChecked {

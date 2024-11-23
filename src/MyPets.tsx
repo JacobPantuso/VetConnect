@@ -20,13 +20,13 @@ const petProfile: PetProfileProps = {
 
 const petProfile2: PetProfileProps = {
   petProfileId: 2,
-  petProfileName: "Sparky",
+  petProfileName: "Buddy",
   petProfileOwner: "Noah"
 };
 
 const petProfile3: PetProfileProps = {
   petProfileId: 3,
-  petProfileName: "Sparky",
+  petProfileName: "Max",
   petProfileOwner: "Noah"
 };
 

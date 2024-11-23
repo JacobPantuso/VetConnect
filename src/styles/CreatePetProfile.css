@@ -4,21 +4,25 @@
 }
 
 .fillInSection {
+    position: relative;
     padding: 2em;
-    margin-top: 3vw;
+    margin-top: 1vw;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.createPetProfile .title {
-    position: absolute;
+.createPetProfileTitle {
+    margin-bottom: -2em;
+}
+
+.createPetProfile .createPetProfileTitle {
     width: 100%;
 }
 
 .petCreationContainer {
     position: absolute;
-    top: 32%;
+    top: 15%;
     width: 88vw;
     aspect-ratio: 2/1;
     display: flex;
@@ -137,7 +141,7 @@ input[type=number] {
     border: solid 2px #3c3e3c;
     border-radius: 0.4em;
     padding: 1.2em;
-    height: 30%;
+    height: 37.8%;
 }
 
 .petCreationTraitsSection {
@@ -269,7 +273,7 @@ input[type=number] {
     width: 100%;
     padding: 1.5em;
     border-radius: 0.4em;
-    min-height: 28em;
+    min-height: 30vw;
 }
 
 .petCreationVaccinationContainer, .petCreationAllergiesContainer {
@@ -280,12 +284,16 @@ input[type=number] {
 
 div.saveButton {
     width: 100%;
+    position: relative;
+    top: -11%;
     display: flex;
     align-items: center;
     justify-content: center;
+    
 }
 
 input.saveButton {
+    font-weight: 500;
     width: 10%;
     font-family: inherit;
     color: inherit;
