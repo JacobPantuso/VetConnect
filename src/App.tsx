@@ -16,6 +16,7 @@ import PetProfile from './PetProfile';
 import CreatePetProfile from './CreatePetProfile';
 import UserProfile from './components/UserProfile';
 import Footer from './Footer';
+import Payment from './Payment';
 
 function App() {
 
@@ -61,6 +62,7 @@ function App() {
         <Route path="/mypets" element={<MyPets />} />
         <Route path="/petprofile" element={<PetProfile/>}/>
         <Route path="/createpetprofile" element={<CreatePetProfile/>}/>
+        <Route path="/payment/:paymentid" element={<Payment />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
       <Footer />
