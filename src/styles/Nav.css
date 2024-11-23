@@ -1,17 +1,19 @@
 :root {
     --padding: clamp(7rem, 2vw, 12rem);
 }
-  
+
 .Nav {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    position: relative; /* Ensure the navbar is the reference point */
     padding-top: 1rem;
     padding-bottom: 1rem;
     padding-left: var(--padding);
     padding-right: var(--padding);
     background-color: #141414;
     align-items: center;
+    z-index: 10; /* Ensure the navbar is above the menu */
 }
 
 .left {
@@ -30,8 +32,16 @@
     margin: 0;
 }
 
-.logo-right h2 {
+.dashboard {
     font-size: 1.3rem;
+    text-decoration: none;
+    color: white;
+    transition: 0.5s ease-in-out;
+}
+
+.dashboard:hover {
+    color: #9bf3a5;
+    cursor: pointer;
 }
 
 .logo-right p {
@@ -45,12 +55,15 @@
     gap: 0.5rem;
 }
 
-.profile-pic img {
+.profile-pic {
+    display: flex;
     width: 35px;
     height: 35px;
-    object-fit: contain;
+    justify-content: center;
+    align-items: center;
     border-radius: 50%;
     background-color: #bbbaba;
+    color: black;
     -webkit-box-shadow: 0px 0px 10px 12px rgba(46,142,56,0.05);
     -moz-box-shadow: 0px 0px 10px 12px rgba(46,142,56,0.05);
     box-shadow: 0px 0px 10px 12px rgba(46,142,56,0.05);
@@ -71,7 +84,7 @@
 
 .right a:hover {
     cursor: pointer;
-    color: #41924a;
+    color: #9bf3a5;
 }
 
 .profile-info {
@@ -97,4 +110,52 @@
 
 .profile-info a:hover, .profile-info p:hover {
     text-decoration: underline;
+}
+
+.hamburger {
+    display: none;
+    font-size: 1.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: white;
+    transition: 0.3s ease-in-out;
+}
+
+@media (max-width: 768px) {
+    :root {
+        --padding: 1rem;
+    }
+      
+    .right {
+        position: absolute;
+        top: 100%; /* Place directly below the navbar */
+        left: 0;
+        flex-direction: column;
+        background: #141414;
+        width: 100%;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        transform: translateY(-200%); /* Hidden off-screen initially */
+        transition: transform 0.3s ease-in-out;
+        z-index: -1; /* Ensure it's behind the navbar */
+    }
+  
+    .right.open {
+        transform: translateY(0); /* Slide into view */
+        z-index: 9; /* Raise it above the content but still below the navbar */
+    }
+  
+    .hamburger {
+        display: block;
+    }
+
+    .hamburger.open {
+        transform: rotate(90deg);
+    }
+  
+    .profile-info {
+        display: block;
+    }
 }

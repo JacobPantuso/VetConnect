@@ -1,16 +1,29 @@
+@import url('https://fonts.cdnfonts.com/css/montserrat');
 @import url('https://fonts.cdnfonts.com/css/sf-pro-display');
+:root {
+  --sweep-delay: 0.1s; /* Shared delay to synchronize animations */
+}
 
+  
 ::-webkit-scrollbar {
   display: none;
 }
-
+  
 html, body {
   background-color: #1a1a1a;
   color: white;
-  font-family: 'SF Pro Display', sans-serif;
+  font-family: 'Montserrat', sans-serif;
+  height: 100vh;
   max-width: 100%;
   overflow-x: hidden;
 }
+
+#root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
 .logo {
   width: 30px;
   height: 30px;
@@ -22,6 +35,44 @@ html, body {
   -moz-box-shadow: 0px 0px 10px 12px rgba(46,142,56,0.05);
   box-shadow: 0px 0px 10px 12px rgba(46,142,56,0.05);
 }
+
+.loading-circle {
+  width: 170px;
+  height: 170px;
+  border-radius: 50%;
+  background: conic-gradient(
+    #333 0%,
+    #555555cb 5%,     /* Transition into the highlight */
+    #555555de 10%,         /* Main highlight color */
+    #555555cb 15%,    /* Transition out of the highlight */
+    #333 60%,         /* Background color */
+    #333 100%         /* Fill the remaining part with #333 */
+  );
+  position: relative;
+  animation: loadingSweep 2s linear infinite var(--sweep-delay);
+}
+
+.loading-circle::before {
+  content: '';
+  width: 120px;
+  height: 120px;
+  background: #1a1a1a;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes loadingSweep {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 
 .loading {
   width: 100px;
@@ -45,9 +96,56 @@ html, body {
   }
 }
 
-footer {
+.footer {
+  background-color: #141414;
+  color: #ffffff; 
+  padding: 20px;
   display: flex;
-  margin-top: auto;
+  margin-top: 1rem;
+  flex-direction: column;
+  gap: 1rem;
+  text-align: center;
+  align-items: center;
+  padding-left: var(--padding);
+  padding-right: var(--padding);
+}
+
+.footer-left {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+}
+
+.footer-logo {
+  font-weight: bold;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.footer-nav {
+  display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-  margin-bottom: 1rem;
+  gap: 15px;
+}
+
+.footer-nav a {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 500;
+  transition: 0.3s ease-in-out;
+}
+
+.footer-nav a:hover {
+  color: #9bf3a5;
+}
+
+.footer-rights {
+  color: #ffffff;
+  font-size: 0.9rem;
 }

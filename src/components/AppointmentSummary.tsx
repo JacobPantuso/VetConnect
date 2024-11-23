@@ -7,10 +7,11 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 interface AppointmentSummaryProps {
-  user: User;
+  user?: User;
+  fetching?: boolean;
 }
 
-function AppointmentSummary({ user }: AppointmentSummaryProps) {
+function AppointmentSummary({ user, fetching }: AppointmentSummaryProps) {
     const data = {
         datasets: [
           {
@@ -30,24 +31,44 @@ function AppointmentSummary({ user }: AppointmentSummaryProps) {
         responsive: true,
         maintainAspectRatio: false,
       };
+
+    if (fetching) {
+      return (
+        <div className="Summary">
+          <div className="appointment-summary-content">
+            <h2>Appointment Summary</h2>
+            <p className="loading" style={{width: '250px'}}></p>
+              <div className="details">
+                  <div className="chart-left">
+                    <div className="loading-circle"></div>
+                  </div>
+                  <div className="breakdown">
+
+                  </div>
+              </div>
+          </div>
+        </div>
+      )
+    }
+
     return (
         <div className="Summary">
-        <div className="appointment-summary-content">
-            <h2>Appointment Summary</h2>
-            <p>There are no upcoming appointments.</p>
-            <div className="details">
-                <div className="chart-left">
-                    <Doughnut data={data} options={options} />
-                    <div className="inside-chart">
-                        <div>Max</div>
-                        <div className="due-in">in 21 days</div>
-                    </div>
-                </div>
-                <div className="breakdown">
+          <div className="appointment-summary-content">
+              <h2>Appointment Summary</h2>
+              <p>There are no upcoming appointments.</p>
+              <div className="details">
+                  <div className="chart-left">
+                      <Doughnut data={data} options={options} />
+                      <div className="inside-chart">
+                          <div>Max</div>
+                          <div className="due-in">in 21 days</div>
+                      </div>
+                  </div>
+                  <div className="breakdown">
 
-                </div>
-            </div>
-        </div>
+                  </div>
+              </div>
+          </div>
         </div>
     );
 }

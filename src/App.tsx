@@ -4,7 +4,7 @@ import { supabase, useUserSession } from './utils/supabase';
 import './styles/App.css';
 import Auth from './Auth';
 import Home from './Home';
-import AccountSetup from './AccoutSetup';
+import AccountSetup from './AccountSetup';
 import Gateway from './components/Gateway';
 import {Route, Routes, Navigate } from 'react-router-dom';
 import Nav from './components/Nav';
@@ -14,6 +14,8 @@ import Resources from './Resources';
 import MyPets from './MyPets';
 import PetProfile from './PetProfile';
 import CreatePetProfile from './CreatePetProfile';
+import UserProfile from './components/UserProfile';
+import Footer from './Footer';
 
 function App() {
 
@@ -53,6 +55,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/appointments" element={<Appointment />} />
+        <Route path={`/profile/${user?.id}`} element={<UserProfile user={user ?? undefined} />} />
         <Route path="/about" element={<About />} />
         <Route path="/resources" element={<Resources />} />
         <Route path="/mypets" element={<MyPets />} />
@@ -60,6 +63,7 @@ function App() {
         <Route path="/createpetprofile" element={<CreatePetProfile/>}/>
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
+      <Footer />
     </>
   );
 }

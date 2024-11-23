@@ -7,10 +7,11 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 interface BillingSummaryProps {
-  user: User;
+  user?: User;
+  fetching?: boolean;
 }
 
-function BillingSummary({ user }: BillingSummaryProps) {
+function BillingSummary({ user, fetching }: BillingSummaryProps) {
     const data = {
         datasets: [
           {
@@ -30,6 +31,26 @@ function BillingSummary({ user }: BillingSummaryProps) {
         responsive: true,
         maintainAspectRatio: false,
       };
+  
+  if (fetching) {
+    return (
+      <div className="Summary">
+      <div className="billing-summary-content">
+        <h2>Billing Summary</h2>
+        <p className="loading" style={{width: '250px'}}></p>
+        <div className="details">
+            <div className="chart-left">
+              <div className="loading-circle"></div>
+            </div>
+            <div className="breakdown">
+
+            </div>
+        </div>
+      </div>
+    </div>
+    )
+  }
+
   return (
     <div className="Summary">
       <div className="billing-summary-content">

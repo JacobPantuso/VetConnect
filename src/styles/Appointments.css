@@ -1,0 +1,435 @@
+.Appointment {
+  display: flex;
+  flex-direction: column;
+  padding-top: 2rem;
+  padding-left: var(--padding);
+  padding-right: var(--padding);
+  height: 100%;
+}
+
+.Appointment h2 {
+  font-size: 2rem;
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.appt-desc {
+  margin-bottom: 1rem;
+}
+
+.appointment-content {
+  display: flex;
+  flex-direction: row;
+  margin-top: 1rem;
+  margin-bottom: 2.5rem;
+  gap: 1.5rem;
+}
+
+.CurrentAppointments,
+.BookAppointment {
+  display: flex;
+  flex-direction: column;
+  width: 45%;
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px 5px #9bf3a542;
+  height: 100%;
+}
+
+.CurrentAppointments h2,
+.BookAppointment h2 {
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.no-appointments {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 50%;
+  gap: 1rem;
+  text-align: center;
+  margin: auto;
+}
+
+.no-appointments svg {
+  color: rgb(252, 95, 95);
+}
+
+.booking {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.booking h4 {
+  margin: 0;
+}
+
+.booking p {
+  margin-bottom: 1rem;
+}
+
+.select-pet {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 50%;
+  margin: auto;
+}
+
+.service-selection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 50%;
+  margin: auto;
+}
+
+.no-pets {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.no-pet h4 {
+  margin: 0;
+}
+
+.no-pets svg {
+  color: rgb(252, 95, 95);
+  margin-bottom: 1rem;
+}
+
+.no-pets a {
+  background-color: transparent;
+  color: white;
+  border: none;
+  text-decoration: none;
+  text-align: center;
+  font-size: 0.9rem;
+  border-radius: 5px;
+  width: 100%;
+  padding: 0.5rem;
+  cursor: pointer;
+  border: none;
+  border: 1px solid #41924a;
+  transition: background-color 0.3s;
+}
+
+.no-pets a:hover {
+  background-color: #41924a;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  width: 100%;
+}
+
+.form select {
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  border: none;
+  border: 1px solid #b2f3b9;
+  border-radius: 5px;
+  background-color: transparent;
+  color: white;
+  outline: none;
+}
+
+.form option {
+  background-color: #141414;
+  color: white;
+}
+
+.form #nextbtn {
+  background-color: transparent;
+  color: white;
+  border: none;
+  text-decoration: none;
+  text-align: center;
+  font-size: 0.9rem;
+  border-radius: 5px;
+  width: 100%;
+  padding: 0.5rem;
+  cursor: pointer;
+  border: none;
+  border: 1px solid #41924a;
+  transition: background-color 0.3s;
+}
+
+.form #nextbtn:hover {
+  background-color: #41924a;
+}
+
+.form #nextbtn:disabled {
+  cursor: not-allowed;
+}
+
+.form #backbtn {
+  background-color: transparent;
+  color: white;
+  border: none;
+  text-decoration: none;
+  text-align: center;
+  font-size: 0.9rem;
+  border-radius: 5px;
+  width: 10%;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  cursor: pointer;
+  border: none;
+  border: 1px solid rgb(252, 95, 95);
+  transition: background-color 0.3s;
+}
+
+.form #backbtn:hover {
+  background-color: rgb(252, 95, 95);
+}
+
+.form #confirmbtn {
+  background-color: transparent;
+  color: white;
+  border: none;
+  text-decoration: none;
+  text-align: center;
+  font-size: 0.9rem;
+  border-radius: 5px;
+  width: 50%;
+  margin: auto;
+  padding: 0.5rem;
+  cursor: pointer;
+  border: none;
+  border: 1px solid #41924a;
+  transition: background-color 0.3s;
+}
+
+.form #confirmbtn:hover {
+  background-color: #41924a;
+}
+
+.dropdown-subtitle {
+  font-size: 0.8rem;
+}
+
+/* Date Picker Input */
+.date-picker-container {
+  display: flex;
+  position: relative;
+  width: 50%;
+  margin: auto;
+}
+
+.date-input {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #b2f3b9;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
+  background-color: transparent;
+  margin-bottom: 1rem;
+}
+
+.date-picker-popup {
+  position: absolute;
+  margin: auto;
+  top: 50px;
+  left: 0;
+  width: 100%;
+  background: rgb(56, 56, 56);
+  border: 1px solid #b2f3b9;
+  border-radius: 4px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+}
+
+/* Calendar */
+.calendar {
+  padding: 10px;
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
+.calendar-header {
+  font-size: 18px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.calendar-header button {
+    background-color: transparent;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.calendar-header button:hover {
+    color: #41924a;
+}
+
+.calendar-header button:disabled {
+    color: #5e5e5e;
+    background-color: transparent;
+    cursor: not-allowed;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+}
+
+/* Calendar Headers */
+.day-header {
+  font-weight: bold;
+  color: white;
+  background-color: #333 !important;
+}
+
+/* Disabled (Weekend) Cells */
+.calendar-cell.disabled {
+  color: #ffffff;
+  background-color: #4b4e4b;
+  cursor: not-allowed;
+}
+
+.calendar-cell.available:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.calendar-cell {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 4px;
+  background-color: #41924a;
+  transition: background-color 0.3s;
+}
+
+.calendar-cell.empty {
+  background-color: transparent;
+  cursor: default;
+}
+
+.time-slots-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  width: 60%;
+  overflow: scroll;
+  overflow-x: hidden;
+  max-height: 300px;
+  justify-content: center;
+  margin: auto;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.time-slot-button {
+  padding: 10px 15px;
+  min-width: 200px;
+  font-size: 16px;
+  background-color: transparent;
+  border: none;
+  border: 1px solid #b2f3b9;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.time-slot-button.selected {
+  background-color: #41924a;
+  border: #41924a;
+}
+
+.time-slot-button:hover {
+  background-color: #41924a;
+  border: #41924a;
+}
+
+.time-slot-button:active {
+  background-color: #41924a;
+  border: #41924a;
+}
+
+/* Scrollbar Container */
+::-webkit-scrollbar {
+  width: 8px; /* Width of the scrollbar */
+  height: 8px; /* Height for horizontal scrollbar */
+}
+
+/* Scrollbar Track */
+::-webkit-scrollbar-track {
+  background: #252525; /* Light background for the track */
+  border-radius: 4px; /* Rounded edges */
+}
+
+/* Scrollbar Thumb */
+::-webkit-scrollbar-thumb {
+  background: #696969; /* Gray color for the scrollbar thumb */
+  border-radius: 4px; /* Rounded edges */
+  transition: background-color 0.3s ease;
+}
+
+/* Scrollbar Thumb Hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #888; /* Darker gray on hover */
+}
+
+.summary-pet img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.summary-pet h3 {
+  margin: 0;
+}
+
+.summary-pet p {
+  color: #ccc;
+}
+
+@media screen and (max-width: 768px) {
+  .Appointment {
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+  }
+  .appointment-content {
+    flex-direction: column;
+  }
+
+  .CurrentAppointments,
+  .BookAppointment {
+    width: 90%;
+    margin: auto;
+  }
+
+  .no-appointments {
+    width: 100%;
+  }
+
+  .no-pets {
+    width: 100%;
+  }
+}
