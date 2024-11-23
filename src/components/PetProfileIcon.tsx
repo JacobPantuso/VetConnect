@@ -7,7 +7,7 @@ function PetProfileSvg() {
     const fillColor: string = "#D5DDDF";
 
     return (
-        <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 100 100" xmlSpace="preserve">
+        <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="0 0 100 100" enableBackground="new 0 0 100 100" xmlSpace="preserve">
             <g>
                 <path fill={fillColor} d="M49.96,44.16L49.96,44.16h-0.01h-0.01l0,0C39.05,44.17,33.86,54.6,29.1,60.68c-5.29,6.75-9.4,13.11-9.1,17.41   c0.69,9.811,9.28,11.71,14.4,10.439c5.1-1.25,11.65-2.34,15.55-2.34c3.92,0,10.45,1.09,15.55,2.34   C70.609,89.79,79.21,87.9,79.91,78.09c0.3-4.3-3.82-10.65-9.1-17.41C66.05,54.6,60.87,44.17,49.96,44.16z" />
                 <path fill={fillColor} d="M25.94,56.59c4.58-2.93,4.96-10.52,0.84-16.94c-4.11-6.42-11.16-9.25-15.74-6.31s-4.96,10.52-0.85,16.94   C14.31,56.7,21.36,59.529,25.94,56.59z" />

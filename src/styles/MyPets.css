@@ -61,12 +61,32 @@ div.manageProfiles {
     margin-top: 3vw;
 }
 
-a, a:visited, a:link {
+a.petProfileButton, a.petProfileButton:visited, a.petProfileButton:link {
     text-decoration: none;
     color: #D5DDDF;
     transition: 0.3s ease-in-out;
 }
 
-a:hover {
-    color: white;
+a.petProfileButton:hover {
+    color: #D5DDDF;
+}
+
+.addIconButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 2em;
+}
+
+.addIconButton svg path {
+    fill: #7E7E7E;
+    transition: ease-in-out 0.3s;
+}
+
+.addIconButton:hover, .addIconButton:hover svg path {
+    cursor: pointer;
+}
+
+.addIconButton:hover svg path {
+    fill: #D5DDDF;
 }

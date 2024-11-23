@@ -12,7 +12,7 @@ function PetProfileButton({petProfile}: PetProfileButtonProps) {
 
   return (
     <div className="petProfileButton">
-      <Link to="/PetProfile">
+      <Link to="/PetProfile" className="petProfileButton">
       <PetProfileIcon petProfile={petProfile}/> 
       <div className="petProfileInfo">
         <h2 className="myPetsTitle">

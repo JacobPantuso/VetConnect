@@ -18,16 +18,17 @@
     padding: .4em;
 }
 
-.searchTags input[type='text'] {
+.searchTags input[type=text] {
     background-color: rgba(0,0,0,0);
     border-style: none;
+    outline: none;
     padding: .5em;
     color: #D5DDDF;
     font-size: 1.2em;
     width: 100%;
 }
 
-.searchTags input[type='text']:focus {
+.searchTags input[type=text]:focus {
     border-style: none;
     outline: none;
 }

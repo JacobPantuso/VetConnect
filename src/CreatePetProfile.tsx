@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useUserSession } from './utils/supabase';
 import './styles/CreatePetProfile.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import SearchTags from './components/SearchTags';
+import { traits, allergies, vaccinations, InfoBubbleValues } from './components/InfoBubbles';
 
 function ArrowSvg() {
     const fillColor: string = "#D5DDDF";
@@ -84,12 +85,12 @@ interface AddBubbleProps {
     color?: string
     onClick: Function,
     onMouseDown: Function,
-    index?: number,
+    title: string,
 };
 
-function AddBubble({ value, color, onClick, index, onMouseDown }: AddBubbleProps) {
+function AddBubble({ value, color, onClick, title, onMouseDown }: AddBubbleProps) {
     return (
-        <div className='petCreationAddBubble' onMouseDown={(e) => { onMouseDown(e); onClick(index)}}>
+        <div className='petCreationAddBubble' onMouseDown={(e) => { onMouseDown(e); onClick(title)}}>
             <div className='petCreationAddBubbleIcon'>
                 <AddSvg />
             </div>
@@ -100,35 +101,9 @@ function AddBubble({ value, color, onClick, index, onMouseDown }: AddBubbleProps
     )
 }
 
-interface InfoBubbleValues {
-    [key: string]: boolean;
-}
-
-const traits: InfoBubbleValues = {
-    "Extroverted": false,
-    "Introverted": false,
-    "Long-hair": false,
-    "Short-hair": false,
-    "Blindness": false,
-    "Deafness": false,
-    "Diabetic": false,
-    "Neutered": false
-}
-
-const vaccinations: InfoBubbleValues = {
-    "Idk": false,
-}
-
-const allergies: InfoBubbleValues = {
-    "Grass": false,
-    "Dust": false,
-    "Smoke": false,
-    "Fleas": false,
-}
-
 function CreatePetProfile() {
     const { user, fetching } = useUserSession();
-
+    let navigate = useNavigate();
     const [selectedTraits, setSelectedTraits] = useState<InfoBubbleValues>(traits);
     const [selectedVaccinations, setSelectedVaccinations] = useState<InfoBubbleValues>(vaccinations);
     const [selectedAllergies, setSelectedAllergies] = useState<InfoBubbleValues>(allergies);
@@ -154,33 +129,25 @@ function CreatePetProfile() {
 
     var truePairs = getTrueTraitPairs();
     //Traits, Vaccinations, Allergies
-    const [openedMenus, setOpenMenu] = useState<boolean[]>([false, false, false]);
-    const [mousePosition, setMousePosition] = useState<any[]>([0, 0, false, false]);
+    const [openedMenu, setOpenedMenu] = useState<string>("None");
+    const [mousePosition, setMousePosition] = useState<number[]>([0, 0]);
 
-    const handleOpenMenu = async (index: number) => {
-        let newOpenedMenus: boolean[] = [...openedMenus];
-        let newOpenedMenusReset = [false, false, false]
-
-        if (!newOpenedMenus[index]) {
-            newOpenedMenusReset[index] = !newOpenedMenus[index];
-            setOpenMenu(newOpenedMenusReset);
+    const handleOpenMenu = async (title: string) => {
+        let newOpenedMenu = openedMenu;
+        if (newOpenedMenu === title) {
+            newOpenedMenu = "None";
         } else {
-            setOpenMenu(newOpenedMenusReset);
+            newOpenedMenu = title;
         }
+
+        setOpenedMenu(newOpenedMenu);  
     };
 
     const GetMousePosition = (e: any) => {
-        let newMousePosition: any[] = [0, 0, false, false];
+        let newMousePosition: number[] = [0, 0];
         newMousePosition[0] = e.clientX;
         newMousePosition[1] = e.clientY;
-        if (newMousePosition[0] > window.innerWidth / 2) {
-            newMousePosition[2] = true
-        }
-
-        if (newMousePosition[1] > window.innerWidth / 2) {
-            newMousePosition[3] = true
-        }
-
+        console.log(newMousePosition)
         setMousePosition(newMousePosition);
     };
 
@@ -202,14 +169,9 @@ function CreatePetProfile() {
         setSelectedAllergies(newAllergies);
     };
 
-    const resetSearchTags = () => {
-        let newOpenedMenusReset = [false, false, false]
-        setOpenMenu(newOpenedMenusReset);
-        return;
-    };
-
     const createPet = () => {
-        console.log("Create a pet here")
+        console.log("Create a pet here");
+        navigate("/mypets");
     }
 
     if (fetching) {
@@ -267,7 +229,7 @@ function CreatePetProfile() {
                                     })
                                 }
                                 <div className='petCreationTraitsRow'>
-                                    <AddBubble onMouseDown={GetMousePosition} onClick={handleOpenMenu} index={0} value="Add Trait" />
+                                    <AddBubble onMouseDown={GetMousePosition} onClick={handleOpenMenu} title={"Traits"} value="Add Trait" />
                                 </div>
                             </div>
                         </div>
@@ -310,7 +272,7 @@ function CreatePetProfile() {
                                             );
                                         }
                                     })}
-                                    <AddBubble onMouseDown={GetMousePosition} onClick={handleOpenMenu} index={1} value='Add Vaccination' />
+                                    <AddBubble onMouseDown={GetMousePosition} onClick={handleOpenMenu} title={"Vaccinations"} value='Add Vaccination' />
                                 </div>
                             </div>
                             <div className='petCreationAllergies'>
@@ -323,16 +285,16 @@ function CreatePetProfile() {
                                             );
                                         }
                                     })}
-                                    <AddBubble onMouseDown={GetMousePosition} onClick={handleOpenMenu} index={2} value='Add Allergy' />
+                                    <AddBubble onMouseDown={GetMousePosition} onClick={handleOpenMenu} title={"Allergies"} value='Add Allergy' />
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
-            {openedMenus[0] && <SearchTags mousePosition={mousePosition} buttons={selectedTraits} setSelectedButtons={handleSelectTraits} />}
-            {openedMenus[1] && <SearchTags mousePosition={mousePosition} buttons={selectedVaccinations} setSelectedButtons={handleSelectVaccinations} />}
-            {openedMenus[2] && <SearchTags mousePosition={mousePosition} buttons={selectedAllergies} setSelectedButtons={handleSelectAllergies} />}
+            {openedMenu ==="Traits" && <SearchTags mousePosition={mousePosition} buttons={selectedTraits} setSelectedButtons={handleSelectTraits} />}
+            {openedMenu === "Vaccinations" && <SearchTags mousePosition={mousePosition} buttons={selectedVaccinations} setSelectedButtons={handleSelectVaccinations} />}
+            {openedMenu === "Allergies" && <SearchTags mousePosition={mousePosition} buttons={selectedAllergies} setSelectedButtons={handleSelectAllergies}/>}
             <div className='saveButton'>
                 <input className='saveButton' type="button" value="Save" onClick={()=>{createPet()}}/>
             </div>

@@ -5,13 +5,20 @@ interface EditButtonProps {
     isEditing: boolean,
     setIsEditing: Function,
     value: string,
+    onClickDone?: Function,
   };
 
-function EditButton({ isEditing, setIsEditing, value }: EditButtonProps) {
+function EditButton({ isEditing, setIsEditing, value, onClickDone }: EditButtonProps) {
     if (isEditing) {
-      return (
-        <button onClick={() => setIsEditing(false)} className='done'>Done</button>
-      );
+      if (onClickDone) {
+        return (
+          <button onClick={() => {setIsEditing(false); onClickDone("None")}} className='done'>Done</button>
+        );
+      } else {
+        return (
+          <button onClick={() => setIsEditing(false)} className='done'>Done</button>
+        );
+      }
     } else {
       return (
         <button onClick={() => setIsEditing(true)} className='manageButton'>{value}</button>

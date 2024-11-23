@@ -101,7 +101,7 @@ h2 {
 }
 
 .petTraits, .petAllergies, .petVaccinations, .petVisits {
-    height: 25em;
+    height: 29em;
 }
 
 .petTraits, .petAllergies, .petVaccinations {
@@ -140,11 +140,7 @@ h2 {
 
 .petProfileContainer {
     overflow: auto;
-    height: 85%;
-}
-
-.petAllergies .petProfileContainer {
-    margin-top: 1.6em;
+    height: 23.5em;
 }
 
 .infoBubbleContainer {
@@ -154,19 +150,73 @@ h2 {
 }
 
 .infoBubble {
-        width: 85%;
+        width: 100%;
+        display: flex;
+        background-color: #121412;
+        border: solid 2px #3c3e3c;
+        border-radius: 50px;
+        padding: 0.6em;
+        margin-bottom: .5em;
 }
 
 .infoBubble h2 {
-    background-color: #121412;
-    border: solid 2px #3c3e3c;
-    border-radius: 50px;
+    width: 90%;
+    margin: .1em 0em;
     text-align: center;
-    padding: 0.6em;
-    margin-bottom: .5em;
     white-space: nowrap; 
     text-overflow: ellipsis;
     overflow: hidden;
     font-size: 1.4em;
-    
+    padding-left: 1.3em;
+}
+
+div.editIcons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: 1.5em;
+    margin-top: 1em;
+}
+
+svg.editIcons path {
+    fill: #595959;
+    transition: ease-in-out 0.3s;
+}
+
+svg.editIcons:hover, svg.editIcons:hover path {
+    cursor: pointer;
+}
+
+svg.editIcons:hover path {
+    fill: #D5DDDF
+}
+
+.petProfileCross {
+    width: 10%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.crossIconSvg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.crossIconSvg svg path {
+    stroke: #3c3e3c;
+    transition: ease-in-out 0.3s;
+}
+
+.crossIconSvg:hover {
+    cursor: pointer;
+}
+
+.crossIconSvg:hover svg path {
+    stroke: #D5DDDF
+}
+
+.appointmentCompleted h3 {
+    font-weight: 200;
 }
