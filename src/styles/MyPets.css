@@ -28,7 +28,7 @@ h1 {
 }
 
 h2.myPetsTitle {
-    font-weight: 300;
+    font-weight: 400;
     margin-top: 20px;
 }
 
@@ -53,15 +53,16 @@ div.petProfileButton:hover {
 }
 
 div.petProfileButton:hover .iconBody {
-    filter: drop-shadow(0 0 0.2rem white)
-    drop-shadow(0 0 0.3rem white);
+    filter: drop-shadow(0 0 0.2rem white) drop-shadow(0 0 0.3rem white);
 }
 
 div.manageProfiles {
     margin-top: 3vw;
 }
 
-a.petProfileButton, a.petProfileButton:visited, a.petProfileButton:link {
+a.petProfileButton,
+a.petProfileButton:visited,
+a.petProfileButton:link {
     text-decoration: none;
     color: #D5DDDF;
     transition: 0.3s ease-in-out;
@@ -83,7 +84,8 @@ a.petProfileButton:hover {
     transition: ease-in-out 0.3s;
 }
 
-.addIconButton:hover, .addIconButton:hover svg path {
+.addIconButton:hover,
+.addIconButton:hover svg path {
     cursor: pointer;
 }
 

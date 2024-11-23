@@ -15,6 +15,10 @@ h1, h2 {
     column-gap: 2vw;
 }
 
+.petProfile h2 {
+    font-weight: 500;
+}
+
 .petTitle, .petStats, .petTraits, .petAllergies, .petVaccinations, .petVisits, .appointmentItem {
     padding: 2em;
     border-radius: 8px;
@@ -63,7 +67,7 @@ h1, h2 {
 
 .numberUnit h1 {
     font-size: 4.5em;
-    font-weight: 100;
+    font-weight: 300;
 }
 
 .petStats {
@@ -82,16 +86,12 @@ h1, h2 {
     width: 20%;
 }
 
-h2 {
-    font-weight: 200;
-}
-
 .stringStat h2, .numberStat h2{
     margin-bottom: 10px;
 }
 
 .stringStat h1 {
-    font-weight: 100;
+    font-weight: 300;
     font-size: 2.2em;
 }
 
@@ -218,5 +218,5 @@ svg.editIcons:hover path {
 }
 
 .appointmentCompleted h3 {
-    font-weight: 200;
+    font-weight: 400;
 }
