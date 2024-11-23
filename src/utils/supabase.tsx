@@ -1,4 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
+import { profile } from "console";
 import React, {useState, useEffect} from "react";
 const supabaseUrl = process.env.REACT_APP_SUPABASE_URL || '';
 const supabaseKey = process.env.REACT_APP_SUPABASE_ANON_KEY || '';
@@ -21,6 +22,21 @@ export interface User {
   email: string;
   user_type: string;
   setup: boolean;
+}
+export interface PetProfile {
+  id: number;
+  owner_id: string;
+  name: string;
+  species: string;
+  date_of_birth: string;
+  gender: 'male' | 'female' | 'unknown';
+  weight: number;
+  height: number;
+  traits: string[];
+}
+
+export interface MedicalRecord {
+
 }
 
 export const useUserSession = (): UserSession => {
@@ -96,4 +112,64 @@ export const setupProfile = async (firstName: string, lastName: string, userId: 
   }
   
   console.log("User profile updated successfully");
+};
+
+export const fetchPetProfiles = async (ownerId?: string): Promise<PetProfile[]> => {
+  let query = supabase.from("pet_profiles").select("*");
+
+  if (ownerId) {
+    query = query.eq("owner_id", ownerId);
+  }
+
+  const { data, error } = await query;
+
+  if (error) {
+    console.error("Error fetching pet profiles:", error);
+    throw error;
+  }
+
+  return data || [];
+};
+
+export const addPetProfile = async (petProfile: PetProfile): Promise<void> => {
+  const { error } = await supabase.from("pet_profiles").insert(petProfile);
+
+  if (error) {
+    console.error("Error adding pet profile:", error);
+    throw error;
+  }
+
+  console.log("Pet profile added successfully");
+};
+
+export const updatePetProfile = async (
+  pet_id: number,
+  updates: Partial<Omit<PetProfile, 'pet_id'>>
+): Promise<void> => {
+  const { error } = await supabase
+    .from("pet_profiles")
+    .update(updates)
+    .eq("pet_id", pet_id);
+
+  if (error) {
+    console.error("Error updating pet profile:", error);
+    throw error;
+  }
+
+  console.log("Pet profile updated successfully");
+};
+
+
+export const deletePetProfile = async (petProfile: PetProfile): Promise<void> => {
+  const { error } = await supabase
+    .from("pet_profiles")
+    .delete()
+    .eq("pet_id", petProfile.id);
+
+  if (error) {
+    console.error("Error deleting pet profile:", error);
+    throw error;
+  }
+
+  console.log("Pet profile deleted successfully");
 };
