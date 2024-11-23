@@ -53,7 +53,7 @@ function Nav() {
       <div className={`right ${menuOpen ? 'open' : ''}`}>
         <Link to="/" onClick={toggleMenu}>Dashboard</Link>
         <Link to="/appointments" onClick={toggleMenu}>Appointments</Link>
-        <Link to="/pet-profiles" onClick={toggleMenu}>Pet Profiles</Link>
+        <Link to="/mypets" onClick={toggleMenu}>Pet Profiles</Link>
         <Link to="/resources" onClick={toggleMenu}>Resources</Link>
         <Link to="/about" onClick={toggleMenu}>About</Link>
         <div className="profile">
