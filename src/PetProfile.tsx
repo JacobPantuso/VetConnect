@@ -165,7 +165,6 @@ function PetVisits({ appointments }: PetVisitsProps) {
     let sortedAppointments = appointments.sort((a: Appointment, b: Appointment) => {
         return  b.scheduled_date.getTime() - a.scheduled_date.getTime();
     })
-    console.log(sortedAppointments)
     const appointmentList = sortedAppointments.map((item) => {
         return (
             <AppointmentItem key={item.appointment_id} appointment_id={item.appointment_id} date={item.scheduled_date} status={item.appointment_status} doctorName={item.vet_name} />
