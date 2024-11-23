@@ -23,10 +23,8 @@ export interface User {
   user_type: string;
   setup: boolean;
 }
-
-
 export interface PetProfile {
-  pet_id: number;
+  id: number;
   owner_id: string;
   name: string;
   species: string;
@@ -35,6 +33,10 @@ export interface PetProfile {
   weight: number;
   height: number;
   traits: string[];
+}
+
+export interface MedicalRecord {
+
 }
 
 export const useUserSession = (): UserSession => {
@@ -162,7 +164,7 @@ export const deletePetProfile = async (petProfile: PetProfile): Promise<void> =>
   const { error } = await supabase
     .from("pet_profiles")
     .delete()
-    .eq("pet_id", petProfile.pet_id);
+    .eq("pet_id", petProfile.id);
 
   if (error) {
     console.error("Error deleting pet profile:", error);
