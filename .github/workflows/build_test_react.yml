@@ -1,4 +1,4 @@
-name: CI - Test React Library
+name: React Component Testing
 
 on:
   push:
@@ -25,4 +25,7 @@ jobs:
       run: npm install
 
     - name: Run tests
+      env:
+        REACT_APP_SUPABASE_URL: ${{ secrets.REACT_APP_SUPABASE_URL }}
+        REACT_APP_SUPABASE_ANON_KEY: ${{ secrets.REACT_APP_SUPABASE_ANON_KEY }}
       run: npm test
