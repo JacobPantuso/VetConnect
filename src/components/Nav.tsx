@@ -41,7 +41,7 @@ function Nav() {
   return (
     <div className="Nav">
       <div className="left">
-        <img src={'./paw.png'} className="logo" alt="logo" />
+        <img src={'/paw.png'} className="logo" alt="logo" />
         <div className="logo-right">
           <Link to="/" className="dashboard">VetConnect</Link>
           <p>Your Trusted Partner in Vet Care.</p>

@@ -5,7 +5,7 @@ function Gateway() {
     <div className="Auth">
         <div className="auth-container">
             <div className="auth-box">
-                <img className="logo" src="./paw.png" alt="VetConnect Logo" />
+                <img className="logo" src="/paw.png" alt="VetConnect Logo" />
                 <h2>Verifying Your Identity...</h2>
                 <p>This will only take a few seconds.</p>
                 <div className="auth-fetching">
