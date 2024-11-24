@@ -44,6 +44,18 @@ export interface MedicalRecord {
   pet_profile_id: number;
 }
 
+export interface PaymentForm {
+  id: number;
+  created_at: string;
+  charge: number;
+  notes: string;
+  status: 'pending' | 'paid' | 'failed';
+  ownder_id: string;
+  appointment_id: number;
+  pet_profile_id: number;
+}
+
+
 export const useUserSession = (): UserSession => {
   const [user, setUser] = useState<User | null>(null);
   const [fetching, setFetching] = useState(true);
@@ -238,3 +250,4 @@ export const deleteMedicalRecord = async (medicalRecord: MedicalRecord): Promise
 
   console.log("Medical record deleted successfully");
 };
+
