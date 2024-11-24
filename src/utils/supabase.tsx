@@ -144,7 +144,7 @@ export const useUserSession = (): UserSession => {
       authListener?.subscription.unsubscribe();
     };
   }, []);
-  console.log(user, fetching, petProfiles, appointments, medicalRecords, paymentForms);
+  
   return { user, fetching, petProfiles, appointments, medicalRecords, paymentForms };
 };
 
