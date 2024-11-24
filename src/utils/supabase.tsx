@@ -34,9 +34,14 @@ export interface PetProfile {
   height: number;
   traits: string[];
 }
-
 export interface MedicalRecord {
-
+  id: number;
+  date: string;
+  owner_id: string;
+  veterinarian_id: string;
+  symptoms: string[];
+  notes: string;
+  pet_profile_id: number;
 }
 
 export const useUserSession = (): UserSession => {
