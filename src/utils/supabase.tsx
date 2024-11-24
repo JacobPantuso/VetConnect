@@ -43,7 +43,6 @@ export interface MedicalRecord {
   symptoms: string[];
   notes: string;
   pet_profile_id: number;
-  cost: number;
 }
 
 export interface PaymentForm {
@@ -55,6 +54,16 @@ export interface PaymentForm {
   ownder_id: string;
   appointment_id: number;
   pet_profile_id: number;
+}
+
+export interface Appointment {
+  id: number;
+  scheduled_date: string;
+  pet_profile_id: number;
+  appointment_status: 'scheduled' | 'completed' | 'cancelled';
+  service: string;
+  veterinarian_id: string;
+  cost: number;
 }
 
 
@@ -259,6 +268,15 @@ export const fetchPaymentForms = async (ownerId?: string, appointmentId?: number
   if (ownerId) {
     query = query.eq("owner_id", ownerId);
   }
+  if (appointmentId) {
+    query = query.eq("appointment_id", appointmentId);
+  }
+  if (petProfileId) {
+    query = query.eq("pet_profile_id", petProfileId);
+  }
+  if (status) {
+    query = query.eq("status", status);
+  }
 
   const { data, error } = await query;
 
@@ -311,4 +329,72 @@ export const deletePaymentForm = async (paymentForm: PaymentForm): Promise<void>
   }
 
   console.log("Payment form deleted successfully");
+};
+
+export const fetchAppointments = async (ownerId?: string, petProfileId?: number, status?: 'scheduled' | 'completed' | 'cancelled'): Promise<Appointment[]> => {
+  let query = supabase.from("appointments").select("*");
+
+  if (ownerId) {
+    query = query.eq("owner_id", ownerId);
+  }
+
+  if (petProfileId) {
+    query = query.eq("pet_profile_id", petProfileId);
+  }
+
+  if (status) {
+    query = query.eq("appointment_status", status);
+  }
+
+  const { data, error } = await query;
+
+  if (error) {
+    console.error("Error fetching appointments:", error);
+    throw error;
+  }
+
+  return data || [];
+};
+
+export const addAppointment = async (appointment: Appointment): Promise<void> => {
+  const { error } = await supabase.from("appointments").insert(appointment);
+
+  if (error) {
+    console.error("Error adding appointment:", error);
+    throw error;
+  }
+
+  console.log("Appointment added successfully");
+};
+
+export const updateAppointment = async (
+  appointmentId: number,
+  updates: Partial<Omit<Appointment, 'appointment_id'>>
+): Promise<void> => {
+  const { error } = await supabase
+    .from("appointments")
+    .update(updates)
+    .eq("appointment_id", appointmentId);
+
+  if (error) {
+    console.error("Error updating appointment:", error);
+    throw error;
+  }
+
+  console.log("Appointment updated successfully");
+};
+
+
+export const deleteAppointment = async (appointment: Appointment): Promise<void> => {
+  const { error } = await supabase
+    .from("appointments")
+    .delete()
+    .eq("appointment_id", appointment.id);
+
+  if (error) {
+    console.error("Error deleting appointment:", error);
+    throw error;
+  }
+
+  console.log("Appointment deleted successfully");
 };
