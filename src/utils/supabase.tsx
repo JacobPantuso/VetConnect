@@ -12,6 +12,7 @@ export const supabase = createClient(supabaseUrl, supabaseKey);
 interface UserSession {
   user: User | null;
   fetching: boolean;
+  // petProfiles: PetProfile[];
 }
 
 export interface User {
@@ -42,6 +43,7 @@ export interface MedicalRecord {
   symptoms: string[];
   notes: string;
   pet_profile_id: number;
+  cost: number;
 }
 
 export interface PaymentForm {
@@ -251,3 +253,62 @@ export const deleteMedicalRecord = async (medicalRecord: MedicalRecord): Promise
   console.log("Medical record deleted successfully");
 };
 
+export const fetchPaymentForms = async (ownerId?: string, appointmentId?: number, petProfileId?: number, status?: 'pending' | 'paid' | 'failed'): Promise<PaymentForm[]> => {
+  let query = supabase.from("payment_forms").select("*");
+
+  if (ownerId) {
+    query = query.eq("owner_id", ownerId);
+  }
+
+  const { data, error } = await query;
+
+  if (error) {
+    console.error("Error fetching payment forms:", error);
+    throw error;
+  }
+
+  return data || [];
+};
+
+export const addPaymentForm = async (paymentForm: PaymentForm): Promise<void> => {
+  const { error } = await supabase.from("payment_forms").insert(paymentForm);
+
+  if (error) {
+    console.error("Error adding payment form:", error);
+    throw error;
+  }
+
+  console.log("Payment form added successfully");
+};
+
+export const updatePaymentForm = async (
+  paymentFormId: number,
+  updates: Partial<Omit<PaymentForm, 'payment_form_id'>>
+): Promise<void> => {
+  const { error } = await supabase
+    .from("payment_forms")
+    .update(updates)
+    .eq("payment_form_id", paymentFormId);
+
+  if (error) {
+    console.error("Error updating payment form:", error);
+    throw error;
+  }
+
+  console.log("Payment form updated successfully");
+};
+
+
+export const deletePaymentForm = async (paymentForm: PaymentForm): Promise<void> => {
+  const { error } = await supabase
+    .from("payment_forms")
+    .delete()
+    .eq("payment_form_id", paymentForm.id);
+
+  if (error) {
+    console.error("Error deleting payment form:", error);
+    throw error;
+  }
+
+  console.log("Payment form deleted successfully");
+};
