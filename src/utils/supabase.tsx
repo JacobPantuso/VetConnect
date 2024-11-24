@@ -12,7 +12,10 @@ export const supabase = createClient(supabaseUrl, supabaseKey);
 interface UserSession {
   user: User | null;
   fetching: boolean;
-  // petProfiles: PetProfile[];
+  petProfiles: PetProfile[];
+  appointments: Appointment[];
+  medicalRecords: MedicalRecord[];
+  paymentForms: PaymentForm[];
 }
 
 export interface User {
@@ -70,6 +73,10 @@ export interface Appointment {
 export const useUserSession = (): UserSession => {
   const [user, setUser] = useState<User | null>(null);
   const [fetching, setFetching] = useState(true);
+  const [petProfiles, setPetProfiles] = useState<PetProfile[]>([]);
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [medicalRecords, setMedicalRecords] = useState<MedicalRecord[]>([]);
+  const [paymentForms, setPaymentForms] = useState<PaymentForm[]>([]);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -105,12 +112,31 @@ export const useUserSession = (): UserSession => {
 
     fetchUser();
 
+    const fetchUserData = async () => {
+      if (!user) {
+        return;
+      }
+      const [petProfiles, appointments, medicalRecords, paymentForms] = await Promise.all([
+        fetchPetProfiles(user.id),
+        fetchAppointments(user.id),
+        fetchMedicalRecords(user.id),
+        fetchPaymentForms(user.id)
+      ]);
+      setPetProfiles(petProfiles);
+      setAppointments(appointments);
+      setMedicalRecords(medicalRecords);
+      setPaymentForms(paymentForms);
+    }
+
+    fetchUserData();
+
     const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
       if (!session?.user) {
         setUser(null);
         setFetching(false);
       } else {
         fetchUser();
+        fetchUserData();
       }
     });
 
@@ -118,11 +144,9 @@ export const useUserSession = (): UserSession => {
       authListener?.subscription.unsubscribe();
     };
   }, []);
-
-  return { user, fetching };
+  console.log(user, fetching, petProfiles, appointments, medicalRecords, paymentForms);
+  return { user, fetching, petProfiles, appointments, medicalRecords, paymentForms };
 };
-
-
 
 export const setupProfile = async (firstName: string, lastName: string, userId: string): Promise<void> => {
   const { error } = await supabase
