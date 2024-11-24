@@ -178,3 +178,63 @@ export const deletePetProfile = async (petProfile: PetProfile): Promise<void> =>
 
   console.log("Pet profile deleted successfully");
 };
+
+export const fetchMedicalRecords = async (ownerId?: string): Promise<MedicalRecord[]> => {
+  let query = supabase.from("medical_records").select("*");
+
+  if (ownerId) {
+    query = query.eq("owner_id", ownerId);
+  }
+
+  const { data, error } = await query;
+
+  if (error) {
+    console.error("Error fetching medical records:", error);
+    throw error;
+  }
+
+  return data || [];
+};
+
+export const addMedicalRecord = async (medicalRecord: MedicalRecord): Promise<void> => {
+  const { error } = await supabase.from("medical_records").insert(medicalRecord);
+
+  if (error) {
+    console.error("Error adding medical record:", error);
+    throw error;
+  }
+
+  console.log("Medical record added successfully");
+};
+
+export const updateMedicalRecord = async (
+  medicalRecordId: number,
+  updates: Partial<Omit<MedicalRecord, 'medical_record_id'>>
+): Promise<void> => {
+  const { error } = await supabase
+    .from("medical_records")
+    .update(updates)
+    .eq("medical_record_id", medicalRecordId);
+
+  if (error) {
+    console.error("Error updating medical record:", error);
+    throw error;
+  }
+
+  console.log("Medical record updated successfully");
+};
+
+
+export const deleteMedicalRecord = async (medicalRecord: MedicalRecord): Promise<void> => {
+  const { error } = await supabase
+    .from("medical_records")
+    .delete()
+    .eq("medical_record_id", medicalRecord.id);
+
+  if (error) {
+    console.error("Error deleting medical record:", error);
+    throw error;
+  }
+
+  console.log("Medical record deleted successfully");
+};
