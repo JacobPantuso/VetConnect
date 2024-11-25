@@ -36,8 +36,6 @@ function Home() {
       </div>
     );
   }
-
-
   if (user?.user_type === 'CS') {
     console.log(user.user_type)
     return (

@@ -6,6 +6,19 @@
   padding-top: 2rem;
 }
 
+.Payment.fetching {
+  height: 100%;
+}
+
+.fetching-payment-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
 .payment-form-container {
     display: flex;
     flex-direction: row;
