@@ -6,20 +6,42 @@ import { useUserSession } from './utils/supabase';
 
 function Appointment() {
   const {user, fetching} = useUserSession();
-
   if (fetching) {
     return (
       <div className="Appointment">
         <h2>Appointments</h2>
         <p className='appt-desc'>No pets have any upcoming appointments.</p>
         <div className='appointment-content'>
-          <CurrentAppointments fetching={fetching} />
-          <BookAppointment fetching={fetching} />
-        </div>    
+          <CurrentAppointments user={{
+              id: '',
+              created_at: '',
+              first_name: '',
+              last_name: '',
+              email: '',
+              user_type: '',
+              setup: true,
+              petProfiles: [],
+              appointments: [],
+              medicalRecords: [],
+              paymentForms: []
+          }} fetching={fetching} />
+          <BookAppointment user={{
+              id: '',
+              created_at: '',
+              first_name: '',
+              last_name: '',
+              email: '',
+              user_type: '',
+              setup: true,
+              petProfiles: [],
+              appointments: [],
+              medicalRecords: [],
+              paymentForms: []
+          }} fetching={fetching}/>
+        </div>   
       </div>
     )
   }
-
   return (
     <div className="Appointment">
       <h2>Appointments</h2>

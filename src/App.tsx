@@ -62,7 +62,7 @@ function App() {
         <Route path="/mypets" element={<MyPets />} />
         <Route path="/petprofile" element={<PetProfile/>}/>
         <Route path="/createpetprofile" element={<CreatePetProfile/>}/>
-        <Route path="/payment/:paymentid" element={<Payment />} />
+        <Route path="/payment/:appointmentid" element={<Payment />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
       <Footer />
