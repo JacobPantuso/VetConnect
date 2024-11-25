@@ -427,6 +427,17 @@ export const fetchAppointments = async ({
   }
 
   const { data, error } = await query;
+  data?.sort((a, b) => {
+    if (a.appointment_status === "scheduled" && b.appointment_status !== "scheduled") {
+      return -1;
+    }
+    if (a.appointment_status !== "scheduled" && b.appointment_status === "scheduled") {
+      return 1;
+    }
+    const dateA = new Date(a.scheduled_date.split(" ")[0]);
+    const dateB = new Date(b.scheduled_date.split(" ")[0]);
+    return dateA.getTime() - dateB.getTime();
+  });
 
   if (error) {
     console.error("Error fetching appointments:", error);

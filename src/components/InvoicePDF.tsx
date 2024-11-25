@@ -8,7 +8,6 @@ import {
   Image,
 } from "@react-pdf/renderer";
 
-// Styles
 const styles = StyleSheet.create({
   page: {
     padding: 30,

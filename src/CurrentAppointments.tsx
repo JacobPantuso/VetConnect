@@ -12,6 +12,7 @@ import {
   PaymentForm,
   fetchAppointments,
   updateAppointment,
+  deleteAppointment,
 } from "./utils/supabase";
 import { useNavigate } from "react-router-dom";
 import { CustomDatePicker } from "./BookAppointment";
@@ -44,23 +45,6 @@ function CurrentAppointments({ user, fetching }: CurrentAppointmentsProps) {
   return (
     <div className="CurrentAppointments">
       <h2>Current Appointments</h2>
-      <p>
-        {user.appointments.filter(
-          (appointment) => appointment.appointment_status === "scheduled"
-        ).length > 0
-          ? `${
-              user.petProfiles.filter(
-                (profile) => profile.id === user.appointments[0].pet_profile_id
-              )[0].name
-            } has an upcoming appointment on ${new Date(
-              user.appointments[0].scheduled_date + "T00:00:00"
-            ).toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}`
-          : "No pets have upcoming appointments"}
-      </p>
       {user.appointments.filter(
         (appointment) => appointment.appointment_status === "scheduled"
       ).length > 0 ? (
@@ -482,18 +466,28 @@ type CancelProps = {
 };
 
 function CancelAppointmentForm({ appointment, setSelectAction }: CancelProps) {
+  const handleCancel = () => {
+    deleteAppointment(appointment).then(() => {
+      window.location.reload();
+    });
+  }
   return (
     <div className="CancelAppointmentForm">
       <h4>Are you sure?</h4>
-      <p></p>
+      <p>You're about to cancel an appointment. <br></br>You cannot undo this change.</p>
       <div className="button-row">
         <button
-          className="back-to-selection"
+          className="back-to-selection cancel"
           onClick={() => setSelectAction("")}
         >
           Go Back
         </button>
-        <button className="confirm-changes">Cancel Appointment</button>
+        <button           
+          onClick={handleCancel}
+          className="confirm-changes cancel"
+        >
+          Cancel Appointment
+        </button>
       </div>
     </div>
   );
