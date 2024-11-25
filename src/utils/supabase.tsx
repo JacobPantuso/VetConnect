@@ -1,10 +1,10 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient, AuthChangeEvent } from "@supabase/supabase-js";
 import { profile } from "console";
-import React, {useState, useEffect} from "react";
-const supabaseUrl = process.env.REACT_APP_SUPABASE_URL || '';
-const supabaseKey = process.env.REACT_APP_SUPABASE_ANON_KEY || '';
+import React, { useState, useEffect } from "react";
+const supabaseUrl = process.env.REACT_APP_SUPABASE_URL || "";
+const supabaseKey = process.env.REACT_APP_SUPABASE_ANON_KEY || "";
 if (!supabaseUrl || !supabaseKey) {
-  throw new Error('Missing Supabase URL or Key');
+  throw new Error("Missing Supabase URL or Key");
 }
 
 export const supabase = createClient(supabaseUrl, supabaseKey);
@@ -12,10 +12,6 @@ export const supabase = createClient(supabaseUrl, supabaseKey);
 interface UserSession {
   user: User | null;
   fetching: boolean;
-  petProfiles: PetProfile[];
-  appointments: Appointment[];
-  medicalRecords: MedicalRecord[];
-  paymentForms: PaymentForm[];
 }
 
 export interface User {
@@ -26,14 +22,19 @@ export interface User {
   email: string;
   user_type: string;
   setup: boolean;
+  petProfiles: PetProfile[];
+  appointments: Appointment[];
+  medicalRecords: MedicalRecord[];
+  paymentForms: PaymentForm[];
 }
 export interface PetProfile {
   id: number;
   owner_id: string;
   name: string;
   species: string;
+  breed: string;
   date_of_birth: string;
-  gender: 'male' | 'female' | 'unknown';
+  gender: "male" | "female" | "unknown";
   weight: number;
   height: number;
   traits: string[];
@@ -53,120 +54,139 @@ export interface PaymentForm {
   created_at: string;
   charge: number;
   notes: string;
-  status: 'pending' | 'paid' | 'failed';
-  ownder_id: string;
+  status: "pending" | "paid" | "failed";
+  owner_id: string;
   appointment_id: number;
   pet_profile_id: number;
 }
 
 export interface Appointment {
   id: number;
+  owner_id: string;
   scheduled_date: string;
   pet_profile_id: number;
-  appointment_status: 'scheduled' | 'completed' | 'cancelled';
+  appointment_status: "scheduled" | "completed" | "cancelled";
   service: string;
   veterinarian_id: string;
   cost: number;
 }
 
-
 export const useUserSession = (): UserSession => {
   const [user, setUser] = useState<User | null>(null);
   const [fetching, setFetching] = useState(true);
-  const [petProfiles, setPetProfiles] = useState<PetProfile[]>([]);
-  const [appointments, setAppointments] = useState<Appointment[]>([]);
-  const [medicalRecords, setMedicalRecords] = useState<MedicalRecord[]>([]);
-  const [paymentForms, setPaymentForms] = useState<PaymentForm[]>([]);
-
   useEffect(() => {
-    const fetchUser = async () => {
-      const { data: authData, error: authError } = await supabase.auth.getUser();
-      if (authError) {
-        setFetching(false);
-        return;
-      }
+    const fetchUserAndData = async () => {
+      try {
+        // Fetch authenticated user
+        const { data: authData, error: authError } =
+          await supabase.auth.getUser();
+        if (authError) {
+          console.error("Error fetching authenticated user:", authError);
+          setFetching(false);
+          return;
+        }
 
-      const userId = authData?.user?.id;
-      if (!userId) {
-        setFetching(false);
-        return;
-      }
-      const { data: profileData, error: profileError } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', userId)
-        .single<User>();
+        const userId = authData?.user?.id;
+        if (!userId) {
+          console.warn("No user ID found.");
+          setFetching(false);
+          return;
+        }
 
-      if (profileError) {
-        console.error("Error fetching user profile:", profileError);
+        // Fetch user profile
+        const { data: profileData, error: profileError } = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("id", userId)
+          .single<User>();
+
+        if (profileError || !profileData) {
+          console.error("Error fetching user profile:", profileError);
+          setUser(null);
+          setFetching(false);
+          return;
+        }
+
+        // Fetch related data in parallel
+        const [petProfiles, appointments, medicalRecords, paymentForms] =
+          await Promise.all([
+            fetchPetProfiles(userId),
+            fetchAppointments({ownerId: userId}),
+            fetchMedicalRecords(userId),
+            fetchPaymentForms({ownerId: userId}),
+          ]);
+
+        // Combine all data into the user object
+        const completeUser = {
+          ...profileData,
+          petProfiles,
+          appointments,
+          medicalRecords,
+          paymentForms,
+        };
+
+        // Update state
+        setUser(completeUser);
+      } catch (error) {
+        console.error("Error during data fetching:", error);
         setUser(null);
-      } else if (profileData?.setup !== undefined) {
-        setUser(profileData);
-      } else {
-        console.warn("Profile data is missing the 'setup' field.");
-        setUser(null);
+      } finally {
+        setFetching(false);
       }
-
-      setFetching(false);
     };
+    fetchUserAndData();
 
-    fetchUser();
+    // Handle authentication state changes
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      (event: AuthChangeEvent, session) => {
+        const currentUserId = session?.user?.id;
 
-    const fetchUserData = async () => {
-      if (!user) {
-        return;
+        // Handle session changes
+        if (event === "SIGNED_IN" || event === "USER_UPDATED") {
+          if (!user || user.id !== currentUserId) {
+            fetchUserAndData();
+          }
+        } else if (event === "SIGNED_OUT") {
+          // Clear user state on sign-out
+          setUser(null);
+          setFetching(false);
+        }
       }
-      const [petProfiles, appointments, medicalRecords, paymentForms] = await Promise.all([
-        fetchPetProfiles(user.id),
-        fetchAppointments(user.id),
-        fetchMedicalRecords(user.id),
-        fetchPaymentForms(user.id)
-      ]);
-      setPetProfiles(petProfiles);
-      setAppointments(appointments);
-      setMedicalRecords(medicalRecords);
-      setPaymentForms(paymentForms);
-    }
-
-    fetchUserData();
-
-    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (!session?.user) {
-        setUser(null);
-        setFetching(false);
-      } else {
-        fetchUser();
-        fetchUserData();
-      }
-    });
+    );
 
     return () => {
       authListener?.subscription.unsubscribe();
     };
   }, []);
-  
-  return { user, fetching, petProfiles, appointments, medicalRecords, paymentForms };
+
+  return { user, fetching };
 };
 
-export const setupProfile = async (firstName: string, lastName: string, userId: string): Promise<void> => {
+export const setupProfile = async (
+  firstName: string,
+  lastName: string,
+  userId: string
+): Promise<void> => {
   const { error } = await supabase
-    .from('profiles')
+    .from("profiles")
     .update({
       first_name: firstName,
       last_name: lastName,
-      setup: true
+      setup: true,
     })
-    .eq('id', userId);
+    .eq("id", userId);
 
   if (error) {
     console.error("Error updating user profile:", error);
     throw new Error("Failed to update user profile");
   }
-  
+
   console.log("User profile updated successfully");
 };
 
-export const fetchPetProfiles = async (ownerId?: string): Promise<PetProfile[]> => {
+export const fetchPetProfiles = async (
+  ownerId?: string
+): Promise<PetProfile[]> => {
   let query = supabase.from("pet_profiles").select("*");
 
   if (ownerId) {
@@ -196,7 +216,7 @@ export const addPetProfile = async (petProfile: PetProfile): Promise<void> => {
 
 export const updatePetProfile = async (
   pet_id: number,
-  updates: Partial<Omit<PetProfile, 'pet_id'>>
+  updates: Partial<Omit<PetProfile, "pet_id">>
 ): Promise<void> => {
   const { error } = await supabase
     .from("pet_profiles")
@@ -211,8 +231,9 @@ export const updatePetProfile = async (
   console.log("Pet profile updated successfully");
 };
 
-
-export const deletePetProfile = async (petProfile: PetProfile): Promise<void> => {
+export const deletePetProfile = async (
+  petProfile: PetProfile
+): Promise<void> => {
   const { error } = await supabase
     .from("pet_profiles")
     .delete()
@@ -226,7 +247,9 @@ export const deletePetProfile = async (petProfile: PetProfile): Promise<void> =>
   console.log("Pet profile deleted successfully");
 };
 
-export const fetchMedicalRecords = async (ownerId?: string): Promise<MedicalRecord[]> => {
+export const fetchMedicalRecords = async (
+  ownerId?: string
+): Promise<MedicalRecord[]> => {
   let query = supabase.from("medical_records").select("*");
 
   if (ownerId) {
@@ -243,8 +266,12 @@ export const fetchMedicalRecords = async (ownerId?: string): Promise<MedicalReco
   return data || [];
 };
 
-export const addMedicalRecord = async (medicalRecord: MedicalRecord): Promise<void> => {
-  const { error } = await supabase.from("medical_records").insert(medicalRecord);
+export const addMedicalRecord = async (
+  medicalRecord: MedicalRecord
+): Promise<void> => {
+  const { error } = await supabase
+    .from("medical_records")
+    .insert(medicalRecord);
 
   if (error) {
     console.error("Error adding medical record:", error);
@@ -256,7 +283,7 @@ export const addMedicalRecord = async (medicalRecord: MedicalRecord): Promise<vo
 
 export const updateMedicalRecord = async (
   medicalRecordId: number,
-  updates: Partial<Omit<MedicalRecord, 'medical_record_id'>>
+  updates: Partial<Omit<MedicalRecord, "medical_record_id">>
 ): Promise<void> => {
   const { error } = await supabase
     .from("medical_records")
@@ -271,8 +298,9 @@ export const updateMedicalRecord = async (
   console.log("Medical record updated successfully");
 };
 
-
-export const deleteMedicalRecord = async (medicalRecord: MedicalRecord): Promise<void> => {
+export const deleteMedicalRecord = async (
+  medicalRecord: MedicalRecord
+): Promise<void> => {
   const { error } = await supabase
     .from("medical_records")
     .delete()
@@ -286,7 +314,17 @@ export const deleteMedicalRecord = async (medicalRecord: MedicalRecord): Promise
   console.log("Medical record deleted successfully");
 };
 
-export const fetchPaymentForms = async (ownerId?: string, appointmentId?: number, petProfileId?: number, status?: 'pending' | 'paid' | 'failed'): Promise<PaymentForm[]> => {
+export const fetchPaymentForms = async ({
+  ownerId,
+  appointmentId,
+  petProfileId,
+  status,
+}: {
+  ownerId?: string;
+  appointmentId?: number;
+  petProfileId?: number;
+  status?: "pending" | "paid" | "failed";
+}): Promise<PaymentForm[]> => {
   let query = supabase.from("payment_forms").select("*");
 
   if (ownerId) {
@@ -312,7 +350,9 @@ export const fetchPaymentForms = async (ownerId?: string, appointmentId?: number
   return data || [];
 };
 
-export const addPaymentForm = async (paymentForm: PaymentForm): Promise<void> => {
+export const addPaymentForm = async (
+  paymentForm: PaymentForm
+): Promise<void> => {
   const { error } = await supabase.from("payment_forms").insert(paymentForm);
 
   if (error) {
@@ -325,12 +365,12 @@ export const addPaymentForm = async (paymentForm: PaymentForm): Promise<void> =>
 
 export const updatePaymentForm = async (
   paymentFormId: number,
-  updates: Partial<Omit<PaymentForm, 'payment_form_id'>>
+  updates: Partial<Omit<PaymentForm, "payment_form_id">>
 ): Promise<void> => {
   const { error } = await supabase
     .from("payment_forms")
     .update(updates)
-    .eq("payment_form_id", paymentFormId);
+    .eq("id", paymentFormId);
 
   if (error) {
     console.error("Error updating payment form:", error);
@@ -340,8 +380,9 @@ export const updatePaymentForm = async (
   console.log("Payment form updated successfully");
 };
 
-
-export const deletePaymentForm = async (paymentForm: PaymentForm): Promise<void> => {
+export const deletePaymentForm = async (
+  paymentForm: PaymentForm
+): Promise<void> => {
   const { error } = await supabase
     .from("payment_forms")
     .delete()
@@ -355,11 +396,26 @@ export const deletePaymentForm = async (paymentForm: PaymentForm): Promise<void>
   console.log("Payment form deleted successfully");
 };
 
-export const fetchAppointments = async (ownerId?: string, petProfileId?: number, status?: 'scheduled' | 'completed' | 'cancelled'): Promise<Appointment[]> => {
+
+export const fetchAppointments = async ({
+  ownerId,
+  appointmentId,
+  petProfileId,
+  status,
+}: {
+  ownerId?: string,
+  appointmentId?: number,
+  petProfileId?: number,
+  status?: "scheduled" | "completed" | "cancelled",
+}): Promise<Appointment[]> => {
   let query = supabase.from("appointments").select("*");
 
   if (ownerId) {
     query = query.eq("owner_id", ownerId);
+  }
+
+  if (appointmentId) {
+    query = query.eq("id", appointmentId);
   }
 
   if (petProfileId) {
@@ -380,7 +436,9 @@ export const fetchAppointments = async (ownerId?: string, petProfileId?: number,
   return data || [];
 };
 
-export const addAppointment = async (appointment: Appointment): Promise<void> => {
+export const addAppointment = async (
+  appointment: Appointment
+): Promise<void> => {
   const { error } = await supabase.from("appointments").insert(appointment);
 
   if (error) {
@@ -393,12 +451,12 @@ export const addAppointment = async (appointment: Appointment): Promise<void> =>
 
 export const updateAppointment = async (
   appointmentId: number,
-  updates: Partial<Omit<Appointment, 'appointment_id'>>
+  updates: Partial<Omit<Appointment, "appointment_id">>
 ): Promise<void> => {
   const { error } = await supabase
     .from("appointments")
     .update(updates)
-    .eq("appointment_id", appointmentId);
+    .eq("id", appointmentId);
 
   if (error) {
     console.error("Error updating appointment:", error);
@@ -408,12 +466,13 @@ export const updateAppointment = async (
   console.log("Appointment updated successfully");
 };
 
-
-export const deleteAppointment = async (appointment: Appointment): Promise<void> => {
+export const deleteAppointment = async (
+  appointment: Appointment
+): Promise<void> => {
   const { error } = await supabase
     .from("appointments")
     .delete()
-    .eq("appointment_id", appointment.id);
+    .eq("id", appointment.id);
 
   if (error) {
     console.error("Error deleting appointment:", error);
