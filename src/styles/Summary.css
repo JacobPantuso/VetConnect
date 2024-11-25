@@ -25,12 +25,19 @@
     display: flex;
     flex-direction: row;
     margin-top: 1rem;
+    gap: 2rem;
 }
 
 .chart-left {
     position: relative;
     width: 170px;
     height: 170px;
+}
+
+.breakdown {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 }
 
 .inside-chart {
@@ -46,4 +53,45 @@
 .due-in {
     color: #ffffff;
     font-size: 13px;
+}
+
+@media screen and (max-width: 768px) {
+    .Summary {
+        width: auto;
+    }
+    
+}
+
+/* Line Chart */
+
+.LineChart{
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+}
+
+.LineChart h4{
+    font-size: 1rem;
+    margin: 0;
+}
+
+.LineChart p{
+    font-size: 0.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.line-chart {
+   position: relative; 
+    width: 100%;
+    height: 20px;
+    background-color: #9bf3a542;
+    border-radius: 10px;
+}
+
+.line-chart-bar {
+    position: absolute;
+    height: 20px;
+    border-radius: 10px;
+    bottom: 0;
+    background-color: #41924a;
 }
