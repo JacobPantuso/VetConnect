@@ -108,13 +108,18 @@ export const useUserSession = (): UserSession => {
         }
 
         // Fetch related data in parallel
-        const [petProfiles, appointments, medicalRecords, paymentForms] =
-          await Promise.all([
-            fetchPetProfiles(userId),
-            fetchAppointments({ownerId: userId}),
-            fetchMedicalRecords(userId),
-            fetchPaymentForms({ownerId: userId}),
-          ]);
+        let petProfiles;
+        if (user?.user_type !== 'USER') {
+          petProfiles = await fetchPetProfiles();
+        } else {
+          petProfiles = await fetchPetProfiles(userId);
+        }
+
+        const [appointments, medicalRecords, paymentForms] = await Promise.all([
+          fetchAppointments({ ownerId: userId }),
+          fetchMedicalRecords(userId),
+          fetchPaymentForms({ ownerId: userId }),
+        ]);
 
         // Combine all data into the user object
         const completeUser = {
@@ -183,6 +188,17 @@ export const setupProfile = async (
 
   console.log("User profile updated successfully");
 };
+
+export const fetchAllUsers = async (): Promise<User[]> => {
+  const { data, error } = await supabase.from("profiles").select("*");
+
+  if (error) {
+    console.error("Error fetching user profiles:", error);
+    throw error;
+  }
+
+  return data || [];
+}
 
 export const fetchPetProfiles = async (
   ownerId?: string
@@ -395,7 +411,6 @@ export const deletePaymentForm = async (
 
   console.log("Payment form deleted successfully");
 };
-
 
 export const fetchAppointments = async ({
   ownerId,
