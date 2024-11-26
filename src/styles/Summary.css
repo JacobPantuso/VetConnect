@@ -78,6 +78,54 @@
     
 }
 
+.Summary.full {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.appointments.full {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    max-height: 500px;
+}
+
+.appointment-summary-content.full {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.no-appointments.full {
+    height: 100%;
+    width: 40%;
+    justify-content: center;
+}
+
+.appointment-filter {
+    width: 30%;
+    padding: 0.5rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border: none;
+    border: 1px solid #b2f3b9;
+    border-radius: 5px;
+    background-color: transparent;
+    color: white;
+    outline: none;
+}
+
+.appointment-filter option {
+    background-color: #141414;
+    color: white;
+}
+
+.appointment-filter:focus {
+    outline: none;
+}
+
+
 /* Line Chart */
 
 .LineChart{

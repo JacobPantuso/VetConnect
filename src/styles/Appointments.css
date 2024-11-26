@@ -448,6 +448,23 @@
   font-size: 0.8rem;
 }
 
+.user-select {
+  width: 20%;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  border: none;
+  border: 1px solid #b2f3b9;
+  border-radius: 5px;
+  background-color: transparent;
+  color: white;
+  outline: none;
+}
+
+.user-select option {
+  background-color: #141414;
+  color: white;
+}
+
 /* Date Picker Input */
 .date-picker-container {
   display: flex;
