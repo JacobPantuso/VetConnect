@@ -87,8 +87,6 @@ function MyPets() {
 
         {petProfiles.length < 1 ? 
             <div className='noPets'>
-            
-            
             <AddIconButton/> 
             <h2>No pets yet! Create a new pet.</h2>
             </div>
