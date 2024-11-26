@@ -2,6 +2,7 @@ import React from "react";
 import '../styles/MyPets.css';
 import { Link } from 'react-router-dom';
 import { PetProfileProps } from "../MyPets";
+import { PetProfile } from "../utils/supabase";
 
 function PetProfileSvg() {
     const fillColor: string = "#D5DDDF";
@@ -19,13 +20,13 @@ function PetProfileSvg() {
 }
 
 interface PetProfileButtonProps {
-    petProfile: PetProfileProps,
+    petProfile: PetProfile,
     size?: string  
 }
 
 function PetProfileIcon({petProfile, size}: PetProfileButtonProps) {
     //petProfile: {name: String; }
-    const petProfileColorId: number = (petProfile.petProfileId % 4) - 1;
+    const petProfileColorId: number = (petProfile.id % 4) - 1;
     const petProfileColors: string[] = ["#47652e", "#2b4a4a", "#3C5148"] //Generated colors for pfps
     const petColorIndex = petProfileColors[petProfileColorId];
 

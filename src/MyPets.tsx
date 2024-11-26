@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useUserSession } from './utils/supabase';
+import { useUserSession, fetchPetProfiles, setupProfile, PetProfile } from './utils/supabase';
 import './styles/MyPets.css';
 import PetProfileButton from './components/PetProfileButton';
 import EditButton from './components/EditButton';
@@ -51,6 +51,19 @@ function AddIconButton() {
 function MyPets() {
   const { user, fetching } = useUserSession();
   const [isEditing, setIsEditing] = useState(false);
+  const [petProfiles, setPetProfiles] = useState<PetProfile[]>([]);
+
+  useEffect(() => {
+    if (user) {
+      const updatePetProfiles = async () => {
+        const petProfiles = await fetchPetProfiles(user.id);
+        setPetProfiles(petProfiles);
+      }
+    
+      updatePetProfiles();
+      
+    }
+  }, [user])
 
   if (fetching) {
     return (
@@ -72,9 +85,7 @@ function MyPets() {
       <div className='petContainer'>
         <div className="petList">
           <div className='petRow'>
-            <PetProfileButton petProfile={petProfile} />
-            <PetProfileButton petProfile={petProfile2} />
-            <PetProfileButton petProfile={petProfile3} />
+            {petProfiles.map((item)=> <PetProfileButton petProfile={item} />)}
             {isEditing && <AddIconButton />}
           </div>
         </div>

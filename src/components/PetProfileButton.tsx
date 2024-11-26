@@ -3,9 +3,10 @@ import '../styles/MyPets.css';
 import { Link } from 'react-router-dom';
 import PetProfileIcon from "./PetProfileIcon";
 import { PetProfileProps } from "../MyPets";
+import { PetProfile } from "../utils/supabase";
 
 interface PetProfileButtonProps {
-  petProfile: PetProfileProps,
+  petProfile: PetProfile,
 }
 
 function PetProfileButton({petProfile}: PetProfileButtonProps) {
@@ -16,7 +17,7 @@ function PetProfileButton({petProfile}: PetProfileButtonProps) {
       <PetProfileIcon petProfile={petProfile}/> 
       <div className="petProfileInfo">
         <h2 className="myPetsTitle">
-          {petProfile.petProfileName}
+          {petProfile.name}
         </h2>
         <h2>
         </h2>

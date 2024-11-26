@@ -68,11 +68,13 @@ function CompletedIcon() {
     )
 }
 
+//<PetProfileIcon petProfile={petProfile} size='6em' />
+
 function PetTitle() {
     return (
         <div className='petTitle'>
             <div>
-                <PetProfileIcon petProfile={petProfile} size='6em' />
+                
             </div>
 
             <div>
