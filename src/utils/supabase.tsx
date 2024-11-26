@@ -412,6 +412,62 @@ export const deletePaymentForm = async (
   console.log("Payment form deleted successfully");
 };
 
+
+export const uploadInvoice = async (
+  paymentFormId: number,
+  file: File
+): Promise<string | null> => {
+  const filePath = `${paymentFormId}-invoice.pdf`;
+  
+  // Upload the file to the Supabase storage bucket
+  const { error } = await supabase.storage
+    .from("invoices")
+    .upload(filePath, file, {upsert:true});
+
+  if (error) {
+    console.error("Error uploading file:", error.message);
+    return null;
+  }
+
+  // Get the public URL for the uploaded file
+  const { data:publicUrl } = supabase.storage.from("invoices").getPublicUrl(filePath);
+
+  return publicUrl.publicUrl || null;
+};
+
+export const updatePaymentFormInvoiceUrl = async (
+  paymentFormId: number,
+  invoiceUrl: string
+): Promise<boolean> => {
+  const { error } = await supabase
+    .from("payment_forms")
+    .update({ invoice_url: invoiceUrl })
+    .eq("id", paymentFormId);
+
+  if (error) {
+    console.error("Error updating payment form:", error.message);
+    return false;
+  }
+
+  return true;
+};
+
+export const downloadInvoice = async (paymentFormId: number): Promise<string | null> => {
+  const filePath = `${paymentFormId}-invoice.pdf`;
+
+  // Get the public URL for the file
+  const { data } = supabase.storage.from("invoices").getPublicUrl(filePath);
+
+  if (!data || !data.publicUrl) {
+    console.error("Error getting file URL:");
+    return null;
+  }
+
+  return data.publicUrl; // Return the public URL of the file
+};
+
+
+
 export const fetchAppointments = async ({
   ownerId,
   appointmentId,
