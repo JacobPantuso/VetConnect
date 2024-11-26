@@ -42,18 +42,10 @@ function AppointmentSummary({ user, fetching }: AppointmentSummaryProps) {
 
   let daysUntilAppointment = 0;
   let petName;
-  if (user?.user_type === 'USER') {
-    const upcomingScheduledDate = user?.appointments[0]?.scheduled_date.split(" ")[0];
-    const today = new Date();
-    const upcomingDate = upcomingScheduledDate ? new Date(upcomingScheduledDate) : null;
-    daysUntilAppointment = upcomingDate ? Math.floor((upcomingDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)) : 0;
-    petName = user?.petProfiles.filter((profile) => profile.id === user.appointments[0].pet_profile_id)[0].name;
-  }
-
   const data = {
     datasets: [
       {
-        data: [daysUntilAppointment, 65 - daysUntilAppointment],
+        data: [65, 0],
         backgroundColor: ['#41924a', '#d3d3d3'],
         borderWidth: 0,
         cutout: '70%',
@@ -69,6 +61,16 @@ function AppointmentSummary({ user, fetching }: AppointmentSummaryProps) {
     responsive: true,
     maintainAspectRatio: false,
   };
+
+  if (user?.user_type === 'USER' && user.appointments.length > 0) {
+    const upcomingScheduledDate = user?.appointments[0]?.scheduled_date.split(" ")[0];
+    const today = new Date();
+    const upcomingDate = upcomingScheduledDate ? new Date(upcomingScheduledDate) : null;
+    daysUntilAppointment = upcomingDate ? Math.floor((upcomingDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)) : 0;
+    petName = user?.petProfiles.filter((profile) => profile.id === user.appointments[0].pet_profile_id)[0].name;
+
+    data.datasets[0].data = [daysUntilAppointment, 65 - daysUntilAppointment];
+  }
 
   return (
     <div className="Summary">
