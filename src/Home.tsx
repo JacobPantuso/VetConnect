@@ -1,5 +1,5 @@
-import React from 'react';
-import { useUserSession } from './utils/supabase';
+import React, {useState, useEffect} from 'react';
+import { useUserSession, User } from './utils/supabase';
 import './styles/Home.css';
 import AppointmentSummary from './components/AppointmentSummary';
 import BillingSummary from './components/BillingSummary';
@@ -37,36 +37,14 @@ function Home() {
     );
   }
   if (user?.user_type === 'CS') {
-    console.log(user.user_type)
     return (
-      <div className="Home">
-      <div className='home-content'>
-        <div className='content-left'>
-          <h2 className='welcome'>Welcome Back!</h2>
-          <p>No upcoming appointments. The clinic is {HoursUntilFivePM()}</p>
-        </div>
-        <div className='content-right'>
-
-        </div>
-      </div>
-    </div>
-    );
+      <ClinicStaff user={user} />
+    )
   }
 
   if (user?.user_type === 'VET') {
     return (
-      <div className="Home">
-      <div className='home-content'>
-        <div className='content-left'>
-          <h2 className='welcome'>Welcome, {user?.first_name}. {user?.last_name}!</h2>
-          <p>Your next appointment is in <b>__ minutes</b>. The clinic is {HoursUntilFivePM()}</p>
-          {user && <AppointmentSummary user={user} />}
-        </div>
-        <div className='content-right'>
-          <AccountNotifications user={user} />
-        </div>
-      </div>
-    </div>
+      <Vet user={user} />
     );
   }
 
@@ -75,7 +53,21 @@ function Home() {
         <div className='home-content'>
           <div className='content-left'>
             <h2 className='welcome'>Welcome, {user?.first_name}!</h2>
-            <p>No pets have any upcoming appointments.</p>
+            {user && user.appointments.filter(
+                (appointment) => appointment.appointment_status === "scheduled"
+              ).length > 0
+                ? <p>{
+                    user.petProfiles.filter(
+                      (profile) => profile.id === user.appointments[0].pet_profile_id
+                    )[0].name
+                  } has an upcoming appointment on {new Date(
+                    user.appointments[0].scheduled_date.split(" ")[0]
+                  ).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}</p>
+                : <p>"No pets have upcoming appointments"</p>}
             {user && <BillingSummary user={user} />}
             {user && <AppointmentSummary user={user} />}
           </div>
@@ -84,6 +76,43 @@ function Home() {
           </div>
         </div>
     </div>
+  );
+}
+
+interface ExternalProps {
+  user: User;
+}
+
+function Vet({ user }: ExternalProps) {
+  return (
+    <div className="Home">
+    <div className='home-content'>
+      <div className='content-left'>
+        <h2 className='welcome'>Welcome, {user?.first_name}. {user?.last_name}!</h2>
+        <p>Your next appointment is in <b>__ minutes</b>. The clinic is {HoursUntilFivePM()}</p>
+        {user && <AppointmentSummary user={user} />}
+      </div>
+      <div className='content-right'>
+        <AccountNotifications user={user} />
+      </div>
+    </div>
+  </div>
+  );
+}
+
+function ClinicStaff({ user }: ExternalProps) {
+  return (
+    <div className="Home">
+    <div className='home-content'>
+      <div className='content-left'>
+        <h2 className='welcome'>Welcome Back!</h2>
+        <p>No upcoming appointments. The clinic is {HoursUntilFivePM()}</p>
+      </div>
+      <div className='content-right'>
+
+      </div>
+    </div>
+  </div>
   );
 }
 

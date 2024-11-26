@@ -4,6 +4,8 @@ import { User } from '../utils/supabase';
 import { Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import LineChart from "./LineChart";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faInfoCircle, faSync } from "@fortawesome/free-solid-svg-icons";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -41,7 +43,7 @@ function AppointmentSummary({ user, fetching }: AppointmentSummaryProps) {
     const data = {
       datasets: [
         {
-          data: [365-daysUntilAppointment, daysUntilAppointment],
+          data: [daysUntilAppointment, 65-daysUntilAppointment],
           backgroundColor: ['#41924a', '#d3d3d3'],
           borderWidth: 0,
           cutout: '70%', 
@@ -94,6 +96,12 @@ function AppointmentSummary({ user, fetching }: AppointmentSummaryProps) {
                       field={appointment.service} 
                       />
                     ))}
+                    {user?.appointments.filter((appointment) => appointment.appointment_status === 'scheduled').length === 1 && (
+                      <div className="thats-all">
+                        <FontAwesomeIcon icon={faInfoCircle} />
+                        <p>No other updates for today.</p>
+                      </div>
+                    )}
                   </div>
               </div>
           </div>
