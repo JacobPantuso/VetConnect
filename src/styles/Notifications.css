@@ -33,3 +33,38 @@
 .no-notifications img {
     filter: invert(1);
 }
+
+.notifications {
+    display: flex;
+    flex-direction: column;
+}
+
+.notification {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    padding: 1rem;
+    align-items: center;
+    border-radius: 10px;
+}
+
+.notification-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.notification-content h3 {
+    font-size: 1.2rem;
+    margin: 0;
+}
+
+.notification-content p {
+    margin-top: 0.2rem;
+    font-size: 1rem;
+    margin: 0;
+}
+
+.notification-icon svg {
+    color: red;
+}
