@@ -84,16 +84,31 @@ function MyPets() {
 
       <div className='petContainer'>
         <div className="petList">
-          <div className='petRow'>
-            {petProfiles.map((item)=> <PetProfileButton petProfile={item} />)}
+
+        {petProfiles.length < 1 ? 
+            <div className='noPets'>
+            
+            
+            <AddIconButton/> 
+            <h2>No pets yet! Create a new pet.</h2>
+            </div>
+            :
+            <div className='petRow'>
+            {petProfiles.map((item)=> <PetProfileButton petProfile={item}/>)}
             {isEditing && <AddIconButton />}
-          </div>
+            </div>
+        }
         </div>
       </div>
 
 
+
       <div className='manageProfiles'>
-        <EditButton isEditing={isEditing} setIsEditing={setIsEditing} value={"Manage Profiles"} />
+
+      {petProfiles.length > 0 &&
+            <EditButton isEditing={isEditing} setIsEditing={setIsEditing} value={"Manage Profiles"} />}
+
+       
       </div>
     </section>
   );

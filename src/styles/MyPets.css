@@ -92,3 +92,13 @@ a.petProfileButton:hover {
 .addIconButton:hover svg path {
     fill: #D5DDDF;
 }
+
+.noPets {
+    padding-top: 4em;
+}
+
+.noPets h2 {
+    font-weight: 500;
+    margin: 3em 0em;
+    margin-top: 1em;
+}
