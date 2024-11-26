@@ -417,7 +417,6 @@ export const CustomDatePicker: React.FC<{ onDateSelect: (date: string) => void, 
 const AppointmentSummary: React.FC<{ previousStep: () => void, pet: PetProfile, service: string, time: string, date: string, user: User }> = ({ user, pet, service, time, date, previousStep }) => {  
   const confirmAppointment = () => {
     addAppointment({
-      id: Math.floor(Math.random() * 1000000),
       owner_id: user.id,
       scheduled_date: `${date} ${time}`,
       pet_profile_id: pet.id,
