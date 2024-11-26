@@ -108,13 +108,18 @@ export const useUserSession = (): UserSession => {
         }
 
         // Fetch related data in parallel
-        const [petProfiles, appointments, medicalRecords, paymentForms] =
-          await Promise.all([
-            fetchPetProfiles(userId),
-            fetchAppointments({ownerId: userId}),
-            fetchMedicalRecords(userId),
-            fetchPaymentForms({ownerId: userId}),
-          ]);
+        let petProfiles;
+        if (user?.user_type !== 'USER') {
+          petProfiles = await fetchPetProfiles();
+        } else {
+          petProfiles = await fetchPetProfiles(userId);
+        }
+
+        const [appointments, medicalRecords, paymentForms] = await Promise.all([
+          fetchAppointments({ ownerId: userId }),
+          fetchMedicalRecords(userId),
+          fetchPaymentForms({ ownerId: userId }),
+        ]);
 
         // Combine all data into the user object
         const completeUser = {
@@ -184,6 +189,17 @@ export const setupProfile = async (
   console.log("User profile updated successfully");
 };
 
+export const fetchAllUsers = async (): Promise<User[]> => {
+  const { data, error } = await supabase.from("profiles").select("*");
+
+  if (error) {
+    console.error("Error fetching user profiles:", error);
+    throw error;
+  }
+
+  return data || [];
+}
+
 export const fetchPetProfiles = async (
   ownerId?: string
 ): Promise<PetProfile[]> => {
@@ -203,7 +219,7 @@ export const fetchPetProfiles = async (
   return data || [];
 };
 
-export const addPetProfile = async (petProfile: PetProfile): Promise<void> => {
+export const addPetProfile = async (petProfile: Omit<PetProfile, "id">): Promise<void> => {
   const { error } = await supabase.from("pet_profiles").insert(petProfile);
 
   if (error) {
@@ -216,12 +232,12 @@ export const addPetProfile = async (petProfile: PetProfile): Promise<void> => {
 
 export const updatePetProfile = async (
   pet_id: number,
-  updates: Partial<Omit<PetProfile, "pet_id">>
+  updates: Partial<Omit<PetProfile, "id">>
 ): Promise<void> => {
   const { error } = await supabase
     .from("pet_profiles")
     .update(updates)
-    .eq("pet_id", pet_id);
+    .eq("id", pet_id);
 
   if (error) {
     console.error("Error updating pet profile:", error);
@@ -237,7 +253,7 @@ export const deletePetProfile = async (
   const { error } = await supabase
     .from("pet_profiles")
     .delete()
-    .eq("pet_id", petProfile.id);
+    .eq("id", petProfile.id);
 
   if (error) {
     console.error("Error deleting pet profile:", error);
@@ -267,7 +283,7 @@ export const fetchMedicalRecords = async (
 };
 
 export const addMedicalRecord = async (
-  medicalRecord: MedicalRecord
+  medicalRecord: Omit<MedicalRecord, "id">
 ): Promise<void> => {
   const { error } = await supabase
     .from("medical_records")
@@ -283,12 +299,12 @@ export const addMedicalRecord = async (
 
 export const updateMedicalRecord = async (
   medicalRecordId: number,
-  updates: Partial<Omit<MedicalRecord, "medical_record_id">>
+  updates: Partial<Omit<MedicalRecord, "id">>
 ): Promise<void> => {
   const { error } = await supabase
     .from("medical_records")
     .update(updates)
-    .eq("medical_record_id", medicalRecordId);
+    .eq("id", medicalRecordId);
 
   if (error) {
     console.error("Error updating medical record:", error);
@@ -304,7 +320,7 @@ export const deleteMedicalRecord = async (
   const { error } = await supabase
     .from("medical_records")
     .delete()
-    .eq("medical_record_id", medicalRecord.id);
+    .eq("id", medicalRecord.id);
 
   if (error) {
     console.error("Error deleting medical record:", error);
@@ -351,7 +367,7 @@ export const fetchPaymentForms = async ({
 };
 
 export const addPaymentForm = async (
-  paymentForm: PaymentForm
+  paymentForm: Omit<PaymentForm, "id">
 ): Promise<void> => {
   const { error } = await supabase.from("payment_forms").insert(paymentForm);
 
@@ -365,7 +381,7 @@ export const addPaymentForm = async (
 
 export const updatePaymentForm = async (
   paymentFormId: number,
-  updates: Partial<Omit<PaymentForm, "payment_form_id">>
+  updates: Partial<Omit<PaymentForm, "id">>
 ): Promise<void> => {
   const { error } = await supabase
     .from("payment_forms")
@@ -386,7 +402,7 @@ export const deletePaymentForm = async (
   const { error } = await supabase
     .from("payment_forms")
     .delete()
-    .eq("payment_form_id", paymentForm.id);
+    .eq("id", paymentForm.id);
 
   if (error) {
     console.error("Error deleting payment form:", error);
@@ -395,6 +411,7 @@ export const deletePaymentForm = async (
 
   console.log("Payment form deleted successfully");
 };
+
 
 export const uploadInvoice = async (
   paymentFormId: number,
@@ -449,6 +466,8 @@ export const downloadInvoice = async (paymentFormId: number): Promise<string | n
   return data.publicUrl; // Return the public URL of the file
 };
 
+
+
 export const fetchAppointments = async ({
   ownerId,
   appointmentId,
@@ -479,6 +498,17 @@ export const fetchAppointments = async ({
   }
 
   const { data, error } = await query;
+  data?.sort((a, b) => {
+    if (a.appointment_status === "scheduled" && b.appointment_status !== "scheduled") {
+      return -1;
+    }
+    if (a.appointment_status !== "scheduled" && b.appointment_status === "scheduled") {
+      return 1;
+    }
+    const dateA = new Date(a.scheduled_date.split(" ")[0]);
+    const dateB = new Date(b.scheduled_date.split(" ")[0]);
+    return dateA.getTime() - dateB.getTime();
+  });
 
   if (error) {
     console.error("Error fetching appointments:", error);
@@ -489,7 +519,7 @@ export const fetchAppointments = async ({
 };
 
 export const addAppointment = async (
-  appointment: Appointment
+  appointment: Omit<Appointment, "id">
 ): Promise<void> => {
   const { error } = await supabase.from("appointments").insert(appointment);
 
@@ -503,7 +533,7 @@ export const addAppointment = async (
 
 export const updateAppointment = async (
   appointmentId: number,
-  updates: Partial<Omit<Appointment, "appointment_id">>
+  updates: Partial<Omit<Appointment, "id">>
 ): Promise<void> => {
   const { error } = await supabase
     .from("appointments")

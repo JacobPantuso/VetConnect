@@ -25,12 +25,19 @@
     display: flex;
     flex-direction: row;
     margin-top: 1rem;
+    gap: 2rem;
 }
 
 .chart-left {
     position: relative;
     width: 170px;
     height: 170px;
+}
+
+.breakdown {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 }
 
 .inside-chart {
@@ -46,4 +53,109 @@
 .due-in {
     color: #ffffff;
     font-size: 13px;
+}
+
+.thats-all {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    margin: 1rem;
+    gap: 0.5rem;
+}
+
+.thats-all svg {
+    width: 30px;
+    height: 30px;
+    margin: auto;
+    box-shadow: 0px 0px 10px 5px #9bf3a542;
+    border-radius: 50%;
+}
+
+@media screen and (max-width: 768px) {
+    .Summary {
+        width: auto;
+    }
+    
+}
+
+.Summary.full {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.appointments.full {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    max-height: 500px;
+}
+
+.appointment-summary-content.full {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.no-appointments.full {
+    height: 100%;
+    width: 40%;
+    justify-content: center;
+}
+
+.appointment-filter {
+    width: 30%;
+    padding: 0.5rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border: none;
+    border: 1px solid #b2f3b9;
+    border-radius: 5px;
+    background-color: transparent;
+    color: white;
+    outline: none;
+}
+
+.appointment-filter option {
+    background-color: #141414;
+    color: white;
+}
+
+.appointment-filter:focus {
+    outline: none;
+}
+
+
+/* Line Chart */
+
+.LineChart{
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+}
+
+.LineChart h4{
+    font-size: 1rem;
+    margin: 0;
+}
+
+.LineChart p{
+    font-size: 0.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.line-chart {
+   position: relative; 
+    width: 100%;
+    height: 20px;
+    background-color: #9bf3a542;
+    border-radius: 10px;
+}
+
+.line-chart-bar {
+    position: absolute;
+    height: 20px;
+    border-radius: 10px;
+    bottom: 0;
+    background-color: #41924a;
 }

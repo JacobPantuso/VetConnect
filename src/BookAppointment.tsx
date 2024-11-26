@@ -33,7 +33,6 @@ function BookAppointment({user, fetching}: BookAppointmentProps) {
       </div>
     )
   }
-
   return (
     <div className="BookAppointment">
       <h2>Book Appointment</h2>
@@ -81,7 +80,7 @@ const SelectPet: React.FC<{ nextStep: () => void, pets: Array<PetProfile>, selec
           <FontAwesomeIcon icon={faShieldDog} size="4x" />
           <h4>Appointment Error</h4>
           <p>You currently have no pets. Please create one now to continue.</p>
-          <Link to={'/pet-profiles'}>Add Pet</Link>
+          <Link to={'/mypets'}>Add Pet</Link>
         </div>
       }
     </div>
@@ -418,7 +417,6 @@ export const CustomDatePicker: React.FC<{ onDateSelect: (date: string) => void, 
 const AppointmentSummary: React.FC<{ previousStep: () => void, pet: PetProfile, service: string, time: string, date: string, user: User }> = ({ user, pet, service, time, date, previousStep }) => {  
   const confirmAppointment = () => {
     addAppointment({
-      id: Math.floor(Math.random() * 1000000),
       owner_id: user.id,
       scheduled_date: `${date} ${time}`,
       pet_profile_id: pet.id,
