@@ -109,9 +109,10 @@ export const useUserSession = (): UserSession => {
 
         // Fetch related data in parallel
         let petProfiles;
-        if (user?.user_type !== 'USER') {
+        if (user?.user_type !== 'USER' && user) {
           petProfiles = await fetchPetProfiles();
         } else {
+          console.log("fetching pet profiles for user", userId);
           petProfiles = await fetchPetProfiles(userId);
         }
 
@@ -146,7 +147,6 @@ export const useUserSession = (): UserSession => {
       (event: AuthChangeEvent, session) => {
         const currentUserId = session?.user?.id;
 
-        // Handle session changes
         if (event === "SIGNED_IN" || event === "USER_UPDATED") {
           if (!user || user.id !== currentUserId) {
             fetchUserAndData();
@@ -204,7 +204,7 @@ export const fetchPetProfiles = async (
   ownerId?: string
 ): Promise<PetProfile[]> => {
   let query = supabase.from("pet_profiles").select("*");
-
+  console.log("ownerId", ownerId);
   if (ownerId) {
     query = query.eq("owner_id", ownerId);
   }
@@ -415,7 +415,7 @@ export const deletePaymentForm = async (
 
 export const uploadInvoice = async (
   paymentFormId: number,
-  file: File
+  file: Blob
 ): Promise<string | null> => {
   const filePath = `${paymentFormId}-invoice.pdf`;
   

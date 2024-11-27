@@ -66,6 +66,7 @@
   justify-content: space-between;
   align-items: center;
   margin-top: 1rem;
+  gap: 1rem;
 }
 
 .left h3 {
@@ -261,10 +262,23 @@
   text-align: left;
 }
 
+.appt-left-payment {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  width: 70%;
+}
+
+.appt-left-payment h3 {
+  margin: 0;
+}
+
 .appt-right-payment {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  text-align: right;
+  width: 30%;
 }
 
 .pay {
@@ -469,7 +483,7 @@
 .date-picker-container {
   display: flex;
   position: relative;
-  width: 50%;
+  width: 60%;
   margin: auto;
 }
 
