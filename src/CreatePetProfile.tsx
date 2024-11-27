@@ -108,7 +108,7 @@ interface NewPetProfile {
     species?: string;
     breed?: string;
     date_of_birth?: string;
-    gender?: "male" | "female" | "unknown";
+    gender: "male" | "female" | "unknown";
     weight?: number;
     height?: number;
     traits?: string[];
@@ -127,7 +127,11 @@ function CreatePetProfile() {
     const defaultNewPetProfile: NewPetProfile = {
         name: "",
         species: "",
+        breed: "",
         gender: "male",
+        traits: [],
+        vaccinations: [],
+        allergies: [],
     }
     const [newPetProfile, setNewPetProfile] = useState<NewPetProfile>(defaultNewPetProfile);
 
@@ -245,17 +249,38 @@ function CreatePetProfile() {
     const createPet = async () => {
         console.log("Create a pet here");
         let savePetProfile: NewPetProfile = {...newPetProfile}
-        savePetProfile.owner_id = user?.id;
-        savePetProfile.breed = "";
-        savePetProfile.id = 123;
 
-        /*
-        const createdPetProfile: PetProfile = {
-            ...savePetProfile
-        }*/
+        if (user) {
+            savePetProfile.owner_id = user?.id;
+            savePetProfile.breed = "";
+            savePetProfile.id = Math.floor(Math.random()*1000000);
+
+            if (savePetProfile.name && savePetProfile.date_of_birth && savePetProfile.weight &&  savePetProfile.height && savePetProfile.traits && savePetProfile.vaccinations && savePetProfile.allergies) {
+                const createdPetProfile: PetProfile = {
+                    id: savePetProfile.id,
+                    owner_id: savePetProfile.owner_id,
+                    breed: savePetProfile.breed,
+                    species: savePetProfile.breed,
+                    name: savePetProfile.name,
+                    date_of_birth: savePetProfile.date_of_birth, 
+                    gender: savePetProfile.gender,
+                    weight: savePetProfile.weight,
+                    height: savePetProfile.height,
+                    traits: savePetProfile.traits, 
+                    vaccinations: savePetProfile.vaccinations,
+                    allergies: savePetProfile.allergies
+                }
+
+                await addPetProfile(createdPetProfile);
+                navigate("/mypets");
+            }
+        }
+
+
+
         
 
-
+        
        // navigate("/mypets");
     }
 
