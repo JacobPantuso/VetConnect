@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCalendarDay,
   faDollarSign,
+  faDownload,
   faInfoCircle,
   faTimesCircle,
 } from "@fortawesome/free-solid-svg-icons";
@@ -13,6 +14,7 @@ import {
   fetchAppointments,
   updateAppointment,
   deleteAppointment,
+  downloadInvoice
 } from "./utils/supabase";
 import { useNavigate } from "react-router-dom";
 import { CustomDatePicker } from "./BookAppointment";
@@ -37,6 +39,14 @@ function CurrentAppointments({ user, fetching }: CurrentAppointmentsProps) {
       </div>
     );
   }
+
+  const handleDownload = async (paymentFormId: number) => {
+    const invoiceUrl = await downloadInvoice(paymentFormId);
+  
+    if (invoiceUrl) {
+      window.open(invoiceUrl, "_blank");
+    }
+  };
 
   const handlePayment = (payment: PaymentForm) => {
     navigate(`/payment/${payment.appointment_id}`);
@@ -123,7 +133,7 @@ function CurrentAppointments({ user, fetching }: CurrentAppointmentsProps) {
           )[0];
           return (
             <div key={appointment.id} className="appointment">
-              <div className="left">
+              <div className="appt-left-payment">
                 <div className="pet-img">
                   <img
                     src="https://media.istockphoto.com/id/474486193/photo/close-up-of-a-golden-retriever-panting-11-years-old-isolated.jpg?s=612x612&w=0&k=20&c=o6clwQS-h6c90AHlpDPC74vAgtc_y2vvGg6pnb7oCNE="
@@ -151,9 +161,14 @@ function CurrentAppointments({ user, fetching }: CurrentAppointmentsProps) {
               </div>
               <div className="appt-right-payment">
                 {payment.status === "paid" ? (
+                  <>
                   <p>
                     <b>Paid:</b> ${payment.charge}
                   </p>                  
+                  <button className="pay" onClick={() => handleDownload(payment.id)}>
+                    <FontAwesomeIcon icon={faDownload} /> Download Invoice
+                  </button>
+                  </>
                 ): (
                   <>
                   <p>

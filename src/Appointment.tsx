@@ -19,7 +19,6 @@ function Appointment() {
 
   const handleUserSelect = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedUser = allUsers.filter((user) => user.id === e.target.value)[0];
-
   
     if (!selectedUser) {
       console.error("User not found");
@@ -80,7 +79,6 @@ function Appointment() {
       </div>
     )
   }
-
   return (
     <div className="Appointment">
       <h2>Appointments</h2>

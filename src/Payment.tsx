@@ -18,13 +18,16 @@ import {
   updatePaymentForm,
   updatePaymentFormInvoiceUrl,
   uploadInvoice,
-  downloadInvoice
+  downloadInvoice,
+  useUserSession
 } from "./utils/supabase";
+import { profile } from "console";
 
 type CardType = "visa" | "mastercard" | "amex" | null;
 
 function Payment() {
   const { appointmentid } = useParams<{ appointmentid: string }>();
+  const {user} = useUserSession();
   const [paymentForm, setPaymentForm] = useState<PaymentForm | null>(null);
   const [appointment, setAppointment] = useState<Appointment | null>(null);
   const [fetching, setFetching] = useState<boolean>(true);
@@ -35,8 +38,6 @@ function Payment() {
   const [cvv, setCvv] = useState<string>("");
   const [verifying, setVerifying] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
-  const [file, setFile] = useState<File | null>(null);
-  const [invoiceUrl, setInvoiceUrl] = useState<string | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -47,7 +48,6 @@ function Payment() {
             navigate("/appointments");
           } else {
             setPaymentForm(paymentForms[0]);
-            setFetching(false);
           }
         }
       );
@@ -57,7 +57,10 @@ function Payment() {
         }
       );
     }
-  }, [appointmentid, navigate]);
+    if (user) {
+      setFetching(false);
+    }
+  }, [appointmentid, navigate, user]);
 
   const formatCardNumber = (value: string) => {
     return value
@@ -116,60 +119,24 @@ function Payment() {
     }
   };
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files[0]) {
-      const selectedFile = event.target.files[0];
-      if (selectedFile.type === "application/pdf") {
-        setFile(selectedFile);
-      } else {
-        alert("Please upload a valid PDF file.");
-      }
-    }
-  };
-
-  // handles the upload of the invoice
   const handleUpload = async () => {
-    if (!file) {
-      alert("No file selected.");
-      return;
-    }
     try {
-      const uploadedUrl = await uploadInvoice(paymentForm?.id!, file);
+      const blob = await pdf(<InvoicePDF invoiceData={invoiceData} />).toBlob();
+      const uploadedUrl = await uploadInvoice(paymentForm?.id!, blob);
       if (uploadedUrl) {
-        setInvoiceUrl(uploadedUrl);
-        await updatePaymentFormInvoiceUrl(paymentForm?.id!, uploadedUrl);
-        alert("Invoice uploaded successfully!");
-      } else {
-        alert("Failed to upload the PDF.");
+        navigate("/appointments");
       }
     } catch (error) {
       console.error("Error uploading PDF:", error);
-      alert("An error occurred while uploading the PDF.");
-    }
-    
+   }
   };
 
-  // Generates link to download invoice
-  const handleDownload = async (paymentFormId: number) => {
-    const invoiceUrl = await downloadInvoice(paymentFormId);
-  
-    if (invoiceUrl) {
-      const link = document.createElement("a");
-      link.href = invoiceUrl;
-      link.download = `${paymentFormId}-invoice.pdf`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    } else {
-      alert("Failed to download the invoice.");
-    }
-  };
   const invoiceData = {
-    clientName: `Tax information not on file. Please contact clinic...`,
+    clientName: `${user?.first_name} ${user?.last_name}`,
     invoiceNumber: `${Math.floor(Math.random() * 1000000)}-${paymentForm?.id}`,
     invoiceDate: `${new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}`,
     dueDate: `${new Date(new Date().setDate(new Date().getDate() + 7)).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}`,
-    lastDigits: `${cardNumber.slice(-4)} (${cardType?.toUpperCase()})`,
+    lastDigits: `${cardNumber.slice(-4)} (${cardType?.toString().toUpperCase()})`,
     items: [
       {
         description: `${appointment?.service}`,
@@ -178,12 +145,6 @@ function Payment() {
       },
     ],
     subTotal: paymentForm?.charge ?? 0,
-  };
-
-  const handleOpenPDF = async (invoiceData: InvoiceData) => {
-    const blob = await pdf(<InvoicePDF invoiceData={invoiceData} />).toBlob();
-    const blobURL = URL.createObjectURL(blob);
-    window.open(blobURL, "_blank");
   };
 
   const handleSubmit = () => {
@@ -219,7 +180,7 @@ function Payment() {
     }
     updatePaymentForm(paymentForm.id, {status: "paid"}).then(() => {
         setTimeout(() => {
-        handleOpenPDF(invoiceData).then(() => {
+        handleUpload().then(() => {
             setVerifying(false);
             navigate("/appointments");
         });
@@ -258,7 +219,7 @@ function Payment() {
               </div>
               <div className="appointment-details">
                 <h3>
-                  {appointment?.service}
+                  {appointment?.service} for {user?.petProfiles.filter((profile) => profile.id === appointment?.pet_profile_id)[0].name}
                 </h3>
                 <p>
                   <b>Completed:</b>{" "}

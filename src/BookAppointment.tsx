@@ -106,7 +106,7 @@ const SelectService: React.FC<{ nextStep: () => void, previousStep: () => void, 
           <option value={'Vaccination (30 Minutes)'}>Vaccination (30 Minutes)</option>
           <option value={'Wellness Exam (1 Hour)'}>Wellness Exam (1 Hour)</option>
           <option value={'Boarding (1 Hour)'}>Boarding (1 Hour)</option>
-          <option value={'Grooming (2 Hours)'}>Grooming (1-2 Hours)</option>
+          <option value={'Grooming (2 Hour)'}>Grooming (2 Hours)</option>
         </select>
         <p className="dropdown-subtitle">One service per appointment. To book multiple services,<br></br> you'll need to create another appointment.</p>
         <button id="nextbtn" disabled={selectedService === ''} onClick={nextStep}> Next</button>          
@@ -126,7 +126,6 @@ export const SelectTime: React.FC<{ nextStep: () => void, previousStep: () => vo
       setAllAppointments(appointments);
     });
   }, []);
-
 
 
   const formatTime = (hours: number, minutes: number) => {
@@ -150,7 +149,7 @@ export const SelectTime: React.FC<{ nextStep: () => void, previousStep: () => vo
       const unit = durationMatch[2].toLowerCase(); // Extract unit (hour/minutes)
       duration = unit === "hour" ? value * 60 : value; // Convert to minutes if in hours
     }
-  
+    console.log(duration)
     const slots: string[] = [];
     const dateAppointments = allAppointments.filter(
       (appointment) => appointment.scheduled_date.split(" ")[0] === selectedDate
@@ -446,7 +445,7 @@ const AppointmentSummary: React.FC<{ previousStep: () => void, pet: PetProfile, 
           <p>{pet.species.charAt(0).toUpperCase() + pet.species.slice(1)}: {pet.breed}</p>
         </div>
         <div className="summary-service">
-          <h3>{service}</h3>
+          <h3> {(service.includes("Grooming")) ? ('Grooming (2 Hours)') : service} </h3>
           <p>{date} from {time}</p>
         </div>
       </div>

@@ -61,6 +61,7 @@
     text-align: center;
     margin: 1rem;
     gap: 0.5rem;
+    margin: auto;
 }
 
 .thats-all svg {

@@ -68,8 +68,11 @@ function AppointmentSummary({ user, fetching }: AppointmentSummaryProps) {
     const upcomingDate = upcomingScheduledDate ? new Date(upcomingScheduledDate) : null;
     daysUntilAppointment = upcomingDate ? Math.floor((upcomingDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)) : 0;
     petName = user?.petProfiles.filter((profile) => profile.id === user.appointments[0].pet_profile_id)[0].name;
-
-    data.datasets[0].data = [daysUntilAppointment, 65 - daysUntilAppointment];
+    if (daysUntilAppointment < 0) {
+      data.datasets[0].data = [65, 0]
+    } else {
+      data.datasets[0].data = [daysUntilAppointment, 65 - daysUntilAppointment];
+    }
   }
 
   return (
@@ -90,13 +93,27 @@ function AppointmentSummary({ user, fetching }: AppointmentSummaryProps) {
             month: "long",
             day: "numeric",
           })}</p>
-          : <p>"No pets have upcoming appointments"</p>}
+          : <p>No pets have upcoming appointments</p>}
         <div className="details">
           <div className="chart-left">
             <Doughnut data={data} options={options} />
             <div className="inside-chart">
-              <div>{petName}</div>
-              <div className="due-in">in {daysUntilAppointment} days</div>
+              {daysUntilAppointment === 0 ? (
+                  <>
+                  <div>{petName}</div>
+                  <div className="due-in">today.</div>
+                  </>
+                ) : (
+                  daysUntilAppointment > 0 ? (
+                    <>
+                    <div>{petName}</div>
+                    <div className="due-in">in {daysUntilAppointment} days.</div>
+                    </>
+                  ) : (
+                    <div className="due-in">No Appointments</div>
+                  )
+                )
+              }
             </div>
           </div>
           <div className="breakdown">
@@ -104,12 +121,12 @@ function AppointmentSummary({ user, fetching }: AppointmentSummaryProps) {
               (appointment.appointment_status === 'scheduled') && (
                 <LineChart
                   key={appointment.id}
-                  amount={((365 - daysUntilAppointment) / 365) * 100}
+                  amount={(30-(daysUntilAppointment))/30*100}
                   pet_name={user.petProfiles.find(profile => profile.id === appointment.pet_profile_id)?.name || ''}
                   field={appointment.service}
                 />
               ))}
-            {user?.appointments.filter((appointment) => appointment.appointment_status === 'scheduled').length === 1 && (
+            {(user?.appointments.filter((appointment) => appointment.appointment_status === 'scheduled').length ?? 0) <= 1 && (
               <div className="thats-all">
                 <FontAwesomeIcon icon={faInfoCircle} />
                 <p>No other updates for today.</p>
