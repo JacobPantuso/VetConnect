@@ -10,10 +10,13 @@ interface PetProfileButtonProps {
 }
 
 function PetProfileButton({petProfile}: PetProfileButtonProps) {
+  const petId = String(petProfile.id);
+  const url = "/petprofile/".concat(petId);
+
 
   return (
     <div className="petProfileButton">
-      <Link to="/PetProfile" className="petProfileButton">
+      <Link to={url} className="petProfileButton">
       <PetProfileIcon petProfile={petProfile}/> 
       <div className="petProfileInfo">
         <h2 className="myPetsTitle">

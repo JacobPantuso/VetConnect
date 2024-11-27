@@ -4,7 +4,7 @@ import './styles/PetProfile.css';
 import PetProfileIcon from './components/PetProfileIcon';
 import { PetProfileProps } from './MyPets';
 import EditButton from './components/EditButton';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { traits, allergies, vaccinations, InfoBubbleValues } from './components/InfoBubbles';
 import SearchTags from './components/SearchTags';
 
@@ -249,7 +249,13 @@ function PetBubbleStat({ isEditing, buttons, title, onClickAdd, onMouseDown, rem
     );
 }
 
+type PetProfileParams = {
+    id: string;
+}
+
 function PetProfile() {
+    const { id } = useParams<PetProfileParams>()
+
     const defaultAppointment: Appointment = {
         appointment_id: 1,
         scheduled_date: new Date("2023-05-03"),
@@ -316,6 +322,7 @@ function PetProfile() {
         newMousePosition[1] = e.clientY;
         setMousePosition(newMousePosition);
     };
+
 
     if (fetching) {
         return (

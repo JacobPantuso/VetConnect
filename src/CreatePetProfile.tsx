@@ -247,7 +247,6 @@ function CreatePetProfile() {
     };
 
     const createPet = async () => {
-        console.log("Create a pet here");
         let savePetProfile: NewPetProfile = {...newPetProfile}
 
         if (user) {
