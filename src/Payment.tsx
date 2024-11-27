@@ -16,6 +16,9 @@ import {
   fetchPaymentForms,
   PaymentForm,
   updatePaymentForm,
+  updatePaymentFormInvoiceUrl,
+  uploadInvoice,
+  downloadInvoice
 } from "./utils/supabase";
 
 type CardType = "visa" | "mastercard" | "amex" | null;
@@ -32,6 +35,8 @@ function Payment() {
   const [cvv, setCvv] = useState<string>("");
   const [verifying, setVerifying] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
+  const [file, setFile] = useState<File | null>(null);
+  const [invoiceUrl, setInvoiceUrl] = useState<string | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -111,6 +116,54 @@ function Payment() {
     }
   };
 
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      const selectedFile = event.target.files[0];
+      if (selectedFile.type === "application/pdf") {
+        setFile(selectedFile);
+      } else {
+        alert("Please upload a valid PDF file.");
+      }
+    }
+  };
+
+  // handles the upload of the invoice
+  const handleUpload = async () => {
+    if (!file) {
+      alert("No file selected.");
+      return;
+    }
+    try {
+      const uploadedUrl = await uploadInvoice(paymentForm?.id!, file);
+      if (uploadedUrl) {
+        setInvoiceUrl(uploadedUrl);
+        await updatePaymentFormInvoiceUrl(paymentForm?.id!, uploadedUrl);
+        alert("Invoice uploaded successfully!");
+      } else {
+        alert("Failed to upload the PDF.");
+      }
+    } catch (error) {
+      console.error("Error uploading PDF:", error);
+      alert("An error occurred while uploading the PDF.");
+    }
+    
+  };
+
+  // Generates link to download invoice
+  const handleDownload = async (paymentFormId: number) => {
+    const invoiceUrl = await downloadInvoice(paymentFormId);
+  
+    if (invoiceUrl) {
+      const link = document.createElement("a");
+      link.href = invoiceUrl;
+      link.download = `${paymentFormId}-invoice.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } else {
+      alert("Failed to download the invoice.");
+    }
+  };
   const invoiceData = {
     clientName: `Tax information not on file. Please contact clinic...`,
     invoiceNumber: `${Math.floor(Math.random() * 1000000)}-${paymentForm?.id}`,

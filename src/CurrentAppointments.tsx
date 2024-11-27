@@ -12,6 +12,7 @@ import {
   PaymentForm,
   fetchAppointments,
   updateAppointment,
+  deleteAppointment,
 } from "./utils/supabase";
 import { useNavigate } from "react-router-dom";
 import { CustomDatePicker } from "./BookAppointment";
@@ -44,23 +45,6 @@ function CurrentAppointments({ user, fetching }: CurrentAppointmentsProps) {
   return (
     <div className="CurrentAppointments">
       <h2>Current Appointments</h2>
-      <p>
-        {user.appointments.filter(
-          (appointment) => appointment.appointment_status === "scheduled"
-        ).length > 0
-          ? `${
-              user.petProfiles.filter(
-                (profile) => profile.id === user.appointments[0].pet_profile_id
-              )[0].name
-            } has an upcoming appointment on ${new Date(
-              user.appointments[0].scheduled_date + "T00:00:00"
-            ).toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}`
-          : "No pets have upcoming appointments"}
-      </p>
       {user.appointments.filter(
         (appointment) => appointment.appointment_status === "scheduled"
       ).length > 0 ? (
@@ -196,7 +180,7 @@ type ModifyAppointmentProps = {
   setShowModify: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function ModifyAppointment({
+export function ModifyAppointment({
   user,
   appointment,
   setShowModify,
@@ -215,7 +199,7 @@ function ModifyAppointment({
           You are {selectedAction !== "" ? selectedAction : "modifying"}{" "}
           {
             user.petProfiles.filter(
-              (profile) => profile.id === user.appointments[0].pet_profile_id
+              (profile) => profile.id === appointment.pet_profile_id
             )[0].name
           }
           's appointment.
@@ -240,6 +224,7 @@ function ModifyAppointment({
                 <option value="">Select an action</option>
                 <option value="rescheduling">Reschedule Appointment</option>
                 <option value="canceling">Cancel Appointment</option>
+                {user.user_type !== 'USER' && (<option value='complete'>Complete Appointment</option>)}
               </select>
               {selectedAction && (
                 <p>Changing your selection will void any current changes.</p>
@@ -256,6 +241,14 @@ function ModifyAppointment({
             <CancelAppointmentForm
               appointment={appointment}
               setSelectAction={setSelectedAction}
+              selectedAction="cancel"
+            />
+          )}
+          {selectedAction === "complete" && (
+            <CancelAppointmentForm
+              appointment={appointment}
+              setSelectAction={setSelectedAction}
+              selectedAction="complete"
             />
           )}
         </div>
@@ -269,7 +262,7 @@ type RescheduleProps = {
   setSelectAction: React.Dispatch<React.SetStateAction<string>>;
 };
 
-function Reschedule({ appointment, setSelectAction }: RescheduleProps) {
+export function Reschedule({ appointment, setSelectAction }: RescheduleProps) {
   const [selectedDate, setSelectedDate] = useState<string | null>(null); // For the newly selected date
   const [availableTimes, setAvailableTimes] = useState<string[]>([]); // To store regenerated time slots
   const [allAppointments, setAllAppointments] = useState<Appointment[]>([]);
@@ -479,21 +472,52 @@ function Reschedule({ appointment, setSelectAction }: RescheduleProps) {
 type CancelProps = {
   appointment: Appointment;
   setSelectAction: React.Dispatch<React.SetStateAction<string>>;
+  selectedAction?: string;
 };
 
-function CancelAppointmentForm({ appointment, setSelectAction }: CancelProps) {
+export function CancelAppointmentForm({ appointment, setSelectAction, selectedAction }: CancelProps) {
+  const handleCancel = () => {
+    deleteAppointment(appointment).then(() => {
+      window.location.reload();
+    });
+  }
+  const handleComplete = () => {
+    updateAppointment(appointment.id, { appointment_status: "completed" }).then(() => {
+      window.location.reload();
+    });
+  }
   return (
     <div className="CancelAppointmentForm">
       <h4>Are you sure?</h4>
-      <p></p>
+      { selectedAction === 'complete' ? (
+        <p>You're about to complete an appointment. <br></br>You cannot undo this change.</p>
+      ) : (
+        <p>You're about to cancel an appointment. <br></br>You cannot undo this change.</p>
+      )
+
+      }
       <div className="button-row">
         <button
-          className="back-to-selection"
+          className="back-to-selection cancel"
           onClick={() => setSelectAction("")}
         >
           Go Back
         </button>
-        <button className="confirm-changes">Cancel Appointment</button>
+        {selectedAction === 'complete' ? (
+          <button
+            onClick={handleComplete}
+            className="confirm-changes cancel"
+          >
+            Complete Appointment
+          </button>
+        ) : (
+          <button
+            onClick={handleCancel}
+            className="confirm-changes cancel"
+          >
+            Cancel Appointment
+          </button>
+        )}
       </div>
     </div>
   );
