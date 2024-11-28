@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useUserSession } from './utils/supabase';
+import React, { useEffect, useState } from 'react';
+import { useUserSession, fetchPetProfiles, PetProfile } from './utils/supabase';
 import './styles/PetProfile.css';
 import PetProfileIcon from './components/PetProfileIcon';
 import { PetProfileProps } from './MyPets';
@@ -69,47 +69,6 @@ function CompletedIcon() {
 }
 
 //<PetProfileIcon petProfile={petProfile} size='6em' />
-
-function PetTitle() {
-    return (
-        <div className='petTitle'>
-            <div>
-                
-            </div>
-
-            <div>
-                <h2 className='petGenderAge'>Male, 6</h2>
-                <h1>Pet_Name</h1>
-            </div>
-        </div>
-    );
-}
-
-function PetStats() {
-    return (
-        <div className='petStats'>
-            <div className='stringStat'>
-                <h2>Species</h2>
-                <h1>Golden Retriever</h1>
-            </div>
-            <div className='numberStat'>
-                <h2>Weight</h2>
-                <div className='numberUnit'>
-                    <h1>31.2</h1>
-                    <h3>kg</h3>
-                </div>
-
-            </div>
-            <div className='numberStat'>
-                <h2>Height</h2>
-                <div className='numberUnit'>
-                    <h1>23.1</h1>
-                    <h3>in</h3>
-                </div>
-            </div>
-        </div>
-    );
-}
 
 interface AppointmentItemProps {
     appointment_id: number,
@@ -254,7 +213,8 @@ type PetProfileParams = {
 }
 
 function PetProfile() {
-    const { id } = useParams<PetProfileParams>()
+    const { id } = useParams<PetProfileParams>();
+    const [petProfile, setPetProfile] = useState<PetProfile | null>(null);
 
     const defaultAppointment: Appointment = {
         appointment_id: 1,
@@ -264,15 +224,6 @@ function PetProfile() {
         appointment_status: "Completed",
         service: "Idk",
     }
-    const defaultAppointment2: Appointment = {
-        appointment_id: 2,
-        scheduled_date: new Date("2024-02-20"),
-        pet_profile_id: 2,
-        vet_name: "Dr.Hello",
-        appointment_status: "Scheduled",
-        service: "Idk",
-    }
-
 
     const { user, fetching } = useUserSession();
     const [isEditing, setIsEditing] = useState(false);
@@ -286,6 +237,16 @@ function PetProfile() {
     //Traits, Vaccinations, Allergies
     const [openedMenu, setOpenedMenu] = useState<string>("None");
     const [mousePosition, setMousePosition] = useState<number[]>([0, 0]);
+
+    useEffect(()=> {
+        if (user && id) {
+            for (let item in user.petProfiles) {
+                if (user.petProfiles[item].id === Number(id)) {
+                    setPetProfile(user.petProfiles[item]);
+                }
+            }
+        }
+    }, [user, id])
 
     const handleSelectTraits = (key: string) => {
         let newTraits = { ...selectedTraits };
@@ -348,8 +309,37 @@ function PetProfile() {
             </section>
             <section className='petInfo'>
                 <section className='petRow'>
-                    <PetTitle />
-                    <PetStats />
+                <div className='petTitle'>
+            <div>
+                
+            </div>
+
+            <div>
+                <h2 className='petGenderAge'>Male, 6</h2>
+                <h1>Pet_Name</h1>
+            </div>
+        </div>
+        <div className='petStats'>
+            <div className='stringStat'>
+                <h2>Species</h2>
+                <h1>{petProfile?.species}</h1>
+            </div>
+            <div className='numberStat'>
+                <h2>Weight</h2>
+                <div className='numberUnit'>
+                    <h1>{petProfile?.weight}</h1>
+                    <h3>kg</h3>
+                </div>
+
+            </div>
+            <div className='numberStat'>
+                <h2>Height</h2>
+                <div className='numberUnit'>
+                    <h1>{petProfile?.height}</h1>
+                    <h3>in</h3>
+                </div>
+            </div>
+        </div>
                 </section>
 
                 <section className='petRow' style={{ marginBottom: '5em' }}>
