@@ -209,20 +209,12 @@ type PetProfileParams = {
 function ViewPetProfile() {
     const { id } = useParams<PetProfileParams>();
     const [petProfile, setPetProfile] = useState<PetProfile | null>(null);
-
-    const defaultAppointment: Appointment = {
-        appointment_id: 1,
-        scheduled_date: new Date("2023-05-03"),
-        pet_profile_id: 2,
-        vet_name: "Dr.M",
-        appointment_status: "Completed",
-        service: "Idk",
-    }
+    const [age, setAge] = useState<number>(0);
 
     const { user, fetching } = useUserSession();
     const [isEditing, setIsEditing] = useState(false);
 
-    const [appointmentsList, setAppointmentsList] = useState<Appointment[]>([defaultAppointment]);
+    const [appointmentsList, setAppointmentsList] = useState<Appointment[]>([]);
 
     const [selectedTraits, setSelectedTraits] = useState<InfoBubbleValues>(traits);
     const [selectedVaccinations, setSelectedVaccinations] = useState<InfoBubbleValues>(vaccinations);
@@ -231,6 +223,7 @@ function ViewPetProfile() {
     //Traits, Vaccinations, Allergies
     const [openedMenu, setOpenedMenu] = useState<string>("None");
     const [mousePosition, setMousePosition] = useState<number[]>([0, 0]);
+
 
     useEffect(() => {
         const setUpTraits = (petProfile: PetProfile) => {
@@ -264,6 +257,10 @@ function ViewPetProfile() {
             for (let x in user.petProfiles) {
                 if (user.petProfiles[x].id === Number(id)) {
                     let petProfile = { ...user.petProfiles[x] }
+                    let timeDiff = Math.abs(Date.now() - new Date(petProfile.date_of_birth).getTime());
+                    let age = Math.floor((timeDiff / (1000 * 3600 * 24)) / 365.25);
+
+                    setAge(age);
                     setPetProfile(petProfile);
                     setUpAllergies(petProfile);
                     setUpVaccinations(petProfile);
@@ -293,7 +290,7 @@ function ViewPetProfile() {
 
     const handleDoneButton = async () => {
 
-        const keysToList = (list : [string, boolean][]) => {
+        const keysToList = (list: [string, boolean][]) => {
             let newList: string[] = [];
 
             for (let i in list) {
@@ -308,15 +305,15 @@ function ViewPetProfile() {
         let vaccinations = keysToList(Object.entries(selectedVaccinations));
         let traits = keysToList(Object.entries(selectedTraits));
 
-       if (petProfile) {
-        let updatedPetProfile = {...petProfile};
-        updatedPetProfile.allergies = allergies;
-        updatedPetProfile.vaccinations = vaccinations;
-        updatedPetProfile.traits = traits;
+        if (petProfile) {
+            let updatedPetProfile = { ...petProfile };
+            updatedPetProfile.allergies = allergies;
+            updatedPetProfile.vaccinations = vaccinations;
+            updatedPetProfile.traits = traits;
 
-        setPetProfile(updatedPetProfile);
-        updatePetProfile(petProfile.id, updatedPetProfile);
-       }
+            setPetProfile(updatedPetProfile);
+            updatePetProfile(petProfile.id, updatedPetProfile);
+        }
 
         handleOpenMenu("None");
     }
@@ -350,64 +347,67 @@ function ViewPetProfile() {
 
     return (
         <section className='petProfile'>
-
-            <section className='title'>
-                <div className='backSection'>
-                    <Link to={"/mypets"}>
-                        <ArrowSvg />
-                    </Link>
-                    <h1>My Pets</h1>
-                </div>
-                <div className='editSection'>
-                    <EditButton isEditing={isEditing} onClickDone={handleDoneButton} setIsEditing={setIsEditing} value='Edit Pet Profile' />
-                </div>
-            </section>
-            <section className='petInfo'>
-                <section className='petRow'>
-                    <div className='petTitle'>
-                        <div>
-                        {petProfile && <PetProfileIcon petProfile={petProfile} size='6em' />}
+            {petProfile &&
+                <>
+                    <section className='title'>
+                        <div className='backSection'>
+                            <Link to={"/mypets"}>
+                                <ArrowSvg />
+                            </Link>
+                            <h1>My Pets</h1>
                         </div>
-                        <div>
-                            <h2 className='petGenderAge'>Male, 6</h2>
-                            <h1>Pet_Name</h1>
+                        <div className='editSection'>
+                            <EditButton isEditing={isEditing} onClickDone={handleDoneButton} setIsEditing={setIsEditing} value='Edit Pet Profile' />
                         </div>
-                    </div>
-                    <div className='petStats'>
-                        <div className='stringStat'>
-                            <h2>Species</h2>
-                            <h1>{petProfile?.species}</h1>
-                        </div>
-                        <div className='numberStat'>
-                            <h2>Weight</h2>
-                            <div className='numberUnit'>
-                                <h1>{petProfile?.weight}</h1>
-                                <h3>kg</h3>
+                    </section>
+                    <section className='petInfo'>
+                        <section className='petRow'>
+                            <div className='petTitle'>
+                                <div>
+                                    {petProfile && <PetProfileIcon petProfile={petProfile} size='6em' />}
+                                </div>
+                                <div>
+                                    <h2 className='petGenderAge'>{petProfile.gender}, {age}</h2>
+                                    <h1>{petProfile.name}</h1>
+                                </div>
                             </div>
+                            <div className='petStats'>
+                                <div className='stringStat'>
+                                    <h2>Species</h2>
+                                    <h1>{petProfile?.species}</h1>
+                                </div>
+                                <div className='numberStat'>
+                                    <h2>Weight</h2>
+                                    <div className='numberUnit'>
+                                        <h1>{petProfile.weight}</h1>
+                                        <h3>kg</h3>
+                                    </div>
 
-                        </div>
-                        <div className='numberStat'>
-                            <h2>Height</h2>
-                            <div className='numberUnit'>
-                                <h1>{petProfile?.height}</h1>
-                                <h3>in</h3>
+                                </div>
+                                <div className='numberStat'>
+                                    <h2>Height</h2>
+                                    <div className='numberUnit'>
+                                        <h1>{petProfile.height}</h1>
+                                        <h3>in</h3>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </section>
+                        </section>
 
-                <section className='petRow' style={{ marginBottom: '5em' }}>
-                    <PetVisits appointments={appointmentsList} />
-                    <PetBubbleStat title="Allergies" removeBubble={handleSelectAllergies} isEditing={isEditing} buttons={selectedAllergies} onMouseDown={GetMousePosition} onClickAdd={handleOpenMenu} />
-                    <PetBubbleStat title="Vaccinations" removeBubble={handleSelectVaccinations} isEditing={isEditing} buttons={selectedVaccinations} onMouseDown={GetMousePosition} onClickAdd={handleOpenMenu} />
-                    <PetBubbleStat title="Traits" removeBubble={handleSelectTraits} isEditing={isEditing} buttons={selectedTraits} onMouseDown={GetMousePosition} onClickAdd={handleOpenMenu} />
-                </section>
+                        <section className='petRow' style={{ marginBottom: '5em' }}>
+                            <PetVisits appointments={appointmentsList} />
+                            <PetBubbleStat title="Allergies" removeBubble={handleSelectAllergies} isEditing={isEditing} buttons={selectedAllergies} onMouseDown={GetMousePosition} onClickAdd={handleOpenMenu} />
+                            <PetBubbleStat title="Vaccinations" removeBubble={handleSelectVaccinations} isEditing={isEditing} buttons={selectedVaccinations} onMouseDown={GetMousePosition} onClickAdd={handleOpenMenu} />
+                            <PetBubbleStat title="Traits" removeBubble={handleSelectTraits} isEditing={isEditing} buttons={selectedTraits} onMouseDown={GetMousePosition} onClickAdd={handleOpenMenu} />
+                        </section>
 
-                {openedMenu === "Traits" && <SearchTags mousePosition={mousePosition} buttons={selectedTraits} setSelectedButtons={handleSelectTraits} />}
-                {openedMenu === "Vaccinations" && <SearchTags mousePosition={mousePosition} buttons={selectedVaccinations} setSelectedButtons={handleSelectVaccinations} />}
-                {openedMenu === "Allergies" && <SearchTags mousePosition={mousePosition} buttons={selectedAllergies} setSelectedButtons={handleSelectAllergies} />}
+                        {openedMenu === "Traits" && <SearchTags mousePosition={mousePosition} buttons={selectedTraits} setSelectedButtons={handleSelectTraits} />}
+                        {openedMenu === "Vaccinations" && <SearchTags mousePosition={mousePosition} buttons={selectedVaccinations} setSelectedButtons={handleSelectVaccinations} />}
+                        {openedMenu === "Allergies" && <SearchTags mousePosition={mousePosition} buttons={selectedAllergies} setSelectedButtons={handleSelectAllergies} />}
 
-            </section>
+                    </section>
+                </>
+            }
         </section>
     );
 }
