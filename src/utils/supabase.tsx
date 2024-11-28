@@ -112,7 +112,6 @@ export const useUserSession = (): UserSession => {
         if (user?.user_type !== 'USER' && user) {
           petProfiles = await fetchPetProfiles();
         } else {
-          console.log("fetching pet profiles for user", userId);
           petProfiles = await fetchPetProfiles(userId);
         }
 
@@ -204,7 +203,6 @@ export const fetchPetProfiles = async (
   ownerId?: string
 ): Promise<PetProfile[]> => {
   let query = supabase.from("pet_profiles").select("*");
-  console.log("ownerId", ownerId);
   if (ownerId) {
     query = query.eq("owner_id", ownerId);
   }
