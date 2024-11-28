@@ -127,7 +127,7 @@ function Vet({ user }: ExternalProps) {
 
     const diffInMilliseconds = appointmentStart.getTime() - now.getTime();
 
-    if (diffInMilliseconds <= 0) return "Your appointment is happening now.";
+    if (diffInMilliseconds <= 0) return "waiting";
 
     const days = Math.floor(diffInMilliseconds / (1000 * 60 * 60 * 24));
     const hours = Math.floor((diffInMilliseconds % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -149,7 +149,7 @@ function Vet({ user }: ExternalProps) {
           <h2 className="welcome">Welcome, {user?.first_name} {user?.last_name}!</h2>
           {nextAppointment ? (
             <p>
-              Your next appointment is in {getTimeUntilAppointment(nextAppointment.scheduled_date)}.
+              Your next appointment is <b>{getTimeUntilAppointment(nextAppointment.scheduled_date)}</b>.
               The clinic is {HoursUntilFivePM()}.
             </p>
           ) : (
