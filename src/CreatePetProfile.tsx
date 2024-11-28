@@ -254,12 +254,12 @@ function CreatePetProfile() {
             savePetProfile.breed = "";
             savePetProfile.id = Math.floor(Math.random()*1000000);
 
-            if (savePetProfile.name && savePetProfile.date_of_birth && savePetProfile.weight &&  savePetProfile.height && savePetProfile.traits && savePetProfile.vaccinations && savePetProfile.allergies) {
+            if (savePetProfile.name && savePetProfile.species && savePetProfile.date_of_birth && savePetProfile.weight &&  savePetProfile.height && savePetProfile.traits && savePetProfile.vaccinations && savePetProfile.allergies) {
                 const createdPetProfile: PetProfile = {
                     id: savePetProfile.id,
                     owner_id: savePetProfile.owner_id,
                     breed: savePetProfile.breed,
-                    species: savePetProfile.breed,
+                    species: savePetProfile.species,
                     name: savePetProfile.name,
                     date_of_birth: savePetProfile.date_of_birth, 
                     gender: savePetProfile.gender,

@@ -1,19 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { useUserSession, fetchPetProfiles, PetProfile } from './utils/supabase';
+import { useUserSession, fetchPetProfiles, PetProfile, updatePetProfile } from './utils/supabase';
 import './styles/PetProfile.css';
 import PetProfileIcon from './components/PetProfileIcon';
-import { PetProfileProps } from './MyPets';
 import EditButton from './components/EditButton';
 import { Link, useParams } from 'react-router-dom';
 import { traits, allergies, vaccinations, InfoBubbleValues } from './components/InfoBubbles';
 import SearchTags from './components/SearchTags';
 
 //Default value
-const petProfile: PetProfileProps = {
-    petProfileId: 1,
-    petProfileName: "Sparky",
-    petProfileOwner: "Noah"
-};
 
 function CrossIconSvg() {
     return (
@@ -124,7 +118,7 @@ interface PetVisitsProps {
 
 function PetVisits({ appointments }: PetVisitsProps) {
     let sortedAppointments = appointments.sort((a: Appointment, b: Appointment) => {
-        return  b.scheduled_date.getTime() - a.scheduled_date.getTime();
+        return b.scheduled_date.getTime() - a.scheduled_date.getTime();
     })
     const appointmentList = sortedAppointments.map((item) => {
         return (
@@ -212,7 +206,7 @@ type PetProfileParams = {
     id: string;
 }
 
-function PetProfile() {
+function ViewPetProfile() {
     const { id } = useParams<PetProfileParams>();
     const [petProfile, setPetProfile] = useState<PetProfile | null>(null);
 
@@ -228,7 +222,7 @@ function PetProfile() {
     const { user, fetching } = useUserSession();
     const [isEditing, setIsEditing] = useState(false);
 
-    const [appointmentsList, setAppointmentsList] = useState<Appointment[]>([defaultAppointment,defaultAppointment2]);
+    const [appointmentsList, setAppointmentsList] = useState<Appointment[]>([defaultAppointment]);
 
     const [selectedTraits, setSelectedTraits] = useState<InfoBubbleValues>(traits);
     const [selectedVaccinations, setSelectedVaccinations] = useState<InfoBubbleValues>(vaccinations);
@@ -238,11 +232,42 @@ function PetProfile() {
     const [openedMenu, setOpenedMenu] = useState<string>("None");
     const [mousePosition, setMousePosition] = useState<number[]>([0, 0]);
 
-    useEffect(()=> {
+    useEffect(() => {
+        const setUpTraits = (petProfile: PetProfile) => {
+            let newTraits = { ...selectedTraits }
+            for (let i in petProfile.traits) {
+                newTraits[petProfile.traits[i]] = true
+            }
+
+            setSelectedTraits(newTraits);
+        }
+
+        const setUpVaccinations = (petProfile: PetProfile) => {
+            let newVaccinations = { ...selectedVaccinations }
+            for (let i in petProfile.vaccinations) {
+                newVaccinations[petProfile.vaccinations[i]] = true
+            }
+
+            setSelectedVaccinations(newVaccinations);
+        }
+
+        const setUpAllergies = (petProfile: PetProfile) => {
+            let newAllergies = { ...selectedAllergies }
+            for (let i in petProfile.allergies) {
+                newAllergies[petProfile.allergies[i]] = true
+            }
+
+            setSelectedAllergies(newAllergies);
+        }
+
         if (user && id) {
-            for (let item in user.petProfiles) {
-                if (user.petProfiles[item].id === Number(id)) {
-                    setPetProfile(user.petProfiles[item]);
+            for (let x in user.petProfiles) {
+                if (user.petProfiles[x].id === Number(id)) {
+                    let petProfile = { ...user.petProfiles[x] }
+                    setPetProfile(petProfile);
+                    setUpAllergies(petProfile);
+                    setUpVaccinations(petProfile);
+                    setUpTraits(petProfile)
                 }
             }
         }
@@ -265,6 +290,36 @@ function PetProfile() {
         newAllergies[key] = !selectedAllergies[key];
         setSelectedAllergies(newAllergies);
     };
+
+    const handleDoneButton = async () => {
+
+        const keysToList = (list : [string, boolean][]) => {
+            let newList: string[] = [];
+
+            for (let i in list) {
+                if (list[i][1]) {
+                    newList.push(list[i][0]);
+                }
+            }
+
+            return newList
+        }
+        let allergies = keysToList(Object.entries(selectedAllergies));
+        let vaccinations = keysToList(Object.entries(selectedVaccinations));
+        let traits = keysToList(Object.entries(selectedTraits));
+
+       if (petProfile) {
+        let updatedPetProfile = {...petProfile};
+        updatedPetProfile.allergies = allergies;
+        updatedPetProfile.vaccinations = vaccinations;
+        updatedPetProfile.traits = traits;
+
+        setPetProfile(updatedPetProfile);
+        updatePetProfile(petProfile.id, updatedPetProfile);
+       }
+
+        handleOpenMenu("None");
+    }
 
     const handleOpenMenu = async (title: string) => {
         let newOpenedMenu = openedMenu;
@@ -304,42 +359,41 @@ function PetProfile() {
                     <h1>My Pets</h1>
                 </div>
                 <div className='editSection'>
-                    <EditButton isEditing={isEditing} onClickDone={handleOpenMenu} setIsEditing={setIsEditing} value='Edit Pet Profile' />
+                    <EditButton isEditing={isEditing} onClickDone={handleDoneButton} setIsEditing={setIsEditing} value='Edit Pet Profile' />
                 </div>
             </section>
             <section className='petInfo'>
                 <section className='petRow'>
-                <div className='petTitle'>
-            <div>
-                
-            </div>
+                    <div className='petTitle'>
+                        <div>
+                        {petProfile && <PetProfileIcon petProfile={petProfile} size='6em' />}
+                        </div>
+                        <div>
+                            <h2 className='petGenderAge'>Male, 6</h2>
+                            <h1>Pet_Name</h1>
+                        </div>
+                    </div>
+                    <div className='petStats'>
+                        <div className='stringStat'>
+                            <h2>Species</h2>
+                            <h1>{petProfile?.species}</h1>
+                        </div>
+                        <div className='numberStat'>
+                            <h2>Weight</h2>
+                            <div className='numberUnit'>
+                                <h1>{petProfile?.weight}</h1>
+                                <h3>kg</h3>
+                            </div>
 
-            <div>
-                <h2 className='petGenderAge'>Male, 6</h2>
-                <h1>Pet_Name</h1>
-            </div>
-        </div>
-        <div className='petStats'>
-            <div className='stringStat'>
-                <h2>Species</h2>
-                <h1>{petProfile?.species}</h1>
-            </div>
-            <div className='numberStat'>
-                <h2>Weight</h2>
-                <div className='numberUnit'>
-                    <h1>{petProfile?.weight}</h1>
-                    <h3>kg</h3>
-                </div>
-
-            </div>
-            <div className='numberStat'>
-                <h2>Height</h2>
-                <div className='numberUnit'>
-                    <h1>{petProfile?.height}</h1>
-                    <h3>in</h3>
-                </div>
-            </div>
-        </div>
+                        </div>
+                        <div className='numberStat'>
+                            <h2>Height</h2>
+                            <div className='numberUnit'>
+                                <h1>{petProfile?.height}</h1>
+                                <h3>in</h3>
+                            </div>
+                        </div>
+                    </div>
                 </section>
 
                 <section className='petRow' style={{ marginBottom: '5em' }}>
@@ -358,4 +412,4 @@ function PetProfile() {
     );
 }
 
-export default PetProfile;
+export default ViewPetProfile;
