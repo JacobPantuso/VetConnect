@@ -464,8 +464,6 @@ export const downloadInvoice = async (paymentFormId: number): Promise<string | n
   return data.publicUrl; // Return the public URL of the file
 };
 
-
-
 export const fetchAppointments = async ({
   ownerId,
   appointmentId,

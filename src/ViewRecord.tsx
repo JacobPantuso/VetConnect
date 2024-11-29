@@ -15,7 +15,6 @@ function ViewRecord() {
             setPetProfile(petProfiles.filter((petProfile) => petProfile.id === medicalRecord?.pet_profile_id)[0]);
         });
     }, [recordId]);
-
   return (
     <div className="MedicalRecords">
       <h2>Viewing Medical Record #{recordId}</h2>
