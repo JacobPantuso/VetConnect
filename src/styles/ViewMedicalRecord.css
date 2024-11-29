@@ -1,0 +1,142 @@
+.ViewMedicalRecord {
+    color: #D5DDDF;
+    margin: 2vw;
+}
+
+.petTitle h2 {
+    font-weight: 500;
+}
+
+.ViewMedicalRecord .petStats {
+    justify-content: center;
+}
+
+.petTitle h3 {
+    margin: 0;
+    padding: 0;
+    margin-top: 0.2rem;
+    font-weight: 600;
+    opacity: 50%;
+    transition: ease-in-out 0.3s;
+}
+
+.petTitle h3:hover {
+    opacity: 100%;
+}
+
+.petTitle a:visited,
+.petTitle a:link,
+.petTitle a:active {
+    text-decoration: none;
+    color: inherit;
+}
+
+.ViewMedicalRecord .stringStat {
+   width: 25%;
+}
+
+.petRow2 {
+    height: 30rem;
+}
+
+.petRow2 > div {
+    padding: 2em;
+}
+
+.petRow2 h2 {
+    font-size: 1.8rem;
+    font-weight: 500;
+    margin-bottom: 0.5em;
+}
+
+.ViewMedicalRecord .petStats h2 {
+    margin-top: .6em;
+}
+
+.medicalNotes {
+    width: 50%;
+    height: inherit;
+}
+
+.medicalSymptoms {
+    width: 50%;
+    height: inherit;
+}
+
+.medicalRecordsContainer {
+    height: 25rem;
+}
+
+.medicalRecordsContainerScroll {
+    overflow-x: scroll;
+}
+
+.medicalRecordsScroll {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: .5em;
+    row-gap: 1em;
+}
+
+textarea.medicalRecordsContainer  {
+    resize: none;
+    height: 23rem;
+    width: 95%;
+    background-color: inherit;
+    color: inherit;
+    padding: 1em;
+    font: inherit;
+    font-size: 1.4rem;
+}
+
+/*Symptom Bubble Styling*/
+
+
+.symptomBubble .center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-right: .3em;
+    width: 10%;
+}
+
+.symptomBubble .center:hover {
+    cursor: pointer;
+}
+
+.symptomBubble .center svg path {
+    stroke: rgba(213, 221, 223, 0.5);
+    transition: ease-in-out 0.3s;
+}
+
+.symptomBubble .center:hover svg path {
+    stroke: #D5DDDF;
+}
+
+.symptomBubble {
+    flex-grow: 2;
+    height: 2em;
+    padding: .8em;
+    border: solid 2px #3c3e3c;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24%;
+    max-width: 40%;
+    column-gap: .2em;
+}
+
+.symptomBubbleValue {
+    padding-left: 8%;
+    width: 80%;
+}
+
+.symptomBubble h2 {
+    text-align: center;
+    margin: 0px;
+    padding: 0px;
+    font-size: 1.4em;
+}
+

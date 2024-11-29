@@ -1,0 +1,123 @@
+.createMedicalRecord {
+    color: #D5DDDF;
+    margin: 2vw;
+    font: inherit;
+}
+
+.createMedicalRecordContainer {
+    height: 100%;
+}
+
+.folderSvg {
+    position: relative;
+    top: -20px;
+}
+
+.medicalRecordsFiller {
+    padding: 5em 3em;
+    padding-left: 5em;
+    height: 90%;
+    width: 100%;
+    position: absolute;
+    top: 5%;
+}
+
+.creationRow {
+    display: flex;
+    margin-bottom: 2.5em;
+    column-gap: 2.8em;
+}
+
+/*The first row of Medical Record Creation*/
+
+.creationRow1 {
+    column-gap: 5em;
+}
+
+.createRecordInfo h2 {
+    font-size: 2.5em;
+    font-weight: 400;
+    margin-bottom: .2em;
+    text-wrap: nowrap;
+    width: 100%;
+}
+
+.petname, .patient {
+    width: 30%;
+}
+
+.date {
+    width: 20%;
+}
+
+.createRecordInfo input[type='text'] {
+    width: 100%;
+    font-size: 3em;
+    font-weight: 400;
+    border: solid 2px #3c3e3c;
+    border-radius: 0.4em;
+    padding: 0.5em;
+    padding-right: 0;
+    font-family: inherit;
+    font-size: 1.5em;
+    color: inherit;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+/*Second Row*/
+
+.creationRow .medicalSymptoms, .creationRow .medicalNotes {
+    padding: 2em;
+}
+
+.creationRow .medicalSymptoms {
+    width: 35%;
+}
+
+.creationRow .medicalNotes {
+    width: 45%;
+}
+
+.creationRow .medicalSymptoms h2, .creationRow .medicalNotes h2 {
+    font-weight: 500;
+    font-size: 2em;
+    margin-bottom: .5em;
+}
+
+
+/*Symptom Bubbles*/
+
+.creationRow .medicalRecordsScroll h2 {
+    font-size: 1.5em;
+    margin: 0;
+}
+
+/*Add Symptom Bubble*/
+.addSymptom {
+    display: flex;
+    align-items: center;
+    column-gap: 1em;
+    padding: 1.2em 2em;
+    border: solid 2px #D5DDDF;
+    border-radius: 50px;
+    width: 100%;
+    fill: #D5DDDF;
+    transition: ease-in-out 0.3s;
+}
+
+.addSymptom svg path {
+    fill: inherit;
+}
+
+
+.addSymptom h2 {
+    margin: 0;
+    font-size: 1.4em;
+}
+
+.addSymptom:hover {
+    cursor: pointer;
+    fill: #3c3e3c;
+    border-color: #3c3e3c;
+    color: #3c3e3c;
+}

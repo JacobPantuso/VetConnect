@@ -32,7 +32,7 @@
     gap: 1rem;
 }
 
-.record {
+.record, .add-medical-record-button {
     display: flex;
     flex-direction: column;
     border-radius: 1rem;
@@ -42,7 +42,7 @@
     transition: box-shadow 0.3s;
 }
 
-.record:hover {
+.record:hover, .add-medical-record-button:hover {
     box-shadow: 0px 0px 10px 5px #9bf3a5;
 }
 
@@ -66,4 +66,15 @@
     text-align: center;
     gap: 1rem;
     width: 300px;
+}
+
+.add-medical-record-button {
+    width: 15%;
+}
+
+.add-medical-record-button div {
+    padding: .5em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

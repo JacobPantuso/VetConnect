@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useUserSession, PetProfile, updatePetProfile, Appointment, fetchAppointments } from './utils/supabase';
+import { useUserSession, PetProfile, updatePetProfile, Appointment, fetchAppointments, fetchPetProfiles } from './utils/supabase';
 import './styles/PetProfile.css';
 import PetProfileIcon from './components/PetProfileIcon';
 import EditButton from './components/EditButton';
@@ -68,11 +68,11 @@ interface AppointmentItemProps {
     appointment: Appointment;
 }
 
-function AppointmentItem({appointment}: AppointmentItemProps) {
+function AppointmentItem({ appointment }: AppointmentItemProps) {
     let formatDate = appointment.scheduled_date//.toLocaleString('en-us', { year: "numeric", month: "long", day: "numeric" });
 
     return (
-        <div className='appointmentItem'>
+        <div className='appointmentItem greyBorder'>
             <h3><span className='doctorName'>{appointment.service}</span></h3>
 
             {appointment.appointment_status === 'completed' ?
@@ -109,14 +109,13 @@ function PetVisits({ appointments }: PetVisitsProps) {
         return new Date(b.scheduled_date).getTime() - new Date(a.scheduled_date).getTime();
     })
     const appointmentList = sortedAppointments.map((item) => {
-        console.log(item.scheduled_date.split(" ")[0])
         return (
             <AppointmentItem key={item.id} appointment={item} />
         );
     })
 
     return (
-        <div className='petVisits'>
+        <div className='petVisits greyBorder'>
             <h2>Visits</h2>
             <div className='petProfileContainer'>
                 {appointmentList}
@@ -175,7 +174,7 @@ function PetBubbleStat({ isEditing, buttons, title, onClickAdd, onMouseDown, rem
     });
 
     return (
-        <div className='petTraits'>
+        <div className='petTraits greyBorder'>
             <h2>{title}</h2>
             <div className='petProfileContainer'>
                 {listItems}
@@ -238,31 +237,38 @@ function ViewPetProfile() {
             for (let i in petProfile.allergies) {
                 newAllergies[petProfile.allergies[i]] = true
             }
-
             setSelectedAllergies(newAllergies);
         }
 
-        const getAppointments = async (petProfileId : number) => {
-            const appointments = await fetchAppointments({petProfileId: petProfileId});
+        const getAppointments = async (petProfileId: number) => {
+            const appointments = await fetchAppointments({ petProfileId: petProfileId });
             setAppointmentsList(appointments);
         }
 
         if (user && id) {
-            for (let x in user.petProfiles) {
-                if (user.petProfiles[x].id === Number(id)) {
-                    let petProfile = { ...user.petProfiles[x] }
-                    let timeDiff = Math.abs(Date.now() - new Date(petProfile.date_of_birth).getTime());
+            if (user.user_type === 'VET') {
+                fetchPetProfiles().then((petProfiles) => {
+                    const getPetProfile = petProfiles.filter((profile) => profile.id === Number(id))[0];
+                    setPetProfile(getPetProfile);
+                    let timeDiff = Math.abs(Date.now() - new Date(getPetProfile.date_of_birth).getTime());
                     let age = Math.floor((timeDiff / (1000 * 3600 * 24)) / 365.25);
-
                     setAge(age);
-                    setPetProfile(petProfile);
-                    setUpAllergies(petProfile);
-                    setUpVaccinations(petProfile);
-                    setUpTraits(petProfile)
+                    setUpAllergies(getPetProfile);
+                    setUpVaccinations(getPetProfile);
+                    setUpTraits(getPetProfile)
+                    getAppointments(getPetProfile.id);
+                })
 
-                    getAppointments(petProfile.id);
-
-                }
+            } else {
+                const getPetProfile = user.petProfiles.filter((profile) => profile.id === Number(id))[0];
+                setPetProfile(getPetProfile);
+                let timeDiff = Math.abs(Date.now() - new Date(getPetProfile.date_of_birth).getTime());
+                let age = Math.floor((timeDiff / (1000 * 3600 * 24)) / 365.25);
+                setAge(age);
+                setUpAllergies(getPetProfile);
+                setUpVaccinations(getPetProfile);
+                setUpTraits(getPetProfile)
+                getAppointments(getPetProfile.id);
             }
         }
     }, [user, id])
@@ -348,18 +354,32 @@ function ViewPetProfile() {
                 <>
                     <section className='title'>
                         <div className='backSection'>
-                            <Link to={"/mypets"}>
-                                <ArrowSvg />
-                            </Link>
-                            <h1>My Pets</h1>
+                            {user?.id === petProfile.owner_id ?
+                                <>
+                                    <Link to={"/mypets"}>
+                                        <ArrowSvg />
+                                    </Link>
+                                    <h1>My Pets</h1>
+                                </>
+                                :
+                                <>
+                                    <Link to={"/medicalrecords"}>
+                                        <ArrowSvg />
+                                    </Link>
+                                    <h1>Medical Records</h1>
+                                </>
+                            }
                         </div>
                         <div className='editSection'>
-                            <EditButton isEditing={isEditing} onClickDone={handleDoneButton} setIsEditing={setIsEditing} value='Edit Pet Profile' />
+                            {user?.id === petProfile.owner_id &&
+                                <EditButton isEditing={isEditing} onClickDone={handleDoneButton} setIsEditing={setIsEditing} value='Edit Pet Profile' />
+                            }
                         </div>
                     </section>
                     <section className='petInfo'>
-                        <section className='petRow'>
-                            <div className='petTitle'>
+                        <section className='petRow petRow1'>
+
+                            <div className='petTitle greyBorder'>
                                 <div>
                                     {petProfile && <PetProfileIcon petProfile={petProfile} size='6em' />}
                                 </div>
@@ -368,10 +388,15 @@ function ViewPetProfile() {
                                     <h1>{petProfile.name}</h1>
                                 </div>
                             </div>
-                            <div className='petStats'>
+
+                            <div className='petStats greyBorder'>
                                 <div className='stringStat'>
                                     <h2>Species</h2>
-                                    <h1>{petProfile?.species}</h1>
+                                    <h1>{petProfile.species}</h1>
+                                </div>
+                                <div className='stringStat'>
+                                    <h2>Breed</h2>
+                                    <h1>{petProfile.breed}</h1>
                                 </div>
                                 <div className='numberStat'>
                                     <h2>Weight</h2>
@@ -379,7 +404,6 @@ function ViewPetProfile() {
                                         <h1>{petProfile.weight}</h1>
                                         <h3>kg</h3>
                                     </div>
-
                                 </div>
                                 <div className='numberStat'>
                                     <h2>Height</h2>
@@ -389,6 +413,7 @@ function ViewPetProfile() {
                                     </div>
                                 </div>
                             </div>
+
                         </section>
 
                         <section className='petRow' style={{ marginBottom: '5em' }}>

@@ -10,22 +10,29 @@ h1, h2 {
 
 .petRow {
     display: flex;
-    align-items: center;
     margin: 2vw;
     column-gap: 2vw;
+}
+
+.petRow1 {
+    height: 10rem;
 }
 
 .petProfile h2 {
     font-weight: 500;
 }
 
-.petTitle, .petStats, .petTraits, .petAllergies, .petVaccinations, .petVisits, .appointmentItem {
-    padding: 2em;
+.greyBorder {
     border-radius: 8px;
     border-style: solid;
     border-width: 2px;
     border-color: #3c3e3c;
 }
+
+.petTraits, .petAllergies, .petVaccinations, .petVisits, .appointmentItem {
+    padding: 2em;
+}
+
 
 .appointmentItem {
     padding: 1em;
@@ -49,15 +56,30 @@ h1, h2 {
 }
 
 .petTitle {
-    padding: 2.05em 2em;
+    
+    padding: 0em 2em;
     width: 28%;
     display: flex;
     align-items: center;
     column-gap: 2vw;
+    height: inherit;
 }
 
 .petStats {
-    padding: 1em;
+    padding: 0em 2em;
+    padding-top: 1em;
+    display: flex;
+    justify-content: center;
+    column-gap: 2em;
+    width: 72%;
+    height: 90%;
+}
+
+.petStats h2 {
+    margin-bottom: 10px;
+}
+.numberStat {
+    width: 25%;
 }
 
 .numberUnit {
@@ -71,24 +93,8 @@ h1, h2 {
     font-weight: 300;
 }
 
-.petStats {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    column-gap: 2em;
-    padding-top: 1.2em;
-}
-
-.numberStat {
-    width: 25%;
-}
-
 .stringStat {
     width: 20%;
-}
-
-.stringStat h2, .numberStat h2{
-    margin-bottom: 10px;
 }
 
 .stringStat h1 {
@@ -96,17 +102,12 @@ h1, h2 {
     font-size: 2.2em;
 }
 
-
-.petStats {
-    width: 62%;
-}
-
 .petTraits, .petAllergies, .petVaccinations, .petVisits {
     height: 29em;
 }
 
 .petTraits, .petAllergies, .petVaccinations {
-    width: 16.5%;
+    width: 17%;
 }
 
 .petVisits {
@@ -229,3 +230,4 @@ h2.petGenderAge {
 .appointmentItem h3 {
     font-weight: 600;
 }
+
