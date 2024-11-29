@@ -1,34 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useUserSession, fetchPetProfiles, setupProfile, PetProfile } from './utils/supabase';
+import { useUserSession, fetchPetProfiles, PetProfile } from './utils/supabase';
 import './styles/MyPets.css';
 import PetProfileButton from './components/PetProfileButton';
 import EditButton from './components/EditButton';
+import DeleteConfirmation from './components/DeleteConfirmation';
 
 export interface PetProfileProps {
   petProfileId: number,
   petProfileName: string,
   petProfileOwner: string,
 }
-
-//Default value
-const petProfile: PetProfileProps = {
-  petProfileId: 1,
-  petProfileName: "Sparky",
-  petProfileOwner: "Noah"
-};
-
-const petProfile2: PetProfileProps = {
-  petProfileId: 2,
-  petProfileName: "Buddy",
-  petProfileOwner: "Noah"
-};
-
-const petProfile3: PetProfileProps = {
-  petProfileId: 3,
-  petProfileName: "Max",
-  petProfileOwner: "Noah"
-};
 
 function AddIconSvg() {
   return (
@@ -51,6 +33,7 @@ function AddIconButton() {
 function MyPets() {
   const { user, fetching } = useUserSession();
   const [isEditing, setIsEditing] = useState(false);
+  const [isDeleting, setIsDeleting] = useState<string>("None");
   const [petProfiles, setPetProfiles] = useState<PetProfile[]>([]);
 
   useEffect(() => {
@@ -74,7 +57,11 @@ function MyPets() {
   }
 
   return (
+    <>
+    <DeleteConfirmation/>
     <section className='MyPets'>
+
+
       <div className="myPetsTitle">
         <h1>
           My Pets
@@ -92,7 +79,7 @@ function MyPets() {
             </div>
             :
             <div className='petRow'>
-            {petProfiles.map((item)=> <PetProfileButton petProfile={item}/>)}
+            {petProfiles.map((item)=> <PetProfileButton isEditing={isEditing} petProfile={item}/>)}
             {isEditing && <AddIconButton />}
             </div>
         }
@@ -105,10 +92,10 @@ function MyPets() {
 
       {petProfiles.length > 0 &&
             <EditButton isEditing={isEditing} setIsEditing={setIsEditing} value={"Manage Profiles"} />}
-
-       
       </div>
     </section>
+    </>
+
   );
 }
 

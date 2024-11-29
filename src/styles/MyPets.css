@@ -32,7 +32,7 @@ h2.myPetsTitle {
     margin-top: 20px;
 }
 
-div.iconBody {
+div.iconBody, .hoverPetIcon {
     width: 11em;
     background-color: grey;
     border-radius: 100%;
@@ -101,4 +101,37 @@ a.petProfileButton:hover {
     font-weight: 500;
     margin: 3em 0em;
     margin-top: 1em;
+}
+
+.hoverPetIcon {
+    background-color: rgba(50, 50, 50, 0);
+    position: absolute;
+    height: 11.2em;
+    z-index: 20;
+    opacity: 0%;
+}
+
+.hoverPetIcon:hover {
+    opacity: 80%;
+    background-color: rgb(50, 50, 50);
+}
+
+div.petManageIcons, div.petManageOverlay {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: 1.5em;
+}
+
+.petManageOverlay svg path{
+    z-index: 30;
+    stroke: white;
+    opacity: inherit;
+    transition: ease-in-out 0.3s;
+}
+
+.petManageOverlay svg:hover path{
+    stroke: rgba(255,255,255,.3);
 }

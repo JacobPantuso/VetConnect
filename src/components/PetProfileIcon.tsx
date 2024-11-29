@@ -1,7 +1,5 @@
-import React from "react";
 import '../styles/MyPets.css';
 import { Link } from 'react-router-dom';
-import { PetProfileProps } from "../MyPets";
 import { PetProfile } from "../utils/supabase";
 
 function PetProfileSvg() {
@@ -32,7 +30,12 @@ function PetProfileIcon({petProfile, size}: PetProfileButtonProps) {
 
     return (
         <div className="iconBody" style={{ backgroundColor: petColorIndex, width: size }}>
-            <div className="icon"><PetProfileSvg /></div>
+            
+            <div className="icon">
+            
+                <PetProfileSvg />
+                
+                </div>
         </div>
     );
 }
