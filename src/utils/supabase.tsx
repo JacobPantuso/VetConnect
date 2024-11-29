@@ -38,6 +38,9 @@ export interface PetProfile {
   weight: number;
   height: number;
   traits: string[];
+  allergies: string[];
+  vaccinations: string[];
+
 }
 export interface MedicalRecord {
   id: number;

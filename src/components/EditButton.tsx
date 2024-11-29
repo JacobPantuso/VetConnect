@@ -12,7 +12,7 @@ function EditButton({ isEditing, setIsEditing, value, onClickDone }: EditButtonP
     if (isEditing) {
       if (onClickDone) {
         return (
-          <button onClick={() => {setIsEditing(false); onClickDone("None")}} className='done'>Done</button>
+          <button onClick={() => {setIsEditing(false); onClickDone()}} className='done'>Done</button>
         );
       } else {
         return (

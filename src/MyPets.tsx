@@ -1,34 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useUserSession } from './utils/supabase';
+import { useUserSession, fetchPetProfiles, PetProfile, deletePetProfile } from './utils/supabase';
 import './styles/MyPets.css';
 import PetProfileButton from './components/PetProfileButton';
 import EditButton from './components/EditButton';
+import DeleteConfirmation from './components/DeleteConfirmation';
 
 export interface PetProfileProps {
   petProfileId: number,
   petProfileName: string,
   petProfileOwner: string,
 }
-
-//Default value
-const petProfile: PetProfileProps = {
-  petProfileId: 1,
-  petProfileName: "Sparky",
-  petProfileOwner: "Noah"
-};
-
-const petProfile2: PetProfileProps = {
-  petProfileId: 2,
-  petProfileName: "Buddy",
-  petProfileOwner: "Noah"
-};
-
-const petProfile3: PetProfileProps = {
-  petProfileId: 3,
-  petProfileName: "Max",
-  petProfileOwner: "Noah"
-};
 
 function AddIconSvg() {
   return (
@@ -51,6 +33,29 @@ function AddIconButton() {
 function MyPets() {
   const { user, fetching } = useUserSession();
   const [isEditing, setIsEditing] = useState(false);
+  const [isDeleting, setIsDeleting] = useState<string | null>();
+  const [selectedPetProfile, setSelectedPetProfile] = useState<PetProfile | null>();
+  const [petProfiles, setPetProfiles] = useState<PetProfile[]>([]);
+  const navigate = useNavigate();
+
+  const updatePetProfiles = async (id : string) => {
+    const petProfiles = await fetchPetProfiles(id);
+    setPetProfiles(petProfiles);
+  }
+
+  useEffect(() => {
+    if (user) {
+      updatePetProfiles(user.id);      
+    }
+  }, [user, petProfiles])
+
+  const handleDelete = async () => {
+    if (selectedPetProfile) {
+      const deletePet = await deletePetProfile(selectedPetProfile);
+      setIsDeleting(null);
+    }
+   // window.location.reload();
+  }
 
   if (fetching) {
     return (
@@ -61,6 +66,11 @@ function MyPets() {
   }
 
   return (
+    <>
+    {isDeleting && 
+    <DeleteConfirmation value={isDeleting} onNo={setIsDeleting} onYes={handleDelete}/>
+    }
+
     <section className='MyPets'>
       <div className="myPetsTitle">
         <h1>
@@ -71,20 +81,31 @@ function MyPets() {
 
       <div className='petContainer'>
         <div className="petList">
-          <div className='petRow'>
-            <PetProfileButton petProfile={petProfile} />
-            <PetProfileButton petProfile={petProfile2} />
-            <PetProfileButton petProfile={petProfile3} />
+
+        {petProfiles.length < 1 ? 
+            <div className='noPets'>
+            <AddIconButton/> 
+            <h2>No pets yet! Create a new pet.</h2>
+            </div>
+            :
+            <div className='petRow'>
+            {petProfiles.map((item)=> <PetProfileButton setSelectedPetProfile={setSelectedPetProfile} onDelete={setIsDeleting} isEditing={isEditing} petProfile={item}/>)}
             {isEditing && <AddIconButton />}
-          </div>
+            </div>
+        }
         </div>
       </div>
 
 
+
       <div className='manageProfiles'>
-        <EditButton isEditing={isEditing} setIsEditing={setIsEditing} value={"Manage Profiles"} />
+
+      {petProfiles.length > 0 &&
+            <EditButton isEditing={isEditing} setIsEditing={setIsEditing} value={"Manage Profiles"} />}
       </div>
     </section>
+    </>
+
   );
 }
 

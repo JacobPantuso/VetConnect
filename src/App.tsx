@@ -62,7 +62,7 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/resources" element={<Resources />} />
         <Route path="/mypets" element={<MyPets />} />
-        <Route path="/petprofile" element={<PetProfile/>}/>
+        <Route path="/petprofile/:id" element={<PetProfile/>}/>
         <Route path="/createpetprofile" element={<CreatePetProfile/>}/>
         <Route path="/medicalrecords" element={<MedicalRecords />} />
         <Route path="/medicalrecords/:recordId" element={<ViewRecord />} />
