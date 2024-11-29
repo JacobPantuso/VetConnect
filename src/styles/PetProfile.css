@@ -40,6 +40,7 @@ h1, h2 {
 .appointmentItem .doctorName {
     font-size: 1.5em;
 }
+
 .appointmentDate {
     margin-top: 4px;
     display: flex;
@@ -223,4 +224,8 @@ svg.editIcons:hover path {
 
 h2.petGenderAge {
     text-transform: capitalize;
+}
+
+.appointmentItem h3 {
+    font-weight: 600;
 }

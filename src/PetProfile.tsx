@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useUserSession, fetchPetProfiles, PetProfile, updatePetProfile } from './utils/supabase';
+import { useUserSession, PetProfile, updatePetProfile, Appointment, fetchAppointments } from './utils/supabase';
 import './styles/PetProfile.css';
 import PetProfileIcon from './components/PetProfileIcon';
 import EditButton from './components/EditButton';
@@ -65,36 +65,23 @@ function CompletedIcon() {
 //<PetProfileIcon petProfile={petProfile} size='6em' />
 
 interface AppointmentItemProps {
-    appointment_id: number,
-    doctorName: string,
-    date: Date,
-    status: string
+    appointment: Appointment;
 }
 
-interface Appointment {
-    appointment_id: number,
-    scheduled_date: Date,
-    pet_profile_id: number,
-    vet_name: string,
-    appointment_status: string,
-    service: string,
-}
-
-
-function AppointmentItem(appointment: AppointmentItemProps) {
-    let formatDate = appointment.date.toLocaleString('en-us', { year: "numeric", month: "long", day: "numeric" });
+function AppointmentItem({appointment}: AppointmentItemProps) {
+    let formatDate = appointment.scheduled_date//.toLocaleString('en-us', { year: "numeric", month: "long", day: "numeric" });
 
     return (
         <div className='appointmentItem'>
-            <h3><span className='doctorName'>{appointment.doctorName}</span></h3>
+            <h3><span className='doctorName'>{appointment.service}</span></h3>
 
-            {appointment.status === 'Completed' ?
+            {appointment.appointment_status === 'completed' ?
                 <div className='appointmentDate appointmentCompleted'>
                     <CompletedIcon />
                     <h3>Completed {formatDate}</h3>
                 </div>
                 :
-                appointment.status === "Scheduled" ?
+                appointment.appointment_status === "scheduled" ?
                     <div className='appointmentDate'>
                         <ClockSvg />
                         <h3>On {formatDate}</h3>
@@ -117,12 +104,14 @@ interface PetVisitsProps {
 }
 
 function PetVisits({ appointments }: PetVisitsProps) {
+
     let sortedAppointments = appointments.sort((a: Appointment, b: Appointment) => {
-        return b.scheduled_date.getTime() - a.scheduled_date.getTime();
+        return new Date(b.scheduled_date).getTime() - new Date(a.scheduled_date).getTime();
     })
     const appointmentList = sortedAppointments.map((item) => {
+        console.log(item.scheduled_date.split(" ")[0])
         return (
-            <AppointmentItem key={item.appointment_id} appointment_id={item.appointment_id} date={item.scheduled_date} status={item.appointment_status} doctorName={item.vet_name} />
+            <AppointmentItem key={item.id} appointment={item} />
         );
     })
 
@@ -253,6 +242,11 @@ function ViewPetProfile() {
             setSelectedAllergies(newAllergies);
         }
 
+        const getAppointments = async (petProfileId : number) => {
+            const appointments = await fetchAppointments({petProfileId: petProfileId});
+            setAppointmentsList(appointments);
+        }
+
         if (user && id) {
             for (let x in user.petProfiles) {
                 if (user.petProfiles[x].id === Number(id)) {
@@ -265,6 +259,9 @@ function ViewPetProfile() {
                     setUpAllergies(petProfile);
                     setUpVaccinations(petProfile);
                     setUpTraits(petProfile)
+
+                    getAppointments(petProfile.id);
+
                 }
             }
         }
