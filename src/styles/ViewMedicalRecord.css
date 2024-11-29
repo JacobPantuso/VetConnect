@@ -49,6 +49,10 @@
     margin-bottom: 0.5em;
 }
 
+.ViewMedicalRecord .petStats h2 {
+    margin-top: .6em;
+}
+
 .medicalNotes {
     width: 50%;
     height: inherit;
@@ -75,13 +79,39 @@
     row-gap: 1em;
 }
 
+textarea.medicalRecordsContainer  {
+    resize: none;
+    height: 23rem;
+    width: 95%;
+    background-color: inherit;
+    color: inherit;
+    padding: 1em;
+    font: inherit;
+    font-size: 1.4rem;
+}
+
 /*Symptom Bubble Styling*/
 
-.center {
+
+.symptomBubble .center {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 20%;
+    padding-right: .3em;
+    width: 10%;
+}
+
+.symptomBubble .center:hover {
+    cursor: pointer;
+}
+
+.symptomBubble .center svg path {
+    stroke: rgba(213, 221, 223, 0.5);
+    transition: ease-in-out 0.3s;
+}
+
+.symptomBubble .center:hover svg path {
+    stroke: #D5DDDF;
 }
 
 .symptomBubble {
@@ -93,7 +123,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    min-width: 25%;
+    min-width: 24%;
     max-width: 40%;
     column-gap: .2em;
 }
@@ -105,21 +135,8 @@
 
 .symptomBubble h2 {
     text-align: center;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
     margin: 0px;
     padding: 0px;
     font-size: 1.4em;
 }
 
-textarea.medicalRecordsContainer  {
-    resize: none;
-    height: 23rem;
-    width: 95%;
-    background-color: inherit;
-    color: inherit;
-    padding: 1em;
-    font: inherit;
-    font-size: 1.4rem;
-}

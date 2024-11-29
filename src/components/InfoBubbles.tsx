@@ -23,3 +23,23 @@ export const allergies: InfoBubbleValues = {
     "Smoke": false,
     "Fleas": false,
 }
+
+export const symptoms: InfoBubbleValues = {
+    "Coughing": false,
+    "Vomiting": false,
+    "Itching": false,
+    "Fatigue": false,
+    "Loss of Appetite": false,
+    "Increased Appetite": false,
+    "Decreased Thirst": false,
+    "Increased Thirst": false,
+    "Drooling": false,
+    "Sneezing": false,
+    "Hair Loss": false,
+    "Sores": false,
+    "Watery Eyes": false,
+    "Limping": false,
+    "Seizures": false,
+    "Shivering": false,
+    "Shortness of Breath": false,
+}

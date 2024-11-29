@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { fetchAllUsers, fetchMedicalRecords, fetchPetProfiles, MedicalRecord, PetProfile, User } from "./utils/supabase";
+import { fetchAllUsers, fetchMedicalRecords, fetchPetProfiles, MedicalRecord, PetProfile, updateMedicalRecord, User } from "./utils/supabase";
 import PetProfileIcon from "./components/PetProfileIcon";
 import './styles/ViewMedicalRecord.css';
+import EditButton from "./components/EditButton";
+import SearchTags from "./components/SearchTags";
+import { InfoBubbleValues, symptoms } from "./components/InfoBubbles";
 
 function AddIconSvg() {
   return (
@@ -15,7 +18,7 @@ function AddIconSvg() {
 function CrossSvg() {
   return (
     <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-      <path stroke='white' d="M18.5 1.5L1.5 18.5M1.5 1.5L18.5 18.5" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M18.5 1.5L1.5 18.5M1.5 1.5L18.5 18.5" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -31,16 +34,18 @@ function ArrowSvg() {
 
 interface SymptomBubbleProps {
   value: string;
+  isEditing: boolean;
+  onDelete: Function;
 }
 
-function SymptomBubble({value} : SymptomBubbleProps) {
+function SymptomBubble({ value, isEditing, onDelete }: SymptomBubbleProps) {
   return (
     <div className="symptomBubble">
       <div className="symptomBubbleValue">
         <h2>{value}</h2>
       </div>
       <div className="center">
-        <CrossSvg/>
+        {isEditing && <div style={{display: 'flex', justifyContent: 'center'}} onClick={()=> {onDelete(value)}}><CrossSvg/></div>}
       </div>
     </div>
   );
@@ -53,41 +58,99 @@ function ViewRecord() {
   const [owner, setOwner] = useState<null | User>();
   const [vet, setVet] = useState<null | User>();
 
+  //Modifying Records
+  const [isEditing, setIsEditing] = useState(false);
+
+  //Notes
+  const [notes, setNotes] = useState<string>("");
+
+  //Symptoms
+  const [openedMenu, setOpenedMenu] = useState<string>("None");
+  const [mousePosition, setMousePosition] = useState<number[]>([0, 0]);
+  const [selectedSymptoms, setSelectedSymptoms] = useState<InfoBubbleValues>(symptoms);
+
+
+  const handleDoneButton = async () => {
+    setOpenedMenu('None');
+    let newSymptoms: string[] = [];
+    Object.entries(selectedSymptoms).forEach(([symptoms, bool]) => {
+      if (bool) {
+        newSymptoms.push(symptoms);
+      }
+    })
+
+    if (medicalRecord) {
+      let updatedMedicalRecord = {...medicalRecord};
+      updatedMedicalRecord.symptoms = newSymptoms;
+      updatedMedicalRecord.notes = notes;
+      setRecord(updatedMedicalRecord);
+      updateMedicalRecord(medicalRecord.id, updatedMedicalRecord);
+    }
+  }
+
+  const handleSelectedSymptoms = (key: string) => {
+    let newSymptoms = { ...selectedSymptoms };
+    newSymptoms[key] = !newSymptoms[key];
+    setSelectedSymptoms(newSymptoms);
+  };
+
   useEffect(() => {
     fetchMedicalRecords().then((records) => {
       setRecord(records.filter((record) => record.id === Number(recordId))[0]);
     });
   }, [recordId]);
 
+
   useEffect(() => {
     fetchPetProfiles(medicalRecord?.owner_id).then((petProfiles) => {
       setPetProfile(petProfiles.filter((petProfile) => petProfile.id === medicalRecord?.pet_profile_id)[0]);
     });
-
-
     fetchAllUsers().then((users) => {
       setOwner(users.filter((user) => user.id === medicalRecord?.owner_id)[0]);
       setVet(users.filter((user) => user.id === medicalRecord?.veterinarian_id)[0]);
     })
 
-  }, [medicalRecord])
+    if (medicalRecord) {
+      let newSymptoms = { ...selectedSymptoms };
+      medicalRecord.symptoms.forEach((symptom) => {
+        newSymptoms[symptom] = true;
+      })
+      setNotes(medicalRecord.notes);
+      setSelectedSymptoms(newSymptoms);
+    }
 
-  //<EditButton isEditing={isEditing} onClickDone={handleDoneButton} setIsEditing={setIsEditing} value='Edit Pet Profile' />
+  }, [medicalRecord]);
 
-  console.log(medicalRecord)
+  const GetMousePosition = (e: any) => {
+    let newMousePosition: [number, number] = [0, 0];
+    newMousePosition[0] = e.clientX;
+    newMousePosition[1] = e.clientY;
+    setMousePosition(newMousePosition);
+  };
+
+  const handleOpenMenu = async (title: string) => {
+    let newOpenedMenu = openedMenu;
+    if (newOpenedMenu === title) {
+      newOpenedMenu = "None";
+    } else {
+      newOpenedMenu = title;
+    }
+
+    setOpenedMenu(newOpenedMenu);
+  };
 
 
   return (
     <div className="ViewMedicalRecord">
       <section className='title'>
         <div className='backSection'>
-          <Link to={"/mypets"}>
+          <Link to={"/medicalrecords"}>
             <ArrowSvg />
           </Link>
           <h1>Medical Record #{recordId}</h1>
         </div>
         <div className='editSection'>
-
+          <EditButton isEditing={isEditing} onClickDone={handleDoneButton} setIsEditing={setIsEditing} value='Edit Medical Record' />
         </div>
       </section>
 
@@ -130,28 +193,37 @@ function ViewRecord() {
             <h2>Symptoms</h2>
             <div className="medicalRecordsContainer medicalRecordsContainerScroll">
               <div className="medicalRecordsScroll">
-                <SymptomBubble value="Coughing"/>
-                <SymptomBubble value="Fatigue"/>
-                <SymptomBubble value="Sore"/>
-                <SymptomBubble value="Shiver"/>
-                <SymptomBubble value="Coughing"/>
-                <SymptomBubble value="Limp"/>
-                <SymptomBubble value="Sneeze"/>
-                <SymptomBubble value="Lack of Appetite"/>
-                
-
+                {Object.entries(selectedSymptoms).map(([symptom, bool]) => {
+                  if (bool) {
+                    return (
+                      <SymptomBubble key={symptom} value={symptom} isEditing={isEditing} onDelete={handleSelectedSymptoms} />
+                    );
+                  }
+                })
+                }
               </div>
             </div>
+            {isEditing &&
+              <div className='editIcons'>
+                <div className='addButtonSvg' onMouseDown={(e) => { GetMousePosition(e); handleOpenMenu("Symptoms") }}>
+                  <AddIconSvg />
+                </div>
+              </div>
+            }
           </div>
           <div className="medicalNotes greyBorder">
             <h2>Notes</h2>
-            <textarea placeholder="Write Notes here..." value={medicalRecord?.notes} disabled className="medicalRecordsContainer greyBorder">
-              
-            </textarea>
+            {isEditing ?
+              <textarea placeholder="Write Notes here..." onChange={(e)=>setNotes(e.currentTarget.value)} value={notes} className="medicalRecordsContainer greyBorder" />
+              :
+              <textarea placeholder="Write Notes here..." value={notes} disabled className="medicalRecordsContainer greyBorder" />
+            }
           </div>
         </section>
-
       </section>
+
+      {openedMenu === "Symptoms" && <SearchTags mousePosition={mousePosition} buttons={selectedSymptoms} setSelectedButtons={handleSelectedSymptoms} />}
+
 
     </div>
   );
