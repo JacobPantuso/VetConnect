@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { fetchAllUsers, fetchMedicalRecords, fetchPetProfiles, MedicalRecord, PetProfile, updateMedicalRecord, User } from "./utils/supabase";
+import { fetchAllUsers, fetchMedicalRecords, fetchPetProfiles, MedicalRecord, PetProfile, updateMedicalRecord, User, useUserSession } from "./utils/supabase";
 import PetProfileIcon from "./components/PetProfileIcon";
 import './styles/ViewMedicalRecord.css';
 import EditButton from "./components/EditButton";
@@ -57,6 +57,7 @@ function ViewRecord() {
   const [petProfile, setPetProfile] = useState(null as PetProfile | null);
   const [owner, setOwner] = useState<null | User>();
   const [vet, setVet] = useState<null | User>();
+const {user, fetching} = useUserSession();
 
   //Modifying Records
   const [isEditing, setIsEditing] = useState(false);
@@ -143,7 +144,7 @@ function ViewRecord() {
   return (
     <div className="ViewMedicalRecord">
       <section className='title'>
-        <div className='backSection'>
+       <div className='backSection'>
           <Link to={"/medicalrecords"}>
             <ArrowSvg />
           </Link>

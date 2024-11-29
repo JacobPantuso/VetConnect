@@ -247,7 +247,7 @@ function ViewPetProfile() {
 
         if (user && id) {
             if (user.user_type === 'VET') {
-                fetchPetProfiles().then((petProfiles)=> {
+                fetchPetProfiles().then((petProfiles) => {
                     const getPetProfile = petProfiles.filter((profile) => profile.id === Number(id))[0];
                     setPetProfile(getPetProfile);
                     let timeDiff = Math.abs(Date.now() - new Date(getPetProfile.date_of_birth).getTime());
@@ -258,7 +258,7 @@ function ViewPetProfile() {
                     setUpTraits(getPetProfile)
                     getAppointments(getPetProfile.id);
                 })
-                
+
             } else {
                 const getPetProfile = user.petProfiles.filter((profile) => profile.id === Number(id))[0];
                 setPetProfile(getPetProfile);
@@ -354,13 +354,26 @@ function ViewPetProfile() {
                 <>
                     <section className='title'>
                         <div className='backSection'>
-                            <Link to={"/mypets"}>
-                                <ArrowSvg />
-                            </Link>
-                            <h1>My Pets</h1>
+                            {user?.id === petProfile.owner_id ?
+                                <>
+                                    <Link to={"/mypets"}>
+                                        <ArrowSvg />
+                                    </Link>
+                                    <h1>My Pets</h1>
+                                </>
+                                :
+                                <>
+                                    <Link to={"/medicalrecords"}>
+                                        <ArrowSvg />
+                                    </Link>
+                                    <h1>Medical Records</h1>
+                                </>
+                            }
                         </div>
                         <div className='editSection'>
-                            <EditButton isEditing={isEditing} onClickDone={handleDoneButton} setIsEditing={setIsEditing} value='Edit Pet Profile' />
+                            {user?.id === petProfile.owner_id &&
+                                <EditButton isEditing={isEditing} onClickDone={handleDoneButton} setIsEditing={setIsEditing} value='Edit Pet Profile' />
+                            }
                         </div>
                     </section>
                     <section className='petInfo'>
