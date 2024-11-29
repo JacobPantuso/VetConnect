@@ -23,9 +23,11 @@ function EditIconSvg() {
 interface PetProfileButtonProps {
   petProfile: PetProfile;
   isEditing: boolean;
+  onDelete: Function;
+  setSelectedPetProfile: Function;
 }
 
-function PetProfileButton({ petProfile, isEditing }: PetProfileButtonProps) {
+function PetProfileButton({ petProfile, isEditing, onDelete, setSelectedPetProfile }: PetProfileButtonProps) {
   const petId = String(petProfile.id);
   const url = "/petprofile/".concat(petId);
   const navigate = useNavigate();
@@ -38,7 +40,7 @@ function PetProfileButton({ petProfile, isEditing }: PetProfileButtonProps) {
         <div onClick={() => { navigate(url) }}>
         <EditIconSvg />
         </div>
-        <div onClick={() => { navigate(url) }}>
+        <div onClick={() => { onDelete("Are you sure you want to delete " + petProfile.name + "?"); setSelectedPetProfile(petProfile);}}>
         <CrossIconSvg />
         </div>
       </div>

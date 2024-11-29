@@ -1,5 +1,6 @@
 .deleteBackdrop {
     position: absolute;
+    z-index: 200;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -22,19 +23,56 @@
 .deleteConfirmation {
     position: absolute;
     top: 40%;
-    z-index: 100;
-    padding: 2em;
-    width: 50%;
-    background-color: black;
+    z-index: 500;
+    padding: 4em 1em;
+    width: 30%;
+    background-color: inherit;
     border: solid 2px #3c3e3c;
+    background-color: #1a1a1a;
     border-radius: 0.4em;
     text-align: center;
 }
 
 .deleteConfirmationButtons {
-    margin: 1.5em 0em;
+    margin-top: 2em;
     display: flex;
     align-items: center;
     justify-content: center;
     column-gap: 5em;
 }
+
+.deleteConfirmationButtons input {
+    font-family: inherit;
+    font-size: 1em;
+    font-weight: 600;
+    background-color: inherit;
+    color: inherit;
+    border: solid 2px #3c3e3c;
+    border-radius: 0.4em;
+    padding: .3em 2em;
+    transition: ease-in-out 0.3s;
+}
+
+.deleteConfirmationButtons input:hover {
+    cursor: pointer;
+    border: solid 2px #D5DDDF;
+
+}
+
+.deleteBackdrop {
+    animation: fade-in 0.5s;
+  }
+
+  
+.deleteConfirmation {
+    animation: fade-in 0.5s;
+  }
+  
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 80%;
+    }
+  }

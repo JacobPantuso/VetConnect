@@ -252,11 +252,9 @@ function CreatePetProfile() {
         if (user) {
             savePetProfile.owner_id = user?.id;
             savePetProfile.breed = "";
-            savePetProfile.id = Math.floor(Math.random()*1000000);
 
             if (savePetProfile.name && savePetProfile.species && savePetProfile.date_of_birth && savePetProfile.weight &&  savePetProfile.height && savePetProfile.traits && savePetProfile.vaccinations && savePetProfile.allergies) {
-                const createdPetProfile: PetProfile = {
-                    id: savePetProfile.id,
+                await addPetProfile({
                     owner_id: savePetProfile.owner_id,
                     breed: savePetProfile.breed,
                     species: savePetProfile.species,
@@ -268,9 +266,7 @@ function CreatePetProfile() {
                     traits: savePetProfile.traits, 
                     vaccinations: savePetProfile.vaccinations,
                     allergies: savePetProfile.allergies
-                }
-
-                await addPetProfile(createdPetProfile);
+                });
                 navigate("/mypets");
             }
         }

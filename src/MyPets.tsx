@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useUserSession, fetchPetProfiles, PetProfile } from './utils/supabase';
+import { useUserSession, fetchPetProfiles, PetProfile, deletePetProfile } from './utils/supabase';
 import './styles/MyPets.css';
 import PetProfileButton from './components/PetProfileButton';
 import EditButton from './components/EditButton';
@@ -33,20 +33,29 @@ function AddIconButton() {
 function MyPets() {
   const { user, fetching } = useUserSession();
   const [isEditing, setIsEditing] = useState(false);
-  const [isDeleting, setIsDeleting] = useState<string>("None");
+  const [isDeleting, setIsDeleting] = useState<string | null>();
+  const [selectedPetProfile, setSelectedPetProfile] = useState<PetProfile | null>();
   const [petProfiles, setPetProfiles] = useState<PetProfile[]>([]);
+  const navigate = useNavigate();
+
+  const updatePetProfiles = async (id : string) => {
+    const petProfiles = await fetchPetProfiles(id);
+    setPetProfiles(petProfiles);
+  }
 
   useEffect(() => {
     if (user) {
-      const updatePetProfiles = async () => {
-        const petProfiles = await fetchPetProfiles(user.id);
-        setPetProfiles(petProfiles);
-      }
-    
-      updatePetProfiles();
-      
+      updatePetProfiles(user.id);      
     }
-  }, [user])
+  }, [user, petProfiles])
+
+  const handleDelete = async () => {
+    if (selectedPetProfile) {
+      const deletePet = await deletePetProfile(selectedPetProfile);
+      setIsDeleting(null);
+    }
+   // window.location.reload();
+  }
 
   if (fetching) {
     return (
@@ -58,10 +67,11 @@ function MyPets() {
 
   return (
     <>
-    <DeleteConfirmation/>
+    {isDeleting && 
+    <DeleteConfirmation value={isDeleting} onNo={setIsDeleting} onYes={handleDelete}/>
+    }
+
     <section className='MyPets'>
-
-
       <div className="myPetsTitle">
         <h1>
           My Pets
@@ -79,7 +89,7 @@ function MyPets() {
             </div>
             :
             <div className='petRow'>
-            {petProfiles.map((item)=> <PetProfileButton isEditing={isEditing} petProfile={item}/>)}
+            {petProfiles.map((item)=> <PetProfileButton setSelectedPetProfile={setSelectedPetProfile} onDelete={setIsDeleting} isEditing={isEditing} petProfile={item}/>)}
             {isEditing && <AddIconButton />}
             </div>
         }
