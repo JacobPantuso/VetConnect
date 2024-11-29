@@ -60,10 +60,7 @@ function SearchTags({buttons, setSelectedButtons, mousePosition} : SearchTagsPro
     }
 
     if (yPosition > window.innerHeight / 1.9) {
-        console.log("true")
         mouseStyles.top = yPosition-275;
-    } else {
-        mouseStyles.top = yPosition+350;
     }
 
 

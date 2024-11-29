@@ -14,7 +14,9 @@ import {
   fetchAppointments,
   updateAppointment,
   deleteAppointment,
-  downloadInvoice
+  downloadInvoice,
+  PetProfile,
+  fetchPetProfiles
 } from "./utils/supabase";
 import { useNavigate } from "react-router-dom";
 import { CustomDatePicker } from "./BookAppointment";
@@ -201,6 +203,26 @@ export function ModifyAppointment({
   setShowModify,
 }: ModifyAppointmentProps) {
   const [selectedAction, setSelectedAction] = React.useState("");
+  const [petProfiles, setPetProfiles] = React.useState([] as PetProfile[]);
+  const [fetching , setFetching] = React.useState(true);
+  useEffect(() => {
+    if (user.user_type !== "USER") {
+      fetchPetProfiles().then((profiles) => {
+        setPetProfiles(profiles);
+        setFetching(false);
+      });
+    }
+  }, [user]);
+
+  if (fetching) {
+    return (
+      <div className="ModifyAppointment">
+        <h2>Modify Appointment</h2>
+        <p className="loading"></p>
+      </div>
+    );
+  }
+
   return (
     <div className="ModifyAppointment">
       <div className="modify-container">
@@ -213,7 +235,7 @@ export function ModifyAppointment({
         <p>
           You are {selectedAction !== "" ? selectedAction : "modifying"}{" "}
           {
-            user.petProfiles.filter(
+            petProfiles.filter(
               (profile) => profile.id === appointment.pet_profile_id
             )[0].name
           }

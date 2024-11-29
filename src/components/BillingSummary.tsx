@@ -112,7 +112,7 @@ function BillingSummary({ user, fetching }: BillingSummaryProps) {
             ) : (
               <div className="inside-chart">
                 <div>
-                  {
+                  ${
                     user?.paymentForms?.filter(
                       (payment) => payment.status === "pending"
                     )[0].charge

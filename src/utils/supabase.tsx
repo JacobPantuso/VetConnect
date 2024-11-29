@@ -38,6 +38,9 @@ export interface PetProfile {
   weight: number;
   height: number;
   traits: string[];
+  allergies: string[];
+  vaccinations: string[];
+
 }
 export interface MedicalRecord {
   id: number;
@@ -112,7 +115,6 @@ export const useUserSession = (): UserSession => {
         if (user?.user_type !== 'USER' && user) {
           petProfiles = await fetchPetProfiles();
         } else {
-          console.log("fetching pet profiles for user", userId);
           petProfiles = await fetchPetProfiles(userId);
         }
 
@@ -204,7 +206,6 @@ export const fetchPetProfiles = async (
   ownerId?: string
 ): Promise<PetProfile[]> => {
   let query = supabase.from("pet_profiles").select("*");
-  console.log("ownerId", ownerId);
   if (ownerId) {
     query = query.eq("owner_id", ownerId);
   }
@@ -465,8 +466,6 @@ export const downloadInvoice = async (paymentFormId: number): Promise<string | n
 
   return data.publicUrl; // Return the public URL of the file
 };
-
-
 
 export const fetchAppointments = async ({
   ownerId,

@@ -15,8 +15,11 @@ import MyPets from './MyPets';
 import PetProfile from './PetProfile';
 import CreatePetProfile from './CreatePetProfile';
 import UserProfile from './components/UserProfile';
+import MedicalRecords from './MedicalRecords';
 import Footer from './Footer';
 import Payment from './Payment';
+import ViewRecord from './ViewRecord';
+import CreateMedicalRecord from './CreateMedicalRecord';
 
 function App() {
 
@@ -60,8 +63,11 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/resources" element={<Resources />} />
         <Route path="/mypets" element={<MyPets />} />
-        <Route path="/petprofile" element={<PetProfile/>}/>
+        <Route path="/petprofile/:id" element={<PetProfile/>}/>
         <Route path="/createpetprofile" element={<CreatePetProfile/>}/>
+        <Route path="/createmedicalrecord/:petId" element={<CreateMedicalRecord/>}/>
+        <Route path="/medicalrecords" element={<MedicalRecords />} />
+        <Route path="/medicalrecords/:recordId" element={<ViewRecord />} />
         <Route path="/payment/:appointmentid" element={<Payment />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>

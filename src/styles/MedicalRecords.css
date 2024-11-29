@@ -1,0 +1,80 @@
+.MedicalRecords {
+    display: flex;
+    flex-direction: column;
+    padding-left: var(--padding);
+    padding-right: var(--padding);
+    padding-top: 2rem;
+    height: 100%;
+}
+
+.MedicalRecords h2 {
+    font-size: 2rem;
+    margin-top: 0;
+    margin-bottom: 1rem;
+  }
+
+  .select-row {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+  }
+
+.medical-records-selection {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.records-container {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
+.record, .add-medical-record-button {
+    display: flex;
+    flex-direction: column;
+    border-radius: 1rem;
+    box-shadow: 0px 0px 10px 5px #9bf3a542;
+    width: 20%;
+    cursor: pointer;
+    transition: box-shadow 0.3s;
+}
+
+.record:hover, .add-medical-record-button:hover {
+    box-shadow: 0px 0px 10px 5px #9bf3a5;
+}
+
+.record-content {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+}
+
+.record-content h4 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+}
+
+.loading-records {
+    display: flex;
+    margin: auto;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 1rem;
+    width: 300px;
+}
+
+.add-medical-record-button {
+    width: 15%;
+}
+
+.add-medical-record-button div {
+    padding: .5em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

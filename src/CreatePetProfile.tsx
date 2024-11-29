@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useUserSession } from './utils/supabase';
+import { useUserSession, addPetProfile, PetProfile } from './utils/supabase';
 import './styles/CreatePetProfile.css';
 import { Link, useNavigate } from 'react-router-dom';
 import SearchTags from './components/SearchTags';
@@ -16,12 +16,6 @@ function ArrowSvg() {
 }
 
 function FolderBackground() {
-    /*
-            <svg width="100%" height="100%" viewBox="0 0 1139 676" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path  d="M1138.5 52V670C1138.5 673.038 1136.04 675.5 1133 675.5H6.00002C2.96245 675.5 0.5 673.038 0.5 670V58C0.5 54.9624 2.96243 52.5 6 52.5H341.606H486.467C488.316 52.5 490.078 51.7122 491.311 50.3338L534.252 2.33297C535.296 1.16663 536.786 0.5 538.351 0.5H858.009H998.035H1021.53H1133C1136.04 0.5 1138.5 2.96243 1138.5 6V52Z" />
-            </svg>
-    */
-
     return (
         <svg width="100%" height="100%" viewBox="0 0 1139 715" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M1138.5 52V708.5C1138.5 711.538 1136.04 714 1133 714H6.00002C2.96245 714 0.5 711.538 0.5 708.5V58C0.5 54.9624 2.96244 52.5 6 52.5H341.606H486.467C488.316 52.5 490.078 51.7122 491.311 50.3338L534.252 2.33297C535.296 1.16663 536.786 0.5 538.351 0.5H858.009H998.035H1021.53H1133C1136.04 0.5 1138.5 2.96243 1138.5 6V52Z" fill="none" stroke="#3c3e3c" />
@@ -32,7 +26,7 @@ function FolderBackground() {
 function CrossSvg() {
     return (
         <svg className='crossSvg' width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M18.5 1.5L1.5 18.5M1.5 1.5L18.5 18.5" className='crossSvg' stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M18.5 1.5L1.5 18.5M1.5 1.5L18.5 18.5" className='crossSvg' strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
     );
 }
@@ -59,7 +53,7 @@ function TraitInfoBubble({ value, color, onClick }: InfoBubbleProps) {
             <div className='petCreationInfoBubbleTitle'>
                 <h2>{value}</h2>
             </div>
-            <div className='petCreationInfoBubbleCross' onClick={()=>onClick(value)}>
+            <div className='petCreationInfoBubbleCross' onClick={() => onClick(value)}>
                 <CrossSvg />
             </div>
         </div>
@@ -73,7 +67,7 @@ function InfoBubble({ value, color, onClick }: InfoBubbleProps) {
             <div className='petCreationInfoBubbleTitleVA'>
                 <h2>{value}</h2>
             </div>
-            <div className='petCreationInfoBubbleCrossVA' onClick={()=>onClick(value)}>
+            <div className='petCreationInfoBubbleCrossVA' onClick={() => onClick(value)}>
                 <CrossSvg />
             </div>
         </div>
@@ -90,7 +84,7 @@ interface AddBubbleProps {
 
 function AddBubble({ value, color, onClick, title, onMouseDown }: AddBubbleProps) {
     return (
-        <div className='petCreationAddBubble' onMouseDown={(e) => { onMouseDown(e); onClick(title)}}>
+        <div className='petCreationAddBubble' onMouseDown={(e) => { onMouseDown(e); onClick(title) }}>
             <div className='petCreationAddBubbleIcon'>
                 <AddSvg />
             </div>
@@ -101,6 +95,21 @@ function AddBubble({ value, color, onClick, title, onMouseDown }: AddBubbleProps
     )
 }
 
+interface NewPetProfile {
+    id?: number;
+    name?: string;
+    owner_id?: string;    
+    species?: string;
+    breed?: string;
+    date_of_birth?: string;
+    gender: "male" | "female" | "unknown";
+    weight?: number;
+    height?: number;
+    traits?: string[];
+    vaccinations?: string[];
+    allergies?: string[];
+};
+
 function CreatePetProfile() {
     const { user, fetching } = useUserSession();
     let navigate = useNavigate();
@@ -108,6 +117,18 @@ function CreatePetProfile() {
     const [selectedVaccinations, setSelectedVaccinations] = useState<InfoBubbleValues>(vaccinations);
     const [selectedAllergies, setSelectedAllergies] = useState<InfoBubbleValues>(allergies);
     const selectedTraitsList = Object.entries(selectedTraits);
+
+    const defaultNewPetProfile: NewPetProfile = {
+        name: "",
+        species: "",
+        breed: "",
+        gender: "male",
+        traits: [],
+        vaccinations: [],
+        allergies: [],
+    }
+    const [newPetProfile, setNewPetProfile] = useState<NewPetProfile>(defaultNewPetProfile);
+
 
     function getTrueTraitPairs() {
         let trueTraits: any = [];
@@ -132,6 +153,55 @@ function CreatePetProfile() {
     const [openedMenu, setOpenedMenu] = useState<string>("None");
     const [mousePosition, setMousePosition] = useState<number[]>([0, 0]);
 
+    const handleNewPetProfileChange = (type: string, newValue: any) => {
+        let updatedPetProfile = { ...newPetProfile };
+
+        if (type === "name") {
+            updatedPetProfile.name = newValue;
+        } else if (type === "species") {
+            updatedPetProfile.species = newValue;
+        } else if (type === "weight") {
+            updatedPetProfile.weight = Number(newValue);
+        } else if (type === "height") {
+            updatedPetProfile.height = Number(newValue);
+        } else if (type === "dateOfBirth") {
+            updatedPetProfile.date_of_birth = newValue;
+        } else if (type === "gender") {
+            updatedPetProfile.gender = newValue;
+        } else if (type === "traits") {
+            const traitsList = Object.entries(newValue);
+            const updatedTraits = [];
+            for (let i = 0; i < traitsList.length; i++) {
+                if (traitsList[i][1]) {
+                    updatedTraits.push(traitsList[i][0])
+                }
+            }
+            updatedPetProfile.traits = updatedTraits;
+
+        } else if (type === "vaccinations") {
+            const vaccinationsList = Object.entries(newValue);
+            const updatedVaccinations = [];
+            for (let i = 0; i < vaccinationsList.length; i++) {
+                if (vaccinationsList[i][1]) {
+                    updatedVaccinations.push(vaccinationsList[i][0])
+                }
+            }
+            updatedPetProfile.vaccinations = updatedVaccinations;
+
+        } else if (type === "allergies") {
+            const allergiesList = Object.entries(newValue);
+            const updatedAllergies = [];
+            for (let i = 0; i < allergiesList.length; i++) {
+                if (allergiesList[i][1]) {
+                    updatedAllergies.push(allergiesList[i][0])
+                }
+            }
+            updatedPetProfile.allergies = updatedAllergies;
+        }
+
+        setNewPetProfile(updatedPetProfile);
+    }
+
     const handleOpenMenu = async (title: string) => {
         let newOpenedMenu = openedMenu;
         if (newOpenedMenu === title) {
@@ -139,15 +209,13 @@ function CreatePetProfile() {
         } else {
             newOpenedMenu = title;
         }
-
-        setOpenedMenu(newOpenedMenu);  
+        setOpenedMenu(newOpenedMenu);
     };
 
     const GetMousePosition = (e: any) => {
         let newMousePosition: number[] = [0, 0];
         newMousePosition[0] = e.clientX;
         newMousePosition[1] = e.clientY;
-        console.log(newMousePosition)
         setMousePosition(newMousePosition);
     };
 
@@ -155,23 +223,54 @@ function CreatePetProfile() {
         let newTraits = { ...selectedTraits };
         newTraits[key] = !newTraits[key];
         setSelectedTraits(newTraits);
+        handleNewPetProfileChange("traits", newTraits);
     };
 
     const handleSelectVaccinations = (key: string) => {
         let newVaccinations = { ...selectedVaccinations };
         newVaccinations[key] = !newVaccinations[key];
         setSelectedVaccinations(newVaccinations);
+        handleNewPetProfileChange("vaccinations", newVaccinations);
     };
 
     const handleSelectAllergies = (key: string) => {
         let newAllergies = { ...selectedAllergies };
         newAllergies[key] = !selectedAllergies[key];
         setSelectedAllergies(newAllergies);
+        handleNewPetProfileChange("allergies", newAllergies);
     };
 
-    const createPet = () => {
-        console.log("Create a pet here");
-        navigate("/mypets");
+    const createPet = async () => {
+        let savePetProfile: NewPetProfile = {...newPetProfile}
+
+        if (user) {
+            savePetProfile.owner_id = user?.id;
+            savePetProfile.breed = "";
+
+            if (savePetProfile.name && savePetProfile.species && savePetProfile.date_of_birth && savePetProfile.weight &&  savePetProfile.height && savePetProfile.traits && savePetProfile.vaccinations && savePetProfile.allergies) {
+                await addPetProfile({
+                    owner_id: savePetProfile.owner_id,
+                    breed: savePetProfile.breed,
+                    species: savePetProfile.species,
+                    name: savePetProfile.name,
+                    date_of_birth: savePetProfile.date_of_birth, 
+                    gender: savePetProfile.gender,
+                    weight: savePetProfile.weight,
+                    height: savePetProfile.height,
+                    traits: savePetProfile.traits, 
+                    vaccinations: savePetProfile.vaccinations,
+                    allergies: savePetProfile.allergies
+                });
+                navigate("/mypets");
+            }
+        }
+
+
+
+        
+
+        
+       // navigate("/mypets");
     }
 
     if (fetching) {
@@ -184,8 +283,6 @@ function CreatePetProfile() {
 
     return (
         <section className='createPetProfile'>
-
-
             <section className='createPetProfileTitle'>
                 <div className='backSection'>
                     <Link to={"/mypets"}>
@@ -201,17 +298,17 @@ function CreatePetProfile() {
                     <div className='petCreationColumn1'>
                         <div className='petName'>
                             <h2>Name:</h2>
-                            <input type="text"></input>
+                            <input type="text" onChange={(e) => (handleNewPetProfileChange("name", e.currentTarget.value))}></input>
                         </div>
 
                         <div className='petSpecies'>
                             <h2>Species:</h2>
-                            <input type="text"></input>
+                            <input type="text" onChange={(e) => (handleNewPetProfileChange("species", e.currentTarget.value))}></input>
                         </div>
 
                         <div className='petDOB'>
                             <h2>Date Of Birth:</h2>
-                            <input type="date"></input>
+                            <input type="date" onChange={(e) => (handleNewPetProfileChange("dateOfBirth", e.currentTarget.value))}></input>
                         </div>
 
                         <div className='petCreationTraits'>
@@ -220,9 +317,9 @@ function CreatePetProfile() {
 
                                 {
                                     truePairs.map((item, i) => {
-                                        const twoTraits = item.map(([key, value]) => <TraitInfoBubble onClick={handleSelectTraits} value={key} />)
+                                        const twoTraits = item.map(([key, value]) => <TraitInfoBubble key={key} onClick={handleSelectTraits} value={key} />)
                                         return (
-                                            <div className='petCreationTraitsRow'>
+                                            <div className='petCreationTraitsRow' key={i}>
                                                 {twoTraits}
                                             </div>
                                         );
@@ -240,23 +337,23 @@ function CreatePetProfile() {
 
                             <div className='petGender'>
                                 <h2>Gender:</h2>
-                                <select className='petGender'>
-                                    <option value="Male">Male</option>
-                                    <option value="Female">Female</option>
+                                <select className='petGender' onChange={(e) => (handleNewPetProfileChange("gender", e.currentTarget.value))}>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
                                 </select>
                             </div>
 
                             <div className='petWeight'>
                                 <h2>Weight:</h2>
                                 <div className='weightSuffix'>
-                                    <input type="number" ></input>
+                                    <input type="number" onChange={(e) => (handleNewPetProfileChange("weight", e.currentTarget.value))}></input>
                                 </div>
                             </div>
 
                             <div className='petHeight'>
                                 <h2>Height:</h2>
                                 <div className='heightSuffix'>
-                                    <input type="number" ></input>
+                                    <input type="number" onChange={(e) => (handleNewPetProfileChange("height", e.currentTarget.value))}></input>
                                 </div>
                             </div>
                         </div>
@@ -268,7 +365,7 @@ function CreatePetProfile() {
                                     {Object.entries(selectedVaccinations).map(([key, value]) => {
                                         if (value) {
                                             return (
-                                                <InfoBubble onClick={handleSelectVaccinations} value={key} />
+                                                <InfoBubble key={key} onClick={handleSelectVaccinations} value={key} />
                                             );
                                         }
                                     })}
@@ -281,7 +378,7 @@ function CreatePetProfile() {
                                     {Object.entries(selectedAllergies).map(([key, value]) => {
                                         if (value) {
                                             return (
-                                                <InfoBubble onClick={handleSelectAllergies} value={key} />
+                                                <InfoBubble key={key} onClick={handleSelectAllergies} value={key} />
                                             );
                                         }
                                     })}
@@ -294,14 +391,14 @@ function CreatePetProfile() {
             </section>
 
             <div className='saveButton'>
-                <input className='saveButton' type="button" value="Save" onClick={()=>{createPet()}}/>
+                <input className='saveButton' type="button" value="Save" onClick={() => { createPet() }} />
             </div>
 
 
-            {openedMenu ==="Traits" && <SearchTags mousePosition={mousePosition} buttons={selectedTraits} setSelectedButtons={handleSelectTraits} />}
+            {openedMenu === "Traits" && <SearchTags mousePosition={mousePosition} buttons={selectedTraits} setSelectedButtons={handleSelectTraits} />}
             {openedMenu === "Vaccinations" && <SearchTags mousePosition={mousePosition} buttons={selectedVaccinations} setSelectedButtons={handleSelectVaccinations} />}
-            {openedMenu === "Allergies" && <SearchTags mousePosition={mousePosition} buttons={selectedAllergies} setSelectedButtons={handleSelectAllergies}/>}
-            
+            {openedMenu === "Allergies" && <SearchTags mousePosition={mousePosition} buttons={selectedAllergies} setSelectedButtons={handleSelectAllergies} />}
+
         </section>
     );
 }
