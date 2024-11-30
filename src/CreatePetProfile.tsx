@@ -271,6 +271,11 @@ function CreatePetProfile() {
     }
 
     return (
+        <>
+                    {openedMenu === "Traits" && <SearchTags mousePosition={mousePosition} buttons={selectedTraits} setSelectedButtons={handleSelectTraits} />}
+            {openedMenu === "Vaccinations" && <SearchTags mousePosition={mousePosition} buttons={selectedVaccinations} setSelectedButtons={handleSelectVaccinations} />}
+            {openedMenu === "Allergies" && <SearchTags mousePosition={mousePosition} buttons={selectedAllergies} setSelectedButtons={handleSelectAllergies} />}
+
         <section className='createPetProfile'>
             <section className='createPetProfileTitle'>
                 <div className='backSection'>
@@ -384,13 +389,8 @@ function CreatePetProfile() {
             <div className='saveButton'>
                 <input className='saveButton' type="button" value="Save" onClick={() => { createPet() }} />
             </div>
-
-
-            {openedMenu === "Traits" && <SearchTags mousePosition={mousePosition} buttons={selectedTraits} setSelectedButtons={handleSelectTraits} />}
-            {openedMenu === "Vaccinations" && <SearchTags mousePosition={mousePosition} buttons={selectedVaccinations} setSelectedButtons={handleSelectVaccinations} />}
-            {openedMenu === "Allergies" && <SearchTags mousePosition={mousePosition} buttons={selectedAllergies} setSelectedButtons={handleSelectAllergies} />}
-
         </section>
+        </>
     );
 }
 

@@ -139,3 +139,6 @@ textarea.medicalRecordsContainer  {
     font-size: 1.4em;
 }
 
+.symptomCross svg path {
+    animation: fade-in .2s;
+}

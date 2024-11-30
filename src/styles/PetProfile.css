@@ -183,6 +183,7 @@ div.editIcons {
 svg.editIcons path {
     fill: #595959;
     transition: ease-in-out 0.3s;
+    animation: fade-in .2s;
 }
 
 svg.editIcons:hover, svg.editIcons:hover path {
@@ -209,6 +210,7 @@ svg.editIcons:hover path {
 .crossIconSvg svg path {
     stroke: #3c3e3c;
     transition: ease-in-out 0.3s;
+    animation: fade-in .2s;
 }
 
 .crossIconSvg:hover {

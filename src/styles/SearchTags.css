@@ -1,3 +1,6 @@
+.searchTagsSection {
+    position: relative;
+}
 .searchTags {
     position: absolute;
     z-index: 4;
@@ -8,6 +11,7 @@
     padding: 1em;
     background-color: #1a1a1a;
     height: 15em;
+    animation: fade-in .2s;
 }
 
 
