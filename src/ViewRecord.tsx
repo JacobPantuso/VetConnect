@@ -182,7 +182,7 @@ const {user, fetching} = useUserSession();
             </div>
 
             <div className='stringStat'>
-              <h2>Date</h2>
+              <h2>Date Created</h2>
               <h1>{medicalRecord?.date}</h1>
             </div>
 

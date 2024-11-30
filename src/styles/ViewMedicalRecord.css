@@ -1,15 +1,14 @@
 .ViewMedicalRecord {
     color: #D5DDDF;
-    margin: 2vw;
+    padding-left: var(--padding);
+    padding-right: var(--padding);
+    margin-top: 2rem;
 }
 
 .petTitle h2 {
     font-weight: 500;
 }
 
-.ViewMedicalRecord .petStats {
-    justify-content: center;
-}
 
 .petTitle h3 {
     margin: 0;

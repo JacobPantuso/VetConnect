@@ -14,8 +14,16 @@ export const traits: InfoBubbleValues = {
 }
 
 export const vaccinations: InfoBubbleValues = {
-    "Idk": false,
-}
+    "Rabies": false,
+    "Distemper": false,
+    "Parvovirus": false,
+    "Hepatitis": false,
+    "Kennel Cough": false,
+    "Leptospirosis": false,
+    "Lyme Disease": false,
+    "Canine Influenza": false
+};
+
 
 export const allergies: InfoBubbleValues = {
     "Grass": false,

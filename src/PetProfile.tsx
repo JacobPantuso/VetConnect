@@ -392,7 +392,7 @@ function ViewPetProfile() {
                             <div className='petStats greyBorder'>
                                 <div className='stringStat'>
                                     <h2>Species</h2>
-                                    <h1>{petProfile.species}</h1>
+                                    <h1>{petProfile.species.charAt(0).toLocaleUpperCase() + petProfile.species.slice(1)}</h1>
                                 </div>
                                 <div className='stringStat'>
                                     <h2>Breed</h2>
