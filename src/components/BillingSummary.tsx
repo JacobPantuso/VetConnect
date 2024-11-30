@@ -17,6 +17,10 @@ function BillingSummary({ user, fetching }: BillingSummaryProps) {
   const [proportionOne, setProportionOne] = useState(30);
   const [proportionTwo, setProportionTwo] = useState(30);
 
+  const totalPendingCharges = user?.paymentForms
+  ?.filter((payment) => payment.status === "pending")
+  .reduce((sum, payment) => sum + payment.charge, 0) || 0;
+
   const data = {
     datasets: [
       {
@@ -113,9 +117,7 @@ function BillingSummary({ user, fetching }: BillingSummaryProps) {
               <div className="inside-chart">
                 <div>
                   ${
-                    user?.paymentForms?.filter(
-                      (payment) => payment.status === "pending"
-                    )[0].charge
+                    totalPendingCharges
                   }
                 </div>
                 <div className="due-in">
