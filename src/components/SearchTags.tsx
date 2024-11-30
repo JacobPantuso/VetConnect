@@ -12,7 +12,7 @@ function MagnifySvg() {
 
 interface Buttons {
     [key: string]: boolean;
-  }
+}
 
 interface SearchTagsProps {
     buttons: Buttons,
@@ -20,29 +20,28 @@ interface SearchTagsProps {
     mousePosition: number[],
 };
 
-function SearchTags({buttons, setSelectedButtons, mousePosition} : SearchTagsProps) {
+function SearchTags({ buttons, setSelectedButtons, mousePosition }: SearchTagsProps) {
     const [searchParams, setSearchParams] = useState("");
-    const listItems = Object.entries(buttons).map(([key, value]) => 
-    {
+    const listItems = Object.entries(buttons).map(([key, value]) => {
         if (searchParams === "") {
             if (value) {
                 return (
-                    <input key={key} type="button" value={key} className='searchTagsButtonChecked' onClick={()=>{setSelectedButtons(key)}}/>
-                );     
+                    <input key={key} type="button" value={key} className='searchTagsButtonChecked' onClick={() => { setSelectedButtons(key) }} />
+                );
             }
             return (
-                <input key={key} type="button" value={key} className='searchTagsButton' onClick={()=>{setSelectedButtons(key)}}/>
-             );
+                <input key={key} type="button" value={key} className='searchTagsButton' onClick={() => { setSelectedButtons(key) }} />
+            );
         } else {
             if (key.toLowerCase().search(searchParams.toLowerCase()) >= 0) {
                 if (value) {
                     return (
-                        <input key={key} type="button" value={key} className='searchTagsButtonChecked' onClick={()=>{setSelectedButtons(key)}}/>
-                    );     
+                        <input key={key} type="button" value={key} className='searchTagsButtonChecked' onClick={() => { setSelectedButtons(key) }} />
+                    );
                 }
                 return (
-                    <input key={key} type="button" value={key} className='searchTagsButton' onClick={()=>{setSelectedButtons(key)}}/>
-                 ); 
+                    <input key={key} type="button" value={key} className='searchTagsButton' onClick={() => { setSelectedButtons(key) }} />
+                );
             }
         }
     }
@@ -50,33 +49,46 @@ function SearchTags({buttons, setSelectedButtons, mousePosition} : SearchTagsPro
 
     const xPosition: number = mousePosition[0];
     const yPosition: number = mousePosition[1];
-    let mouseStyles = {
+    let mouseStyles: { left: number; top?: number; bottom?: number } = {
         left: xPosition,
-        top: yPosition
     };
 
     if (xPosition > window.innerWidth / 1.2) {
-        mouseStyles.left = xPosition-360;
+        mouseStyles.left = xPosition - 360;
     }
 
-    if (yPosition > window.innerHeight / 1.9) {
-        mouseStyles.top = yPosition-275;
-    }
+    const calculateMouseStylesTop = (yPosition:number, windowHeight:number) => {
+        const normalizedY = yPosition / windowHeight;
+        let offSet = 0.6;
+        if (yPosition > window.innerHeight / 2.3) {
+            offSet = .6
+            if (yPosition > window.innerHeight / 1.8 && yPosition < window.innerHeight / 1.5) {
+                offSet = .5
+            }
+        } else {
+            offSet = 0.49;
+        }
+        const top = Math.pow(normalizedY, 2) - 1 * normalizedY + offSet * windowHeight;
+        return Math.max(0, top);
+    };
 
-
+    mouseStyles.top = calculateMouseStylesTop(yPosition, window.innerHeight);
 
     return (
-        <div className='searchTags' style={mouseStyles}>
-            <div className='searchTagsSearchBar'>
-                <input type='text' placeholder='Search' onChange={(e)=>{setSearchParams(e.currentTarget.value)}} className='searchTagsInput' style={{outline: 'None', borderStyle: "None"}}/>
-                <div className='magnifySvg'>
-                    <MagnifySvg/>
+        <div className='searchTagsSection'>
+            <div className='searchTags'  style={mouseStyles}>
+                <div className='searchTagsSearchBar'>
+                    <input type='text' placeholder='Search' onChange={(e) => { setSearchParams(e.currentTarget.value) }} className='searchTagsInput' style={{ outline: 'None', borderStyle: "None" }} />
+                    <div className='magnifySvg'>
+                        <MagnifySvg />
+                    </div>
+                </div>
+                <div className='searchedTagsContainer'>
+                    {listItems}
                 </div>
             </div>
-            <div className='searchedTagsContainer'>
-                {listItems}
-            </div>
         </div>
+
     );
 }
 

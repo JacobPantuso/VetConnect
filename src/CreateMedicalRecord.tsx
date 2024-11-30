@@ -134,6 +134,8 @@ function CreateMedicalRecord() {
     }
 
     return (
+        <>
+        {openedMenu === "Symptoms" && <SearchTags mousePosition={mousePosition} buttons={selectedSymptoms} setSelectedButtons={handleSelectedSymptoms} />}
         <div className="createMedicalRecord">
             <section className='createMedicalRecordTitle'>
                 <div className='backSection'>
@@ -142,8 +144,7 @@ function CreateMedicalRecord() {
                     </Link>
                     <h1>Create Medical Record</h1>
                 </div>
-            </section>
-
+            </section>          
 
             <section className='createMedicalRecordContainer' >
                 <div className='folderSvg'>
@@ -209,9 +210,9 @@ function CreateMedicalRecord() {
                 </div>
             </section>
 
-            {openedMenu === "Symptoms" && <SearchTags mousePosition={mousePosition} buttons={selectedSymptoms} setSelectedButtons={handleSelectedSymptoms} />}
 
         </div>
+        </>
     );
 }
 

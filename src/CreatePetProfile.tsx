@@ -116,7 +116,6 @@ function CreatePetProfile() {
     const [selectedTraits, setSelectedTraits] = useState<InfoBubbleValues>(traits);
     const [selectedVaccinations, setSelectedVaccinations] = useState<InfoBubbleValues>(vaccinations);
     const [selectedAllergies, setSelectedAllergies] = useState<InfoBubbleValues>(allergies);
-    const selectedTraitsList = Object.entries(selectedTraits);
 
     const defaultNewPetProfile: NewPetProfile = {
         name: "",
@@ -128,33 +127,12 @@ function CreatePetProfile() {
         allergies: [],
     }
     const [newPetProfile, setNewPetProfile] = useState<NewPetProfile>(defaultNewPetProfile);
-
-
-    function getTrueTraitPairs() {
-        let trueTraits: any = [];
-        for (let i = 0; i < selectedTraitsList.length; i++) {
-            if (selectedTraitsList[i][1]) {
-                trueTraits.push(selectedTraitsList[i]);
-            }
-        }
-        var truePairs = [];
-        for (var i = 0; i < trueTraits.length; i += 2) {
-            if (trueTraits[i + 1] !== undefined) {
-                truePairs.push([trueTraits[i], trueTraits[i + 1]]);
-            } else {
-                truePairs.push([trueTraits[i]]);
-            }
-        }
-        return truePairs;
-    }
-
-    var truePairs = getTrueTraitPairs();
     const [openedMenu, setOpenedMenu] = useState<string>("None");
     const [mousePosition, setMousePosition] = useState<number[]>([0, 0]);
 
     const handleNewPetProfileChange = (type: string, newValue: any) => {
         let updatedPetProfile = { ...newPetProfile };
-        console.log(newValue);
+
         if (type === "name") {
             updatedPetProfile.name = newValue;
         } else if (type === "species") {
@@ -293,6 +271,11 @@ function CreatePetProfile() {
     }
 
     return (
+        <>
+                    {openedMenu === "Traits" && <SearchTags mousePosition={mousePosition} buttons={selectedTraits} setSelectedButtons={handleSelectTraits} />}
+            {openedMenu === "Vaccinations" && <SearchTags mousePosition={mousePosition} buttons={selectedVaccinations} setSelectedButtons={handleSelectVaccinations} />}
+            {openedMenu === "Allergies" && <SearchTags mousePosition={mousePosition} buttons={selectedAllergies} setSelectedButtons={handleSelectAllergies} />}
+
         <section className='createPetProfile'>
             <section className='createPetProfileTitle'>
                 <div className='backSection'>
@@ -329,22 +312,19 @@ function CreatePetProfile() {
 
                         <div className='petCreationTraits'>
                             <h2>Traits:</h2>
+                            <div className='petCreationTraitsContainer'>
                             <div className='petCreationTraitsSection'>
-
-                                {
-                                    truePairs.map((item, i) => {
-                                        const twoTraits = item.map(([key, value]) => <TraitInfoBubble key={key} onClick={handleSelectTraits} value={key} />)
-                                        return (
-                                            <div className='petCreationTraitsRow' key={i}>
-                                                {twoTraits}
-                                            </div>
-                                        );
-                                    })
-                                }
-                                <div className='petCreationTraitsRow'>
+                            {Object.entries(selectedTraits).map(([key, value]) => {
+                                        if (value) {
+                                            return (
+                                                <TraitInfoBubble key={key} onClick={handleSelectTraits} value={key} />
+                                            );
+                                        }
+                                    })}
                                     <AddBubble onMouseDown={GetMousePosition} onClick={handleOpenMenu} title={"Traits"} value="Add Trait" />
-                                </div>
                             </div>
+                            </div>
+                           
                         </div>
 
                     </div>
@@ -409,13 +389,8 @@ function CreatePetProfile() {
             <div className='saveButton'>
                 <input className='saveButton' type="button" value="Save" onClick={() => { createPet() }} />
             </div>
-
-
-            {openedMenu === "Traits" && <SearchTags mousePosition={mousePosition} buttons={selectedTraits} setSelectedButtons={handleSelectTraits} />}
-            {openedMenu === "Vaccinations" && <SearchTags mousePosition={mousePosition} buttons={selectedVaccinations} setSelectedButtons={handleSelectVaccinations} />}
-            {openedMenu === "Allergies" && <SearchTags mousePosition={mousePosition} buttons={selectedAllergies} setSelectedButtons={handleSelectAllergies} />}
-
         </section>
+        </>
     );
 }
 

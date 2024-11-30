@@ -69,7 +69,8 @@ h1, h2 {
 
 .petStats {
     padding: 0em 2em;
-    padding-top: 1em;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
     display: flex;
     column-gap: 2em;
     width: 72%;
@@ -81,26 +82,35 @@ h1, h2 {
 }
 .numberStat {
     width: 25%;
+    margin: auto;
+    text-align: center;
 }
 
 .numberUnit {
     display: flex;
-    align-items: baseline;
     column-gap: 0.8vw;
+    align-items: baseline;
+    justify-content: center;
 }
 
 .numberUnit h1 {
-    font-size: 4.5em;
+    font-size: 1.5em;
     font-weight: 300;
+}
+
+.numberUnit h3 {
+    margin: 0;
 }
 
 .stringStat {
     width: 20%;
+    text-align: center;
+    margin: auto;
 }
 
 .stringStat h1 {
     font-weight: 300;
-    font-size: 2.2em;
+    font-size: 1.5em;
 }
 
 .petTraits, .petAllergies, .petVaccinations, .petVisits {
@@ -169,7 +179,6 @@ h1, h2 {
     text-overflow: ellipsis;
     overflow: hidden;
     font-size: 1.4em;
-    padding-left: 1.3em;
 }
 
 div.editIcons {
@@ -183,6 +192,7 @@ div.editIcons {
 svg.editIcons path {
     fill: #595959;
     transition: ease-in-out 0.3s;
+    animation: fade-in .2s;
 }
 
 svg.editIcons:hover, svg.editIcons:hover path {
@@ -209,6 +219,7 @@ svg.editIcons:hover path {
 .crossIconSvg svg path {
     stroke: #3c3e3c;
     transition: ease-in-out 0.3s;
+    animation: fade-in .2s;
 }
 
 .crossIconSvg:hover {

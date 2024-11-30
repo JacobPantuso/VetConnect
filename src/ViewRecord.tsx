@@ -45,7 +45,7 @@ function SymptomBubble({ value, isEditing, onDelete }: SymptomBubbleProps) {
         <h2>{value}</h2>
       </div>
       <div className="center">
-        {isEditing && <div style={{display: 'flex', justifyContent: 'center'}} onClick={()=> {onDelete(value)}}><CrossSvg/></div>}
+        {isEditing && <div className="symptomCross" style={{ display: 'flex', justifyContent: 'center' }} onClick={() => { onDelete(value) }}><CrossSvg /></div>}
       </div>
     </div>
   );
@@ -57,7 +57,7 @@ function ViewRecord() {
   const [petProfile, setPetProfile] = useState(null as PetProfile | null);
   const [owner, setOwner] = useState<null | User>();
   const [vet, setVet] = useState<null | User>();
-const {user, fetching} = useUserSession();
+  const { user, fetching } = useUserSession();
 
   //Modifying Records
   const [isEditing, setIsEditing] = useState(false);
@@ -81,7 +81,7 @@ const {user, fetching} = useUserSession();
     })
 
     if (medicalRecord) {
-      let updatedMedicalRecord = {...medicalRecord};
+      let updatedMedicalRecord = { ...medicalRecord };
       updatedMedicalRecord.symptoms = newSymptoms;
       updatedMedicalRecord.notes = notes;
       setRecord(updatedMedicalRecord);
@@ -142,91 +142,90 @@ const {user, fetching} = useUserSession();
 
 
   return (
-    <div className="ViewMedicalRecord">
-      <section className='title'>
-       <div className='backSection'>
-          <Link to={"/medicalrecords"}>
-            <ArrowSvg />
-          </Link>
-          <h1>Medical Record #{recordId}</h1>
-        </div>
-        <div className='editSection'>
-          <EditButton isEditing={isEditing} onClickDone={handleDoneButton} setIsEditing={setIsEditing} value='Edit Medical Record' />
-        </div>
-      </section>
-
-      <section className='petInfo'>
-        <section className='petRow petRow1'>
-          <div className='petTitle greyBorder'>
-            <div>
-              {petProfile && <PetProfileIcon petProfile={petProfile} size='6em' />}
-            </div>
-            <div>
-              {petProfile &&
-                <h2 className='petGenderAge'>{petProfile.gender}, {Math.floor((Math.abs(Date.now() - new Date(petProfile.date_of_birth).getTime()) / (1000 * 3600 * 24)) / 365.25)}</h2>
-              }
-              <h1>{petProfile?.name}</h1>
-              <Link to={`/petprofile/${petProfile?.id}`}><h3>View Pet Profile</h3></Link>
-            </div>
+    <>
+      {openedMenu === "Symptoms" && <SearchTags mousePosition={mousePosition} buttons={selectedSymptoms} setSelectedButtons={handleSelectedSymptoms} />}
+      <div className="ViewMedicalRecord">
+        <section className='title'>
+          <div className='backSection'>
+            <Link to={"/medicalrecords"}>
+              <ArrowSvg />
+            </Link>
+            <h1>Medical Record #{recordId}</h1>
           </div>
-          <div className='petStats greyBorder'>
-
-            <div className='stringStat'>
-              <h2>Owner</h2>
-              <h1>{owner?.first_name} {owner?.last_name}</h1>
-            </div>
-
-            <div className='stringStat'>
-              <h2>Doctor</h2>
-              <h1>Dr.{vet?.last_name}</h1>
-            </div>
-
-            <div className='stringStat'>
-              <h2>Date Created</h2>
-              <h1>{medicalRecord?.date}</h1>
-            </div>
-
+          <div className='editSection'>
+            <EditButton isEditing={isEditing} onClickDone={handleDoneButton} setIsEditing={setIsEditing} value='Edit Medical Record' />
           </div>
         </section>
 
-        <section className='petRow petRow2' style={{ marginBottom: '5em' }}>
-          <div className="medicalSymptoms greyBorder">
-            <h2>Symptoms</h2>
-            <div className="medicalRecordsContainer medicalRecordsContainerScroll">
-              <div className="medicalRecordsScroll">
-                {Object.entries(selectedSymptoms).map(([symptom, bool]) => {
-                  if (bool) {
-                    return (
-                      <SymptomBubble key={symptom} value={symptom} isEditing={isEditing} onDelete={handleSelectedSymptoms} />
-                    );
-                  }
-                })
+        <section className='petInfo'>
+          <section className='petRow petRow1'>
+            <div className='petTitle greyBorder'>
+              <div>
+                {petProfile && <PetProfileIcon petProfile={petProfile} size='6em' />}
+              </div>
+              <div>
+                {petProfile &&
+                  <h2 className='petGenderAge'>{petProfile.gender}, {Math.floor((Math.abs(Date.now() - new Date(petProfile.date_of_birth).getTime()) / (1000 * 3600 * 24)) / 365.25)}</h2>
                 }
+                <h1>{petProfile?.name}</h1>
+                <Link to={`/petprofile/${petProfile?.id}`}><h3>View Pet Profile</h3></Link>
               </div>
             </div>
-            {isEditing &&
-              <div className='editIcons'>
-                <div className='addButtonSvg' onMouseDown={(e) => { GetMousePosition(e); handleOpenMenu("Symptoms") }}>
-                  <AddIconSvg />
+            <div className='petStats greyBorder'>
+
+              <div className='stringStat'>
+                <h2>Owner</h2>
+                <h1>{owner?.first_name} {owner?.last_name}</h1>
+              </div>
+
+              <div className='stringStat'>
+                <h2>Doctor</h2>
+                <h1>Dr. {vet?.last_name}</h1>
+              </div>
+
+              <div className='stringStat'>
+                <h2>Date Created</h2>
+                <h1>{medicalRecord?.date && new Date(medicalRecord.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</h1>
+              </div>
+
+            </div>
+          </section>
+
+          <section className='petRow petRow2' style={{ marginBottom: '5em' }}>
+            <div className="medicalSymptoms greyBorder">
+              <h2>Symptoms</h2>
+              <div className="medicalRecordsContainer medicalRecordsContainerScroll">
+                <div className="medicalRecordsScroll">
+                  {Object.entries(selectedSymptoms).map(([symptom, bool]) => {
+                    if (bool) {
+                      return (
+                        <SymptomBubble key={symptom} value={symptom} isEditing={isEditing} onDelete={handleSelectedSymptoms} />
+                      );
+                    }
+                  })
+                  }
                 </div>
               </div>
-            }
-          </div>
-          <div className="medicalNotes greyBorder">
-            <h2>Notes</h2>
-            {isEditing ?
-              <textarea placeholder="Write Notes here..." onChange={(e)=>setNotes(e.currentTarget.value)} value={notes} className="medicalRecordsContainer greyBorder" />
-              :
-              <textarea placeholder="Write Notes here..." value={notes} disabled className="medicalRecordsContainer greyBorder" />
-            }
-          </div>
+              {isEditing &&
+                <div className='editIcons'>
+                  <div className='addButtonSvg' onMouseDown={(e) => { GetMousePosition(e); handleOpenMenu("Symptoms") }}>
+                    <AddIconSvg />
+                  </div>
+                </div>
+              }
+            </div>
+            <div className="medicalNotes greyBorder">
+              <h2>Notes</h2>
+              {isEditing ?
+                <textarea placeholder="Write Notes here..." onChange={(e) => setNotes(e.currentTarget.value)} value={notes} className="medicalRecordsContainer greyBorder" />
+                :
+                <textarea placeholder="Write Notes here..." value={notes} disabled className="medicalRecordsContainer greyBorder" />
+              }
+            </div>
+          </section>
         </section>
-      </section>
-
-      {openedMenu === "Symptoms" && <SearchTags mousePosition={mousePosition} buttons={selectedSymptoms} setSelectedButtons={handleSelectedSymptoms} />}
-
-
-    </div>
+      </div>
+    </>
   );
 }
 

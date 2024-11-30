@@ -338,114 +338,114 @@ function ViewPetProfile() {
 
     if (fetching) {
         return (
-            <div style={{height: '100%', margin: 'auto'}}>
-              <section className='MyPets'>
-                <div className="myPetsTitle">
-                  <h1>
-                    Fetching Profile...
-                  </h1>
-                </div>
-      
-      
-                <div className='petContainer'>
-                  <div className="petList">
-                    <div className='loader' style={{scale: "1.5"}}></div>
-                  </div>
-                </div>
-      
-      
-      
-                <div className='manageProfiles'>
-                  <p className='loading' style={{ width: '300px' }}></p>
-                </div>
-              </section>
+            <div style={{ height: '100%', margin: 'auto' }}>
+                <section className='MyPets'>
+                    <div className="myPetsTitle">
+                        <h1>
+                            Fetching Profile...
+                        </h1>
+                    </div>
+
+
+                    <div className='petContainer'>
+                        <div className="petList">
+                            <div className='loader' style={{ scale: "1.5" }}></div>
+                        </div>
+                    </div>
+
+
+
+                    <div className='manageProfiles'>
+                        <p className='loading' style={{ width: '300px' }}></p>
+                    </div>
+                </section>
             </div>
-          );
+        );
     }
 
     return (
-        <section className='petProfile'>
-            {petProfile &&
-                <>
-                    <section className='title'>
-                        <div className='backSection'>
-                            {user?.id === petProfile.owner_id ?
-                                <>
-                                    <Link to={"/mypets"}>
-                                        <ArrowSvg />
-                                    </Link>
-                                    <h1>My Pets</h1>
-                                </>
-                                :
-                                <>
-                                    <Link to={"/medicalrecords"}>
-                                        <ArrowSvg />
-                                    </Link>
-                                    <h1>Medical Records</h1>
-                                </>
-                            }
-                        </div>
-                        <div className='editSection'>
-                            {user?.id === petProfile.owner_id &&
-                                <EditButton isEditing={isEditing} onClickDone={handleDoneButton} setIsEditing={setIsEditing} value='Edit Pet Profile' />
-                            }
-                        </div>
-                    </section>
-                    <section className='petInfo'>
-                        <section className='petRow petRow1'>
-
-                            <div className='petTitle greyBorder'>
-                                <div>
-                                    {petProfile && <PetProfileIcon petProfile={petProfile} size='6em' />}
-                                </div>
-                                <div>
-                                    <h2 className='petGenderAge'>{petProfile.gender}, {age} Years Old</h2>
-                                    <h1>{petProfile.name}</h1>
-                                </div>
+        <>
+            {openedMenu === "Traits" && <SearchTags mousePosition={mousePosition} buttons={selectedTraits} setSelectedButtons={handleSelectTraits} />}
+            {openedMenu === "Vaccinations" && <SearchTags mousePosition={mousePosition} buttons={selectedVaccinations} setSelectedButtons={handleSelectVaccinations} />}
+            {openedMenu === "Allergies" && <SearchTags mousePosition={mousePosition} buttons={selectedAllergies} setSelectedButtons={handleSelectAllergies} />}
+            <section className='petProfile'>
+                {petProfile &&
+                    <>
+                        <section className='title'>
+                            <div className='backSection'>
+                                {user?.id === petProfile.owner_id ?
+                                    <>
+                                        <Link to={"/mypets"}>
+                                            <ArrowSvg />
+                                        </Link>
+                                        <h1>My Pets</h1>
+                                    </>
+                                    :
+                                    <>
+                                        <Link to={"/medicalrecords"}>
+                                            <ArrowSvg />
+                                        </Link>
+                                        <h1>Medical Records</h1>
+                                    </>
+                                }
                             </div>
+                            <div className='editSection'>
+                                {user?.id === petProfile.owner_id &&
+                                    <EditButton isEditing={isEditing} onClickDone={handleDoneButton} setIsEditing={setIsEditing} value='Edit Pet Profile' />
+                                }
+                            </div>
+                        </section>
+                        <section className='petInfo'>
+                            <section className='petRow petRow1'>
 
-                            <div className='petStats greyBorder'>
-                                <div className='stringStat'>
-                                    <h2>Species</h2>
-                                    <h1>{petProfile.species.charAt(0).toLocaleUpperCase() + petProfile.species.slice(1)}</h1>
-                                </div>
-                                <div className='stringStat'>
-                                    <h2>Breed</h2>
-                                    <h1>{petProfile.breed}</h1>
-                                </div>
-                                <div className='numberStat'>
-                                    <h2>Weight</h2>
-                                    <div className='numberUnit'>
-                                        <h1>{petProfile.weight}</h1>
-                                        <h3>kg</h3>
+                                <div className='petTitle greyBorder'>
+                                    <div>
+                                        {petProfile && <PetProfileIcon petProfile={petProfile} size='6em' />}
+                                    </div>
+                                    <div>
+                                        <h2 className='petGenderAge'>{petProfile.gender}, {age} Years Old</h2>
+                                        <h1>{petProfile.name}</h1>
                                     </div>
                                 </div>
-                                <div className='numberStat'>
-                                    <h2>Height</h2>
-                                    <div className='numberUnit'>
-                                        <h1>{petProfile.height}</h1>
-                                        <h3>in</h3>
+
+                                <div className='petStats greyBorder'>
+                                    <div className='stringStat'>
+                                        <h2>Species</h2>
+                                        <h1>{petProfile.species.charAt(0).toLocaleUpperCase() + petProfile.species.slice(1)}</h1>
+                                    </div>
+                                    <div className='stringStat'>
+                                        <h2>Breed</h2>
+                                        <h1>{petProfile.breed}</h1>
+                                    </div>
+                                    <div className='numberStat'>
+                                        <h2>Weight</h2>
+                                        <div className='numberUnit'>
+                                            <h1>{petProfile.weight}</h1>
+                                            <h3>kg</h3>
+                                        </div>
+                                    </div>
+                                    <div className='numberStat'>
+                                        <h2>Height</h2>
+                                        <div className='numberUnit'>
+                                            <h1>{petProfile.height}</h1>
+                                            <h3>in</h3>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
+                            </section>
+
+                            <section className='petRow' style={{ marginBottom: '5em' }}>
+                                <PetVisits appointments={appointmentsList} />
+                                <PetBubbleStat title="Allergies" removeBubble={handleSelectAllergies} isEditing={isEditing} buttons={selectedAllergies} onMouseDown={GetMousePosition} onClickAdd={handleOpenMenu} />
+                                <PetBubbleStat title="Vaccinations" removeBubble={handleSelectVaccinations} isEditing={isEditing} buttons={selectedVaccinations} onMouseDown={GetMousePosition} onClickAdd={handleOpenMenu} />
+                                <PetBubbleStat title="Traits" removeBubble={handleSelectTraits} isEditing={isEditing} buttons={selectedTraits} onMouseDown={GetMousePosition} onClickAdd={handleOpenMenu} />
+                            </section>
                         </section>
-
-                        <section className='petRow' style={{ marginBottom: '5em' }}>
-                            <PetVisits appointments={appointmentsList} />
-                            <PetBubbleStat title="Allergies" removeBubble={handleSelectAllergies} isEditing={isEditing} buttons={selectedAllergies} onMouseDown={GetMousePosition} onClickAdd={handleOpenMenu} />
-                            <PetBubbleStat title="Vaccinations" removeBubble={handleSelectVaccinations} isEditing={isEditing} buttons={selectedVaccinations} onMouseDown={GetMousePosition} onClickAdd={handleOpenMenu} />
-                            <PetBubbleStat title="Traits" removeBubble={handleSelectTraits} isEditing={isEditing} buttons={selectedTraits} onMouseDown={GetMousePosition} onClickAdd={handleOpenMenu} />
-                        </section>
-
-                        {openedMenu === "Traits" && <SearchTags mousePosition={mousePosition} buttons={selectedTraits} setSelectedButtons={handleSelectTraits} />}
-                        {openedMenu === "Vaccinations" && <SearchTags mousePosition={mousePosition} buttons={selectedVaccinations} setSelectedButtons={handleSelectVaccinations} />}
-                        {openedMenu === "Allergies" && <SearchTags mousePosition={mousePosition} buttons={selectedAllergies} setSelectedButtons={handleSelectAllergies} />}
-
-                    </section>
-                </>
-            }
-        </section>
+                    </>
+                }
+            </section>
+        </>
     );
 }
 
