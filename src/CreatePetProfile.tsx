@@ -100,7 +100,7 @@ interface NewPetProfile {
     name?: string;
     owner_id?: string;    
     species?: string;
-    breed?: string;
+    breed: string;
     date_of_birth?: string;
     gender: "male" | "female" | "unknown";
     weight?: number;
@@ -149,17 +149,18 @@ function CreatePetProfile() {
     }
 
     var truePairs = getTrueTraitPairs();
-    //Traits, Vaccinations, Allergies
     const [openedMenu, setOpenedMenu] = useState<string>("None");
     const [mousePosition, setMousePosition] = useState<number[]>([0, 0]);
 
     const handleNewPetProfileChange = (type: string, newValue: any) => {
         let updatedPetProfile = { ...newPetProfile };
-
+        console.log(newValue);
         if (type === "name") {
             updatedPetProfile.name = newValue;
         } else if (type === "species") {
             updatedPetProfile.species = newValue;
+        } else if (type === "breed") {
+            updatedPetProfile.breed = newValue;
         } else if (type === "weight") {
             updatedPetProfile.weight = Number(newValue);
         } else if (type === "height") {
@@ -245,8 +246,6 @@ function CreatePetProfile() {
 
         if (user) {
             savePetProfile.owner_id = user?.id;
-            savePetProfile.breed = "";
-
             if (savePetProfile.name && savePetProfile.species && savePetProfile.date_of_birth && savePetProfile.weight &&  savePetProfile.height && savePetProfile.traits && savePetProfile.vaccinations && savePetProfile.allergies) {
                 await addPetProfile({
                     owner_id: savePetProfile.owner_id,
@@ -264,21 +263,33 @@ function CreatePetProfile() {
                 navigate("/mypets");
             }
         }
-
-
-
-        
-
-        
-       // navigate("/mypets");
     }
 
     if (fetching) {
         return (
-            <div>
-
+            <div style={{height: '100%', margin: 'auto'}}>
+                <section className='MyPets'>
+                <div className="myPetsTitle">
+                    <h1>
+                    My Pets
+                    </h1>
+                </div>
+        
+        
+                <div className='petContainer'>
+                    <div className="petList">
+                    <div className='loader' style={{scale: "1.5"}}></div>
+                    </div>
+                </div>
+        
+        
+        
+                <div className='manageProfiles'>
+                    <p className='loading' style={{ width: '300px' }}></p>
+                </div>
+                </section>
             </div>
-        );
+            );
     }
 
     return (
@@ -304,6 +315,11 @@ function CreatePetProfile() {
                         <div className='petSpecies'>
                             <h2>Species:</h2>
                             <input type="text" onChange={(e) => (handleNewPetProfileChange("species", e.currentTarget.value))}></input>
+                        </div>
+
+                        <div className='petSpecies'>
+                            <h2>Breed:</h2>
+                            <input type="text" onChange={(e) => (handleNewPetProfileChange("breed", e.currentTarget.value))}></input>
                         </div>
 
                         <div className='petDOB'>

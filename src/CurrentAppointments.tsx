@@ -53,7 +53,7 @@ function CurrentAppointments({ user, fetching }: CurrentAppointmentsProps) {
   const handlePayment = (payment: PaymentForm) => {
     navigate(`/payment/${payment.appointment_id}`);
   };
-
+  console.log(user.petProfiles);
   return (
     <div className="CurrentAppointments">
       <h2>Current Appointments</h2>
@@ -81,7 +81,7 @@ function CurrentAppointments({ user, fetching }: CurrentAppointmentsProps) {
                         {
                           user.petProfiles.filter(
                             (profile) =>
-                              profile.id === user.appointments[0].pet_profile_id
+                              profile.id === appointment.pet_profile_id
                           )[0].name
                         }
                       </h3>
@@ -211,6 +211,9 @@ export function ModifyAppointment({
         setPetProfiles(profiles);
         setFetching(false);
       });
+    } else {
+      setPetProfiles(user.petProfiles);
+      setFetching(false);
     }
   }, [user]);
 
@@ -222,7 +225,6 @@ export function ModifyAppointment({
       </div>
     );
   }
-
   return (
     <div className="ModifyAppointment">
       <div className="modify-container">

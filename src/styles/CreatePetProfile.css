@@ -1,11 +1,12 @@
 .createPetProfile {
-    margin: 2vw;
+    margin-top: 2rem;
+    padding-left: var(--padding);
+    padding-right: var(--padding);
     color: #D5DDDF;
 }
 
 .fillInSection {
     position: relative;
-    padding: 2em;
     margin-top: 1vw;
     display: flex;
     align-items: center;
@@ -22,7 +23,6 @@
 
 .petCreationContainer {
     position: absolute;
-    top: 15%;
     width: 88vw;
     aspect-ratio: 2/1;
     display: flex;
@@ -283,13 +283,12 @@ input[type=number] {
 }
 
 div.saveButton {
-    width: 100%;
+    width: 99%;
     position: relative;
-    top: -11%;
+    top: -8%;
     display: flex;
     align-items: center;
-    justify-content: center;
-    
+    justify-content: right;    
 }
 
 input.saveButton {

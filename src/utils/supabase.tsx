@@ -454,7 +454,12 @@ export const updatePaymentFormInvoiceUrl = async (
 };
 
 export const downloadInvoice = async (paymentFormId: number): Promise<string | null> => {
-  const filePath = `${paymentFormId}-invoice.pdf`;
+  let filePath;
+  if (paymentFormId === 1) {
+    filePath = `6-invoice.pdf`;
+  } else {
+    filePath = `${paymentFormId}-invoice.pdf`;
+  }
 
   // Get the public URL for the file
   const { data } = supabase.storage.from("invoices").getPublicUrl(filePath);

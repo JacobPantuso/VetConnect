@@ -144,7 +144,11 @@ function Payment() {
         duration: `${appointment?.scheduled_date.slice(10)}`,
       },
     ],
-    subTotal: paymentForm?.charge ?? 0,
+    subTotal: (paymentForm?.charge ?? 0) * (
+      appointment?.scheduled_date
+        ? parseInt(appointment.scheduled_date.slice(10).split(":")[0]) - parseInt(appointment.scheduled_date.slice(21).split(":")[0])
+        : 0
+    ),
   };
 
   const handleSubmit = () => {
