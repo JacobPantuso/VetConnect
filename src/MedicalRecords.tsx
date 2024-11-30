@@ -1,12 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { useUserSession, fetchAllUsers, fetchPetProfiles, User, PetProfile, MedicalRecord, fetchMedicalRecords } from "./utils/supabase";
+import { useUserSession, fetchAllUsers, fetchPetProfiles, User, PetProfile, MedicalRecord, fetchMedicalRecords, deleteMedicalRecord } from "./utils/supabase";
 import { useNavigate } from "react-router-dom";
 import "./styles/MedicalRecords.css";
+import DeleteConfirmation from "./components/DeleteConfirmation";
 
 function AddIconSvg() {
     return (
         <svg width="40" height="40" viewBox="0 0 95 95" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path fill="white" d="M42.7915 71.0417H52.2082V52.2084H71.0415V42.7917H52.2082V23.9583H42.7915V42.7917H23.9582V52.2084H42.7915V71.0417ZM47.4998 94.5833C40.9866 94.5833 34.8658 93.367 29.1373 90.9344C23.4089 88.4233 18.4259 85.049 14.1884 80.8115C9.95088 76.574 6.57657 71.591 4.06546 65.8625C1.63282 60.134 0.416504 54.0132 0.416504 47.5C0.416504 40.9868 1.63282 34.866 4.06546 29.1375C6.57657 23.409 9.95088 18.4261 14.1884 14.1886C18.4259 9.95106 23.4089 6.61599 29.1373 4.18335C34.8658 1.67224 40.9866 0.416687 47.4998 0.416687C54.013 0.416687 60.1339 1.67224 65.8623 4.18335C71.5908 6.61599 76.5738 9.95106 80.8113 14.1886C85.0488 18.4261 88.3839 23.409 90.8165 29.1375C93.3276 34.866 94.5832 40.9868 94.5832 47.5C94.5832 54.0132 93.3276 60.134 90.8165 65.8625C88.3839 71.591 85.0488 76.574 80.8113 80.8115C76.5738 85.049 71.5908 88.4233 65.8623 90.9344C60.1339 93.367 54.013 94.5833 47.4998 94.5833ZM47.4998 85.1667C58.0151 85.1667 66.9217 81.5177 74.2196 74.2198C81.5176 66.9219 85.1665 58.0153 85.1665 47.5C85.1665 36.9847 81.5176 28.0781 74.2196 20.7802C66.9217 13.4823 58.0151 9.83335 47.4998 9.83335C36.9846 9.83335 28.078 13.4823 20.78 20.7802C13.4821 28.0781 9.83317 36.9847 9.83317 47.5C9.83317 58.0153 13.4821 66.9219 20.78 74.2198C28.078 81.5177 36.9846 85.1667 47.4998 85.1667Z" />
+        </svg>
+    );
+}
+
+function CrossIconSvg() {
+    return (
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18.5 1.5L1.5 18.5M1.5 1.5L18.5 18.5" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
     );
 }
@@ -20,7 +29,8 @@ function MedicalRecords() {
     const [medicalRecords, setMedicalRecords] = useState([] as MedicalRecord[]);
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
-
+    const [isDeleting, setIsDeleting] = useState<string | null>();
+    const [selectedRecord, setSelectedRecord] = useState<MedicalRecord | null>();
 
     useEffect(() => {
         if (user?.user_type !== 'USER') {
@@ -78,9 +88,23 @@ function MedicalRecords() {
         });
         setLoading(false);
     }
+    const handleDelete = async () => {
+        if (selectedRecord) {
+          const deleteRecord = await deleteMedicalRecord(selectedRecord);
+          setIsDeleting(null);
+          const newMedicalRecords = [...medicalRecords];
+         if (selectedPetProfile) {
+            setMedicalRecords(newMedicalRecords.filter((record) => record.pet_profile_id === selectedPetProfile.id && record.id !== selectedRecord.id));
+         }
+        }
+       // window.location.reload();
+      }
 
     return (
+        <>
+        
         <div className="MedicalRecords">
+
             <h2>Medical Records</h2>
             <p style={{ marginBottom: "1rem" }}>Select a customer and pet to view their medical records.</p>
             <div className="select-row">
@@ -109,12 +133,18 @@ function MedicalRecords() {
                     {selectedPetProfile && <h3>Medical Records for {selectedPetProfile?.name}</h3>}
                     <div className="records-container">
                         {medicalRecords.map((record) => (
+                            <>
                             <div key={record.id} className="record" onClick={() => navigate(`/medicalrecords/${record.id}`)}>
-                                <div className="record-content">
-                                    <h4>{new Date(new Date(record.date).getTime() + new Date(record.date).getTimezoneOffset() * 60000).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</h4>
-                                    <p>{selectedPetProfile?.name} | {selectedPetProfile?.breed}</p>
+                                <div className="record-container">
+                                  <div className="record-content">
+                                  <h4>{new Date(new Date(record.date).getTime() + new Date(record.date).getTimezoneOffset() * 60000).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</h4>
+                                  <p>{selectedPetProfile?.name} | {selectedPetProfile?.breed}</p>
+                                  </div>
                                 </div>
                             </div>
+                            <div className="recordDelete" onClick={() => {setSelectedRecord(record); setIsDeleting(`Are you sure you want to delete Medical Record #${record.id}?`);}} ><CrossIconSvg/></div>
+                            </>
+
                         ))
                         }
                         {selectedPetProfile && medicalRecords.length >= 0 &&
@@ -132,7 +162,12 @@ function MedicalRecords() {
                 </div>
 
             }
+            
         </div>
+        {isDeleting && 
+    <DeleteConfirmation value={isDeleting} onNo={setIsDeleting} onYes={handleDelete}/>
+    }
+        </>
     );
 }
 

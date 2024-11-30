@@ -49,12 +49,35 @@
 .record-content {
     display: flex;
     flex-direction: column;
-    padding: 1rem;
+    width: 94%;
+    height: 100%;
 }
 
 .record-content h4 {
     margin-top: 0;
     margin-bottom: 0.5rem;
+}
+
+.record-container {
+    display: flex;
+    padding: 1rem;
+}
+
+.recordDelete {
+    height: 50%;
+    position: relative;
+    left: -3em;
+    top: 1em;
+    z-index: 100;
+}
+
+.recordDelete svg {
+    stroke: #3c3e3c;
+    transition: ease-in-out .3s;
+}
+
+.recordDelete:hover svg {
+    stroke: white;
 }
 
 .loading-records {

@@ -22,7 +22,7 @@
 
 .deleteConfirmation {
     position: absolute;
-    top: 40%;
+    top: 32%;
     z-index: 500;
     padding: 4em 1em;
     width: 30%;
