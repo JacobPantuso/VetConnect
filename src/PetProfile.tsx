@@ -338,10 +338,29 @@ function ViewPetProfile() {
 
     if (fetching) {
         return (
-            <div>
-
+            <div style={{height: '100%', margin: 'auto'}}>
+              <section className='MyPets'>
+                <div className="myPetsTitle">
+                  <h1>
+                    Fetching Profile...
+                  </h1>
+                </div>
+      
+      
+                <div className='petContainer'>
+                  <div className="petList">
+                    <div className='loader' style={{scale: "1.5"}}></div>
+                  </div>
+                </div>
+      
+      
+      
+                <div className='manageProfiles'>
+                  <p className='loading' style={{ width: '300px' }}></p>
+                </div>
+              </section>
             </div>
-        );
+          );
     }
 
     return (
@@ -380,7 +399,7 @@ function ViewPetProfile() {
                                     {petProfile && <PetProfileIcon petProfile={petProfile} size='6em' />}
                                 </div>
                                 <div>
-                                    <h2 className='petGenderAge'>{petProfile.gender}, {age}</h2>
+                                    <h2 className='petGenderAge'>{petProfile.gender}, {age} Years Old</h2>
                                     <h1>{petProfile.name}</h1>
                                 </div>
                             </div>

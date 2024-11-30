@@ -17,7 +17,7 @@ interface AppointmentSummaryProps {
 
 function AppointmentSummary({ user, fetching }: AppointmentSummaryProps) {
 
-  if (fetching) {
+  if (fetching && !user) {
     return (
       <div className="Summary">
         <div className="appointment-summary-content">
@@ -62,17 +62,21 @@ function AppointmentSummary({ user, fetching }: AppointmentSummaryProps) {
     maintainAspectRatio: false,
   };
 
-  if (user?.user_type === 'USER' && user.appointments.length > 0) {
-    const upcomingScheduledDate = user?.appointments[0]?.scheduled_date.split(" ")[0];
+  const calcDaysUntilAppointment = (appointment: Appointment) => {
+    const upcomingScheduledDate = appointment.scheduled_date.split(" ")[0];
     const today = new Date();
+    const todayNormalized = new Date(today.getFullYear(), today.getMonth(), today.getDate()); // Set to midnight
     const upcomingDate = upcomingScheduledDate ? new Date(upcomingScheduledDate) : null;
-    daysUntilAppointment = upcomingDate ? Math.floor((upcomingDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)) : 0;
-    petName = user?.petProfiles.filter((profile) => profile.id === user.appointments[0].pet_profile_id)[0].name;
+    daysUntilAppointment = upcomingDate
+      ? Math.floor((upcomingDate.getTime() - todayNormalized.getTime()) / (1000 * 60 * 60 * 24))
+      : 0;
+    petName = user?.petProfiles.filter((profile) => profile.id === appointment.pet_profile_id)[0].name;
     if (daysUntilAppointment < 0) {
-      data.datasets[0].data = [65, 0]
+      data.datasets[0].data = [65, 0];
     } else {
       data.datasets[0].data = [daysUntilAppointment, 65 - daysUntilAppointment];
     }
+    return daysUntilAppointment;
   }
 
   return (
@@ -98,7 +102,7 @@ function AppointmentSummary({ user, fetching }: AppointmentSummaryProps) {
           <div className="chart-left">
             <Doughnut data={data} options={options} />
             <div className="inside-chart">
-              {daysUntilAppointment === 0 ? (
+              {user?.appointments[0] && calcDaysUntilAppointment(user.appointments[0]) === 0 ? (
                   <>
                   <div>{petName}</div>
                   <div className="due-in">today.</div>
@@ -107,7 +111,7 @@ function AppointmentSummary({ user, fetching }: AppointmentSummaryProps) {
                   daysUntilAppointment > 0 ? (
                     <>
                     <div>{petName}</div>
-                    <div className="due-in">in {daysUntilAppointment} days.</div>
+                    <div className="due-in">in {user?.appointments[0] ? calcDaysUntilAppointment(user.appointments[0]) : 0} days.</div>
                     </>
                   ) : (
                     <div className="due-in">No Appointments</div>
@@ -121,7 +125,7 @@ function AppointmentSummary({ user, fetching }: AppointmentSummaryProps) {
               (appointment.appointment_status === 'scheduled') && (
                 <LineChart
                   key={appointment.id}
-                  amount={(30-(daysUntilAppointment))/30*100}
+                  amount={(30-(calcDaysUntilAppointment(appointment)))/30*100}
                   pet_name={user.petProfiles.find(profile => profile.id === appointment.pet_profile_id)?.name || ''}
                   field={appointment.service}
                 />

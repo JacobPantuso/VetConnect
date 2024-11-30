@@ -300,7 +300,9 @@ export const CustomDatePicker: React.FC<{ onDateSelect: (date: string) => void, 
   onDateSelect,
   prevDate,
 }) => {
-  const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [currentMonth, setCurrentMonth] = useState(
+    new Date(new Date().getFullYear(), new Date().getMonth(), 1)
+  );  
 
   const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -367,14 +369,13 @@ export const CustomDatePicker: React.FC<{ onDateSelect: (date: string) => void, 
       }
     }
   }, [prevDate]);
-
   return (
     <div className="calendar">
       <div className="calendar-header">
         <button
           onClick={handlePreviousMonth}
-          disabled={currentMonth <= new Date(new Date().getFullYear(), new Date().getMonth(), 1)}
-        >
+          disabled={currentMonth.getTime() <= new Date(new Date().getFullYear(), new Date().getMonth(), 1).getTime()}
+          >
           <FontAwesomeIcon icon={faArrowLeft} />
         </button>
         <span>
@@ -415,6 +416,23 @@ export const CustomDatePicker: React.FC<{ onDateSelect: (date: string) => void, 
 
 const AppointmentSummary: React.FC<{ previousStep: () => void, pet: PetProfile, service: string, time: string, date: string, user: User }> = ({ user, pet, service, time, date, previousStep }) => {  
   const confirmAppointment = () => {
+    const durationMatch = service.match(/\((\d+)\s*(Minute|Hour)/i);
+    let durationMultiplier = 1; // Default multiplier
+  
+    if (durationMatch) {
+      const durationValue = parseInt(durationMatch[1], 10);
+      const durationUnit = durationMatch[2].toLowerCase();
+  
+      if (durationUnit === "minute") {
+        durationMultiplier = durationValue / 60;
+      } else if (durationUnit === "hour") {
+        durationMultiplier = durationValue;
+      }
+    }
+  
+    const baseCost = 100;
+    const totalCost = baseCost * durationMultiplier;
+  
     addAppointment({
       owner_id: user.id,
       scheduled_date: `${date} ${time}`,
@@ -422,13 +440,16 @@ const AppointmentSummary: React.FC<{ previousStep: () => void, pet: PetProfile, 
       appointment_status: 'scheduled',
       service: service,
       veterinarian_id: '891ae498-e4a5-44fc-b884-0be8b3385c63',
-      cost: 100
-    }).then(() => {
-      window.location.reload()
-    }).catch((error) => {
-      console.error('Error adding appointment:', error)
-    });
-  }
+      cost: totalCost,
+    })
+      .then(() => {
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.error('Error adding appointment:', error);
+      });
+  };
+  
 
   return (
     <div className="form">
@@ -437,7 +458,7 @@ const AppointmentSummary: React.FC<{ previousStep: () => void, pet: PetProfile, 
       <p>Review the details of your appointment.</p>
       <div className="summary-details">
         <div className="summary-pet">
-          {pet.species === "dog"
+          {pet.species.toLocaleLowerCase() === "dog"
             ? <img src="https://media.istockphoto.com/id/474486193/photo/close-up-of-a-golden-retriever-panting-11-years-old-isolated.jpg?s=612x612&w=0&k=20&c=o6clwQS-h6c90AHlpDPC74vAgtc_y2vvGg6pnb7oCNE=" alt={pet.name} />
             : <img src="https://t3.ftcdn.net/jpg/01/63/55/90/360_F_163559018_oWTwmNBHysXDPj4lh2PPWJDMXOkMYFlD.jpg" alt={pet.name} />
           }

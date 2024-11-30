@@ -6,14 +6,21 @@ import BillingSummary from './components/BillingSummary';
 import AccountNotifications from './components/AccountNotifications';
 
 function HoursUntilFivePM(): string {
+  const now = new Date();
+  const dayOfWeek = now.getDay(); // 0 is Sunday, 6 is Saturday
+
+  if (dayOfWeek === 0 || dayOfWeek === 6) {
+    return "closed for the day.";
+  }
+
   return (
-      new Date().getHours() >= 17
-        ? "closed for the day."
-        : `open for another ${Math.floor(
-            (new Date(new Date().setHours(17, 0, 0, 0)).getTime() - new Date().getTime()) / (1000 * 60 * 60)
-          )} hours and ${Math.floor(
-            ((new Date(new Date().setHours(17, 0, 0, 0)).getTime() - new Date().getTime()) % (1000 * 60 * 60)) / (1000 * 60)
-          )} minutes.`
+    now.getHours() >= 17
+      ? "closed for the day."
+      : `open for another ${Math.floor(
+          (new Date(now.setHours(17, 0, 0, 0)).getTime() - now.getTime()) / (1000 * 60 * 60)
+        )} hours and ${Math.floor(
+          ((new Date(now.setHours(17, 0, 0, 0)).getTime() - now.getTime()) % (1000 * 60 * 60)) / (1000 * 60)
+        )} minutes.`
   );
 };
 
@@ -67,7 +74,7 @@ function Home() {
                     month: "long",
                     day: "numeric",
                   })}</p>
-                : <p>"No pets have upcoming appointments"</p>}
+                : <p>No pets have upcoming appointments.</p>}
             {user && <BillingSummary user={user} />}
             {user && <AppointmentSummary user={user} />}
           </div>
@@ -202,7 +209,7 @@ function ClinicStaff({ user }: ExternalProps) {
         <h2 className='welcome'>Welcome Back!</h2>
         {appointments.length > 0 ? (
           <p>
-            You have {appointments.length} upcoming appointment{appointments.length > 1 ? "s" : ""}. The clinic is {HoursUntilFivePM()}
+            You have {appointments.filter((appointment) => appointment.appointment_status === "scheduled").length} upcoming appointment{appointments.length > 1 ? "s" : ""}. The clinic is {HoursUntilFivePM()}
           </p>
         ) : (
           <p>No upcoming appointments. The clinic is {HoursUntilFivePM()}</p>
