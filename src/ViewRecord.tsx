@@ -180,12 +180,12 @@ function ViewRecord() {
 
               <div className='stringStat'>
                 <h2>Doctor</h2>
-                <h1>Dr.{vet?.last_name}</h1>
+                <h1>Dr. {vet?.last_name}</h1>
               </div>
 
               <div className='stringStat'>
                 <h2>Date Created</h2>
-                <h1>{medicalRecord?.date}</h1>
+                <h1>{medicalRecord?.date && new Date(medicalRecord.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</h1>
               </div>
 
             </div>
