@@ -10,7 +10,23 @@ export const traits: InfoBubbleValues = {
     "Blindness": false,
     "Deafness": false,
     "Diabetic": false,
-    "Neutered": false
+    "Neutered": false,
+    "Spayed": false,
+    "Microchipped": false,
+    "Vaccinated": false,
+    "Aggressive": false,
+    "Friendly": false,
+    "Anxious": false,
+    "Playful": false,
+    "Overweight": false,
+    "Underweight": false,
+    "Arthritis": false,
+    "Heartworm Positive": false,
+    "Epileptic": false,
+    "Hyperthyroidism": false,
+    "Hypothyroidism": false,
+    "Skin Conditions": false,
+    "Special Diet": false
 }
 
 export const vaccinations: InfoBubbleValues = {
@@ -21,7 +37,16 @@ export const vaccinations: InfoBubbleValues = {
     "Kennel Cough": false,
     "Leptospirosis": false,
     "Lyme Disease": false,
-    "Canine Influenza": false
+    "Canine Influenza": false,
+    "Bordetella": false,
+    "Panleukopenia": false,
+    "Calicivirus": false,
+    "Rhinotracheitis": false,
+    "FeLV": false,
+    "FIV": false,
+    "Heartworm Preventative": false,
+    "Giardia": false,
+    "Rattlesnake Vaccine": false
 };
 
 
@@ -30,6 +55,20 @@ export const allergies: InfoBubbleValues = {
     "Dust": false,
     "Smoke": false,
     "Fleas": false,
+    "Pollen": false,
+    "Mold": false,
+    "Chicken": false,
+    "Beef": false,
+    "Dairy": false,
+    "Wheat": false,
+    "Corn": false,
+    "Soy": false,
+    "Insect Bites": false,
+    "Medications": false,
+    "Rubber": false,
+    "Plastic": false,
+    "Synthetic Fabrics": false,
+    "Dust Mites": false
 }
 
 export const symptoms: InfoBubbleValues = {
