@@ -59,14 +59,33 @@ function MyPets() {
 
   if (fetching) {
     return (
-      <div>
+      <div style={{height: '100%', margin: 'auto'}}>
+        <section className='MyPets'>
+          <div className="myPetsTitle">
+            <h1>
+              My Pets
+            </h1>
+          </div>
 
+
+          <div className='petContainer'>
+            <div className="petList">
+              <div className='loader' style={{scale: "1.5"}}></div>
+            </div>
+          </div>
+
+
+
+          <div className='manageProfiles'>
+            <p className='loading' style={{ width: '300px' }}></p>
+          </div>
+        </section>
       </div>
     );
   }
 
   return (
-    <>
+    <div style={{height: '100%'}}>
     {isDeleting && 
     <DeleteConfirmation value={isDeleting} onNo={setIsDeleting} onYes={handleDelete}/>
     }
@@ -104,7 +123,7 @@ function MyPets() {
             <EditButton isEditing={isEditing} setIsEditing={setIsEditing} value={"Manage Profiles"} />}
       </div>
     </section>
-    </>
+    </div>
 
   );
 }

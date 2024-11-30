@@ -7,8 +7,6 @@ import { Link, useParams } from 'react-router-dom';
 import { traits, allergies, vaccinations, InfoBubbleValues } from './components/InfoBubbles';
 import SearchTags from './components/SearchTags';
 
-//Default value
-
 function CrossIconSvg() {
     return (
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -61,8 +59,6 @@ function CompletedIcon() {
         </svg>
     )
 }
-
-//<PetProfileIcon petProfile={petProfile} size='6em' />
 
 interface AppointmentItemProps {
     appointment: Appointment;
