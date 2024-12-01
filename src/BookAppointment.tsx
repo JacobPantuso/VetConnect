@@ -150,7 +150,7 @@ export const SelectTime: React.FC<{ nextStep: () => void, previousStep: () => vo
       const unit = durationMatch[2].toLowerCase(); // Extract unit (hour/minutes)
       duration = unit === "hour" ? value * 60 : value; // Convert to minutes if in hours
     }
-    console.log(duration)
+
     const slots: string[] = [];
     const dateAppointments = allAppointments.filter(
       (appointment) => appointment.scheduled_date.split(" ")[0] === selectedDate
