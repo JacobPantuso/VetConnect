@@ -17,3 +17,4 @@ describe('Home Component', () => {
         expect(loadingElements.length).toBeGreaterThan(0);
     });
 });
+

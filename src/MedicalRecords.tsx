@@ -147,7 +147,7 @@ function MedicalRecords() {
 
                         ))
                         }
-                        {selectedPetProfile && medicalRecords.length >= 0 &&
+                        {selectedPetProfile && user?.user_type === "VET" && medicalRecords.length >= 0 &&
                             <div className="add-medical-record-button" onClick={()=>{navigate(`/createmedicalrecord/${selectedPetProfile.id}`)}}>
                                 <div>
                                     <AddIconSvg />

@@ -151,6 +151,9 @@ function CreateMedicalRecord() {
             <section className='createMedicalRecordContainer' >
                 <div className='folderSvg'>
                     <FolderBackground />
+                    <div className='saveButtonRecord'>
+                        <input className='saveButton' type="button" value="Save" onClick={() => { handleMedicalRecordCreation() }} />
+                    </div>
                     <div className='medicalRecordsFiller'>
                         <div className='creationRow creationRow1'>
                             <div className='createRecordInfo patient'>
@@ -206,9 +209,6 @@ function CreateMedicalRecord() {
                         </div>
 
                     </div>
-                </div>
-                <div className='saveButton'>
-                    <input className='saveButton' type="button" value="Save" onClick={() => { handleMedicalRecordCreation() }} />
                 </div>
             </section>
 
