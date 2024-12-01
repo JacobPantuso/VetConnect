@@ -136,15 +136,12 @@ function CurrentAppointments({ user, fetching }: CurrentAppointmentsProps) {
             <div key={appointment.id} className="appointment">
               <div className="appt-left-payment">
                 <div className="pet-img">
-                  <img
-                    src="https://media.istockphoto.com/id/474486193/photo/close-up-of-a-golden-retriever-panting-11-years-old-isolated.jpg?s=612x612&w=0&k=20&c=o6clwQS-h6c90AHlpDPC74vAgtc_y2vvGg6pnb7oCNE="
-                    alt={"test"}
-                  />
+                <PetProfileIcon petProfileId={appointment.pet_profile_id} size="4.5rem" />
                 </div>
                 <div className="appointment-details">
                   <h3>
                     {appointment.service} for {user.petProfiles.filter(
-                      (profile) => profile.id === user.appointments[0].pet_profile_id
+                      (profile) => profile.id === appointment.pet_profile_id
                     )[0].name}
                   </h3>
                   <p>

@@ -22,6 +22,7 @@ import {
   useUserSession
 } from "./utils/supabase";
 import { profile } from "console";
+import PetProfileIcon from "./components/PetProfileIcon";
 
 type CardType = "visa" | "mastercard" | "amex" | null;
 
@@ -216,10 +217,7 @@ function Payment() {
           <div key={appointment?.id} className="appointment">
             <div className="left">
               <div className="pet-img">
-                <img
-                  src="https://media.istockphoto.com/id/474486193/photo/close-up-of-a-golden-retriever-panting-11-years-old-isolated.jpg?s=612x612&w=0&k=20&c=o6clwQS-h6c90AHlpDPC74vAgtc_y2vvGg6pnb7oCNE="
-                  alt={"test"}
-                />
+               <PetProfileIcon petProfileId={appointment?.pet_profile_id} size="5rem"/>
               </div>
               <div className="appointment-details">
                 <h3>

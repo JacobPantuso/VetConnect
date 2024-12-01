@@ -30,8 +30,9 @@ function PetProfileIcon({petProfile, size, petProfileId}: PetProfileButtonProps)
     } else if (petProfileId) {
         id = petProfileId;
     }
-    const petProfileColorId: number = (id % 3);
-    const petProfileColors: string[] = ["#47652e", "#2b4a4a", "#3C5148"] //Generated colors for pfps
+
+    const petProfileColorId: number = (id % 4);
+    const petProfileColors: string[] = ["#47652e", "#2b4a4a", "#873D48","#3C5148",] //Generated colors for pfps
     const petColorIndex = petProfileColors[petProfileColorId];
     return (
         <div className="iconBody" style={{ backgroundColor: petColorIndex, width: size }}>

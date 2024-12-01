@@ -7,6 +7,7 @@ import LineChart from "./LineChart";
 import { ModifyAppointment } from "../CurrentAppointments";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarDay, faInfoCircle, faSync } from "@fortawesome/free-solid-svg-icons";
+import PetProfileIcon from "./PetProfileIcon";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -154,6 +155,7 @@ export function FullAppointmentSummary({ user }: ExternalProps) {
   const [selected, setSelected] = useState('today');
   const [loading, setLoading] = useState(true);
   const [showModify, setShowModify] = useState(false);
+  const [selectedAppointment, setSelectedAppointment] = useState<Appointment>();
   useEffect(() => {
     const fetchData = async () => {
       const appointments = await fetchAppointments({});
@@ -232,10 +234,7 @@ export function FullAppointmentSummary({ user }: ExternalProps) {
                   <div key={appointment.id} className="appointment">
                     <div className="left">
                       <div className="pet-img">
-                        <img
-                          src="https://media.istockphoto.com/id/474486193/photo/close-up-of-a-golden-retriever-panting-11-years-old-isolated.jpg?s=612x612&w=0&k=20&c=o6clwQS-h6c90AHlpDPC74vAgtc_y2vvGg6pnb7oCNE="
-                          alt={"test"}
-                        />
+                      <PetProfileIcon petProfileId={appointment.pet_profile_id} size="4.5rem"/>
                       </div>
                       <div className="appointment-details">
                         <h3>
@@ -263,7 +262,7 @@ export function FullAppointmentSummary({ user }: ExternalProps) {
                     <div className="appt-right">
                       <button
                         className="modify"
-                        onClick={() => setShowModify(!showModify)}
+                        onClick={() => {setShowModify(!showModify); setSelectedAppointment(appointment)}}
                       >
                         <FontAwesomeIcon icon={faCalendarDay} /> &nbsp; Modify
                         Appointment
@@ -271,7 +270,7 @@ export function FullAppointmentSummary({ user }: ExternalProps) {
                       {showModify && (
                         <ModifyAppointment
                           user={user}
-                          appointment={appointment}
+                          appointment={selectedAppointment}
                           setShowModify={setShowModify}
                         />
                       )}
