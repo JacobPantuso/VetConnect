@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faArrowRight, faShieldDog } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import { User, PetProfile, fetchAppointments, Appointment, addAppointment } from './utils/supabase'
+import PetProfileIcon from "./components/PetProfileIcon";
 
 interface BookAppointmentProps {
   user: User;
@@ -458,10 +459,9 @@ const AppointmentSummary: React.FC<{ previousStep: () => void, pet: PetProfile, 
       <p>Review the details of your appointment.</p>
       <div className="summary-details">
         <div className="summary-pet">
-          {pet.species.toLocaleLowerCase() === "dog"
-            ? <img src="https://media.istockphoto.com/id/474486193/photo/close-up-of-a-golden-retriever-panting-11-years-old-isolated.jpg?s=612x612&w=0&k=20&c=o6clwQS-h6c90AHlpDPC74vAgtc_y2vvGg6pnb7oCNE=" alt={pet.name} />
-            : <img src="https://t3.ftcdn.net/jpg/01/63/55/90/360_F_163559018_oWTwmNBHysXDPj4lh2PPWJDMXOkMYFlD.jpg" alt={pet.name} />
-          }
+        <div style={{display:'flex', alignItems: 'center',  justifyContent: 'center', marginBottom: '1em'}}>
+        <PetProfileIcon petProfileId={pet.id} size="6rem"/>
+        </div>
           <h3>{pet.name}</h3>
           <p>{pet.species.charAt(0).toUpperCase() + pet.species.slice(1)}: {pet.breed}</p>
         </div>

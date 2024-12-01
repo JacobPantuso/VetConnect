@@ -20,6 +20,7 @@ import {
 } from "./utils/supabase";
 import { useNavigate } from "react-router-dom";
 import { CustomDatePicker } from "./BookAppointment";
+import PetProfileIcon from "./components/PetProfileIcon";
 
 interface CurrentAppointmentsProps {
   user: User;
@@ -53,7 +54,7 @@ function CurrentAppointments({ user, fetching }: CurrentAppointmentsProps) {
   const handlePayment = (payment: PaymentForm) => {
     navigate(`/payment/${payment.appointment_id}`);
   };
-  console.log(user.petProfiles);
+
   return (
     <div className="CurrentAppointments">
       <h2>Current Appointments</h2>
@@ -70,10 +71,7 @@ function CurrentAppointments({ user, fetching }: CurrentAppointmentsProps) {
                 <div key={appointment.id} className="appointment">
                   <div className="left">
                     <div className="pet-img">
-                      <img
-                        src="https://media.istockphoto.com/id/474486193/photo/close-up-of-a-golden-retriever-panting-11-years-old-isolated.jpg?s=612x612&w=0&k=20&c=o6clwQS-h6c90AHlpDPC74vAgtc_y2vvGg6pnb7oCNE="
-                        alt={"test"}
-                      />
+                      <PetProfileIcon petProfileId={appointment.pet_profile_id} size="4.5rem"/>
                     </div>
                     <div className="appointment-details">
                       <h3>
@@ -516,9 +514,11 @@ type CancelProps = {
 
 export function CancelAppointmentForm({ appointment, setSelectAction, selectedAction }: CancelProps) {
   const handleCancel = () => {
-    deleteAppointment(appointment).then(() => {
+   deleteAppointment(appointment).then(() => {
       window.location.reload();
     });
+console.log(appointment)
+
   }
   const handleComplete = () => {
     updateAppointment(appointment.id, { appointment_status: "completed" }).then(() => {
