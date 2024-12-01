@@ -54,25 +54,10 @@ function SearchTags({ buttons, setSelectedButtons, mousePosition }: SearchTagsPr
     };
 
     if (xPosition > window.innerWidth / 1.2) {
-        mouseStyles.left = xPosition - 360;
+        mouseStyles.left = xPosition-320;
     }
 
-    const calculateMouseStylesTop = (yPosition:number, windowHeight:number) => {
-        const normalizedY = yPosition / windowHeight;
-        let offSet = 0.6;
-        if (yPosition > window.innerHeight / 2.3) {
-            offSet = .6
-            if (yPosition > window.innerHeight / 1.8 && yPosition < window.innerHeight / 1.5) {
-                offSet = .5
-            }
-        } else {
-            offSet = 0.49;
-        }
-        const top = Math.pow(normalizedY, 2) - 1 * normalizedY + offSet * windowHeight;
-        return Math.max(0, top);
-    };
-
-    mouseStyles.top = calculateMouseStylesTop(yPosition, window.innerHeight);
+    mouseStyles.top = yPosition-150;
 
     return (
         <div className='searchTagsSection'>

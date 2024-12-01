@@ -20,6 +20,7 @@ import {
 } from "./utils/supabase";
 import { useNavigate } from "react-router-dom";
 import { CustomDatePicker } from "./BookAppointment";
+import PetProfileIcon from "./components/PetProfileIcon";
 
 interface CurrentAppointmentsProps {
   user: User;
@@ -28,6 +29,7 @@ interface CurrentAppointmentsProps {
 
 function CurrentAppointments({ user, fetching }: CurrentAppointmentsProps) {
   const [showModify, setShowModify] = React.useState(false);
+  const [selectedAppointment, setSelectedAppointment] = useState<Appointment>();
   const navigate = useNavigate();
 
   if (fetching) {
@@ -44,7 +46,7 @@ function CurrentAppointments({ user, fetching }: CurrentAppointmentsProps) {
 
   const handleDownload = async (paymentFormId: number) => {
     const invoiceUrl = await downloadInvoice(paymentFormId);
-  
+
     if (invoiceUrl) {
       window.open(invoiceUrl, "_blank");
     }
@@ -53,7 +55,7 @@ function CurrentAppointments({ user, fetching }: CurrentAppointmentsProps) {
   const handlePayment = (payment: PaymentForm) => {
     navigate(`/payment/${payment.appointment_id}`);
   };
-  console.log(user.petProfiles);
+
   return (
     <div className="CurrentAppointments">
       <h2>Current Appointments</h2>
@@ -70,10 +72,7 @@ function CurrentAppointments({ user, fetching }: CurrentAppointmentsProps) {
                 <div key={appointment.id} className="appointment">
                   <div className="left">
                     <div className="pet-img">
-                      <img
-                        src="https://media.istockphoto.com/id/474486193/photo/close-up-of-a-golden-retriever-panting-11-years-old-isolated.jpg?s=612x612&w=0&k=20&c=o6clwQS-h6c90AHlpDPC74vAgtc_y2vvGg6pnb7oCNE="
-                        alt={"test"}
-                      />
+                      <PetProfileIcon petProfileId={appointment.pet_profile_id} size="4.5rem" />
                     </div>
                     <div className="appointment-details">
                       <h3>
@@ -101,7 +100,7 @@ function CurrentAppointments({ user, fetching }: CurrentAppointmentsProps) {
                   <div className="appt-right">
                     <button
                       className="modify"
-                      onClick={() => setShowModify(!showModify)}
+                      onClick={() => { setShowModify(!showModify); setSelectedAppointment(appointment); }}
                     >
                       <FontAwesomeIcon icon={faCalendarDay} /> &nbsp; Modify
                       Appointment
@@ -109,7 +108,7 @@ function CurrentAppointments({ user, fetching }: CurrentAppointmentsProps) {
                     {showModify && (
                       <ModifyAppointment
                         user={user}
-                        appointment={appointment}
+                        appointment={selectedAppointment}
                         setShowModify={setShowModify}
                       />
                     )}
@@ -127,7 +126,7 @@ function CurrentAppointments({ user, fetching }: CurrentAppointmentsProps) {
           </p>
         </div>
       )}
-      <h2 style={{marginTop: '1rem'}}>Completed Appointments</h2>
+      <h2 style={{ marginTop: '1rem' }}>Completed Appointments</h2>
       <div className="appointments">
         {user.paymentForms.map((payment) => {
           const appointment = user.appointments.filter(
@@ -145,40 +144,40 @@ function CurrentAppointments({ user, fetching }: CurrentAppointmentsProps) {
                 <div className="appointment-details">
                   <h3>
                     {appointment.service} for {user.petProfiles.filter(
-                                                (profile) => profile.id === user.appointments[0].pet_profile_id
-                                              )[0].name}
+                      (profile) => profile.id === user.appointments[0].pet_profile_id
+                    )[0].name}
                   </h3>
                   <p>
                     <b>Completed:</b>{" "}
-                        {new Date(
-                          appointment.scheduled_date.split(" ")[0]
-                        ).toLocaleDateString("en-US", {
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric",
-                        })}{" "}
-                        from {appointment.scheduled_date.slice(10)}
+                    {new Date(
+                      appointment.scheduled_date.split(" ")[0]
+                    ).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}{" "}
+                    from {appointment.scheduled_date.slice(10)}
                   </p>
                 </div>
               </div>
               <div className="appt-right-payment">
                 {payment.status === "paid" ? (
                   <>
-                  <p>
-                    <b>Paid:</b> ${payment.charge}
-                  </p>                  
-                  <button className="pay" onClick={() => handleDownload(payment.id)}>
-                    <FontAwesomeIcon icon={faDownload} /> Download Invoice
-                  </button>
+                    <p>
+                      <b>Paid:</b> ${payment.charge}
+                    </p>
+                    <button className="pay" onClick={() => handleDownload(payment.id)}>
+                      <FontAwesomeIcon icon={faDownload} /> Download Invoice
+                    </button>
                   </>
-                ): (
+                ) : (
                   <>
-                  <p>
-                    <b>Total Due:</b> ${payment.charge}
-                  </p>
-                  <button className="pay" onClick={() => handlePayment(payment)}>
-                    <FontAwesomeIcon icon={faDollarSign} /> &nbsp; Pay Balance
-                  </button>
+                    <p>
+                      <b>Total Due:</b> ${payment.charge}
+                    </p>
+                    <button className="pay" onClick={() => handlePayment(payment)}>
+                      <FontAwesomeIcon icon={faDollarSign} /> &nbsp; Pay Balance
+                    </button>
                   </>
                 )}
 
@@ -193,7 +192,7 @@ function CurrentAppointments({ user, fetching }: CurrentAppointmentsProps) {
 
 type ModifyAppointmentProps = {
   user: User;
-  appointment: Appointment;
+  appointment?: Appointment;
   setShowModify: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
@@ -204,7 +203,7 @@ export function ModifyAppointment({
 }: ModifyAppointmentProps) {
   const [selectedAction, setSelectedAction] = React.useState("");
   const [petProfiles, setPetProfiles] = React.useState([] as PetProfile[]);
-  const [fetching , setFetching] = React.useState(true);
+  const [fetching, setFetching] = React.useState(true);
   useEffect(() => {
     if (user.user_type !== "USER") {
       fetchPetProfiles().then((profiles) => {
@@ -217,7 +216,7 @@ export function ModifyAppointment({
     }
   }, [user]);
 
-  if (fetching) {
+  if (fetching || !appointment) {
     return (
       <div className="ModifyAppointment">
         <h2>Modify Appointment</h2>
@@ -225,6 +224,9 @@ export function ModifyAppointment({
       </div>
     );
   }
+
+
+
   return (
     <div className="ModifyAppointment">
       <div className="modify-container">
@@ -244,16 +246,16 @@ export function ModifyAppointment({
           's appointment.
         </p>
         {selectedAction === "" && (
-                  <div className="note">
-                  <div className="top-row-note">
-                    <FontAwesomeIcon icon={faInfoCircle} />
-                    <h5>NOTE</h5>
-                  </div>
-                  <p>
-                    If you wish to change the service associated with an appointment you
-                    must cancel and rebook the appointment.
-                  </p>
-                </div> 
+          <div className="note">
+            <div className="top-row-note">
+              <FontAwesomeIcon icon={faInfoCircle} />
+              <h5>NOTE</h5>
+            </div>
+            <p>
+              If you wish to change the service associated with an appointment you
+              must cancel and rebook the appointment.
+            </p>
+          </div>
         )}
         <div className="modify-form">
           {selectedAction === "" && (
@@ -322,11 +324,11 @@ export function Reschedule({ appointment, setSelectAction }: RescheduleProps) {
     return `${formattedHours}:${formattedMinutes} ${ampm}`
   };
 
-  const generateTimeSlots = () => { 
+  const generateTimeSlots = () => {
     if (!selectedDate) {
       return []; // No date selected, no time slots to generate
     }
-  
+
     const durationMatch = appointment.service.match(/\((\d+)\s*(Hour|Minutes)\)/i); // Regex to match the duration
     let duration = 30; // Default to 30 minutes if no match
     if (durationMatch) {
@@ -334,15 +336,15 @@ export function Reschedule({ appointment, setSelectAction }: RescheduleProps) {
       const unit = durationMatch[2].toLowerCase(); // Extract unit (hour/minutes)
       duration = unit === "hour" ? value * 60 : value; // Convert to minutes if in hours
     }
-  
+
     const slots: string[] = [];
     const dateAppointments = allAppointments.filter(
       (appointment) => appointment.scheduled_date.split(" ")[0] === selectedDate
     );
-  
+
     let currentTime = new Date();
     currentTime.setHours(9, 0, 0, 0); // Start at 9:00 AM
-  
+
     while (currentTime.getHours() < 17) {
       const start = formatTime(
         currentTime.getHours(),
@@ -353,29 +355,29 @@ export function Reschedule({ appointment, setSelectAction }: RescheduleProps) {
       const end = formatTime(currentTime.getHours(), currentTime.getMinutes());
       const slotStart = new Date(`${selectedDate} ${start}`).getTime();
       const slotEnd = new Date(`${selectedDate} ${end}`).getTime();
-  
+
       const isSlotAvailable = !dateAppointments.some((appointment) => {
         const appointmentDate = appointment.scheduled_date.split(" ")[0];
         const appointmentTimeRange = appointment.scheduled_date.slice(10);
         if (appointmentDate !== selectedDate) return false; // Skip appointments on different dates
-  
+
         const appointmentStartTime = appointmentTimeRange.split(" - ")[0];
         const appointmentEndTime = appointmentTimeRange.split(" - ")[1];
         const appointmentStart = new Date(`${appointmentDate} ${appointmentStartTime}`).getTime();
         const appointmentEnd = new Date(`${appointmentDate} ${appointmentEndTime}`).getTime();
-  
+
         return (
           (slotStart >= appointmentStart && slotStart < appointmentEnd) || // Slot start overlaps
           (slotEnd > appointmentStart && slotEnd <= appointmentEnd) || // Slot end overlaps
           (slotStart <= appointmentStart && slotEnd >= appointmentEnd) // Slot completely covers appointment
         );
       });
-  
+
       if (isSlotAvailable) {
         slots.push(`${start} - ${end}`);
       }
     }
-  
+
     return slots;
   };
 
@@ -448,9 +450,8 @@ export function Reschedule({ appointment, setSelectAction }: RescheduleProps) {
         from {appointment.scheduled_date.slice(10)}
       </p>
       <div
-        className={`date-picker-container resch ${
-          availableTimes.length > 0 ? "times-on" : ""
-        }`}
+        className={`date-picker-container resch ${availableTimes.length > 0 ? "times-on" : ""
+          }`}
       >
         <div
           className={`date-input resch`}
@@ -475,9 +476,8 @@ export function Reschedule({ appointment, setSelectAction }: RescheduleProps) {
               availableTimes.map((time) => (
                 <button
                   key={time}
-                  className={`time-slot-button ${
-                    time === currentTime ? "selected" : ""
-                  }`}
+                  className={`time-slot-button ${time === currentTime ? "selected" : ""
+                    }`}
                   onClick={(e) => handleSelectTime(time, e)}
                 >
                   {time}
@@ -520,6 +520,7 @@ export function CancelAppointmentForm({ appointment, setSelectAction, selectedAc
       window.location.reload();
     });
   }
+
   const handleComplete = () => {
     updateAppointment(appointment.id, { appointment_status: "completed" }).then(() => {
       window.location.reload();
@@ -528,7 +529,7 @@ export function CancelAppointmentForm({ appointment, setSelectAction, selectedAc
   return (
     <div className="CancelAppointmentForm">
       <h4>Are you sure?</h4>
-      { selectedAction === 'complete' ? (
+      {selectedAction === 'complete' ? (
         <p>You're about to complete an appointment. <br></br>You cannot undo this change.</p>
       ) : (
         <p>You're about to cancel an appointment. <br></br>You cannot undo this change.</p>

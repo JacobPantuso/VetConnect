@@ -17,13 +17,20 @@ function PetProfileSvg() {
 }
 
 interface PetProfileButtonProps {
-    petProfile: PetProfile,
+    petProfile?: PetProfile,
+    petProfileId?: number,
     size?: string  
 }
 
-function PetProfileIcon({petProfile, size}: PetProfileButtonProps) {
+function PetProfileIcon({petProfile, size, petProfileId}: PetProfileButtonProps) {
     //petProfile: {name: String; }
-    const petProfileColorId: number = (petProfile.id % 3);
+    let id: number = 0;
+    if (petProfile) {
+        id = petProfile.id;
+    } else if (petProfileId) {
+        id = petProfileId;
+    }
+    const petProfileColorId: number = (id % 3);
     const petProfileColors: string[] = ["#47652e", "#2b4a4a", "#3C5148"] //Generated colors for pfps
     const petColorIndex = petProfileColors[petProfileColorId];
     return (
