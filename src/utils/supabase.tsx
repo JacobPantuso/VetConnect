@@ -220,8 +220,12 @@ export const fetchPetProfiles = async (
   return data || [];
 };
 
-export const addPetProfile = async (petProfile: Omit<PetProfile, "id">): Promise<void> => {
-  const { error } = await supabase.from("pet_profiles").insert(petProfile);
+export const addPetProfile = async (petProfile: Omit<PetProfile, "id">): Promise<number> => {
+  const { data, error } = await supabase
+    .from("pet_profiles")
+    .insert(petProfile)
+    .select("id")
+    .single();
 
   if (error) {
     console.error("Error adding pet profile:", error);
@@ -229,6 +233,7 @@ export const addPetProfile = async (petProfile: Omit<PetProfile, "id">): Promise
   }
 
   console.log("Pet profile added successfully");
+  return data.id;
 };
 
 export const updatePetProfile = async (
@@ -286,9 +291,12 @@ export const fetchMedicalRecords = async (
 export const addMedicalRecord = async (
   medicalRecord: Omit<MedicalRecord, "id">
 ): Promise<void> => {
-  const { error } = await supabase
+
+    const { data, error } = await supabase
     .from("medical_records")
-    .insert(medicalRecord);
+    .insert(medicalRecord)
+    .select("id")
+    .single();
 
   if (error) {
     console.error("Error adding medical record:", error);
@@ -296,6 +304,7 @@ export const addMedicalRecord = async (
   }
 
   console.log("Medical record added successfully");
+  return data.id;
 };
 
 export const updateMedicalRecord = async (

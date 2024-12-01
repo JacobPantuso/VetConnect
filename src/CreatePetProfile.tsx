@@ -237,8 +237,9 @@ function CreatePetProfile() {
                     traits: savePetProfile.traits, 
                     vaccinations: savePetProfile.vaccinations,
                     allergies: savePetProfile.allergies
+                }).then((id) => {
+                    navigate(`/petprofile/${id}`);
                 });
-                navigate("/mypets");
             }
         }
     }

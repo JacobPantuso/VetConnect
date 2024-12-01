@@ -126,9 +126,11 @@ function CreateMedicalRecord() {
                 pet_profile_id: petProfile.id,
                 notes: notes,
                 symptoms: symptoms,
+            }).then((id)=> {
+                navigate(`/medicalrecords/${id}`);
             })
 
-            navigate('/medicalrecords');
+            
             
         }
     }
