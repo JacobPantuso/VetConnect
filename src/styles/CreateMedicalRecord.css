@@ -1,6 +1,8 @@
 .createMedicalRecord {
     color: #D5DDDF;
-    margin: 2vw;
+    padding-left: var(--padding);
+    padding-right: var(--padding);
+    padding-top: 2rem;
     font: inherit;
 }
 
@@ -10,16 +12,23 @@
 
 .folderSvg {
     position: relative;
-    top: -20px;
+}
+
+.saveButtonRecord {
+    width: 99%;
+    position: absolute;
+    display: flex;
+    top: 3%;
+    align-items: center;
+    justify-content: right;
 }
 
 .medicalRecordsFiller {
     padding: 5em 3em;
-    padding-left: 5em;
     height: 90%;
     width: 100%;
     position: absolute;
-    top: 5%;
+    top: 2%;
 }
 
 .creationRow {
