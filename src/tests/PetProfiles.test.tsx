@@ -81,7 +81,7 @@ describe('ViewPetProfile', () => {
     });
   
     const { container } = render(
-      <Router>
+      <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <ViewPetProfile />
       </Router>
     );
@@ -95,7 +95,7 @@ describe('ViewPetProfile', () => {
 
   test('displays pet profile details', async () => {
     render(
-      <Router>
+      <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <ViewPetProfile />
       </Router>
     );
@@ -105,7 +105,7 @@ describe('ViewPetProfile', () => {
 
   test('displays appointments', async () => {
     render(
-      <Router>
+      <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <ViewPetProfile />
       </Router>
     );

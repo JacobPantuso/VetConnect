@@ -22,7 +22,7 @@ const mockUser: User = {
 describe('CurrentAppointments', () => {
   test('renders CurrentAppointments component', () => {
     render(
-      <Router>
+      <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <CurrentAppointments user={mockUser} />
       </Router>
     );
@@ -31,7 +31,7 @@ describe('CurrentAppointments', () => {
 
   test('displays loading state when fetching', () => {
     render(
-      <Router>
+      <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <CurrentAppointments user={mockUser} fetching={true} />
       </Router>
     );
@@ -40,7 +40,7 @@ describe('CurrentAppointments', () => {
 
   test('displays no appointments message', () => {
     render(
-      <Router>
+      <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <CurrentAppointments user={mockUser} />
       </Router>
     );

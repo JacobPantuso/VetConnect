@@ -22,7 +22,7 @@ const mockUser: User = {
 describe('BookAppointment', () => {
   test('renders BookAppointment component', () => {
     render(
-      <Router>
+      <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <BookAppointment user={mockUser} />
       </Router>
     );
@@ -31,7 +31,7 @@ describe('BookAppointment', () => {
 
   test('displays loading state when fetching', () => {
     render(
-      <Router>
+      <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <BookAppointment user={mockUser} fetching={true} />
       </Router>
     );
@@ -41,7 +41,7 @@ describe('BookAppointment', () => {
 
   test('displays select pet step', () => {
     render(
-      <Router>
+      <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <BookAppointment user={mockUser} />
       </Router>
     );
