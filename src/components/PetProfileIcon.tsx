@@ -23,10 +23,9 @@ interface PetProfileButtonProps {
 
 function PetProfileIcon({petProfile, size}: PetProfileButtonProps) {
     //petProfile: {name: String; }
-    const petProfileColorId: number = (petProfile.id % 3) - 1;
+    const petProfileColorId: number = (petProfile.id % 3);
     const petProfileColors: string[] = ["#47652e", "#2b4a4a", "#3C5148"] //Generated colors for pfps
     const petColorIndex = petProfileColors[petProfileColorId];
-
     return (
         <div className="iconBody" style={{ backgroundColor: petColorIndex, width: size }}>
             
